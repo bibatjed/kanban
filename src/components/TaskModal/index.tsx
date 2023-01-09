@@ -4,24 +4,30 @@ interface ITaskModal {
   submit: (e: Task) => void;
 }
 
+type Subtasks = {
+  name: string;
+  done: boolean;
+};
+
 export type Task = {
+  id?: string;
   title: string;
   description: string;
-  subtasks: string[];
+  subtasks: Subtasks[];
   status: string;
 };
 export default function TaskModal(props: ITaskModal) {
   const [formValues, setFormValues] = useState<Task>({
     title: "",
     description: "",
-    subtasks: [""],
+    subtasks: [{ name: "", done: false }],
     status: "",
   });
 
   function handleAddSubtasks() {
     setFormValues((prev) => ({
       ...prev,
-      subtasks: [...prev.subtasks, ""],
+      subtasks: [...prev.subtasks, { name: "", done: false }],
     }));
   }
   function handleDeleteSubtasks(id: number) {
@@ -40,7 +46,7 @@ export default function TaskModal(props: ITaskModal) {
   function onChangeSubtasks(value: string, id: number) {
     setFormValues((prev) => {
       const subtasks = [...prev.subtasks];
-      subtasks[id] = value;
+      subtasks[id].name = value;
 
       return {
         ...prev,
@@ -65,7 +71,7 @@ export default function TaskModal(props: ITaskModal) {
             <input
               onChange={(e) => onChangeSubtasks(e.target.value, idx)}
               key={idx}
-              value={value}
+              value={value.name}
             />
             <button onClick={() => handleDeleteSubtasks(idx)}>x</button>
           </div>

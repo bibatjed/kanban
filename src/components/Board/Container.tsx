@@ -6,6 +6,7 @@ import {
 } from "@dnd-kit/sortable";
 
 import SortableItem from "./SortableItem";
+import { Task } from "../TaskModal";
 
 const containerStyle = {
   background: "#dadada",
@@ -16,12 +17,12 @@ const containerStyle = {
 
 type ContainerProps = {
   id: string;
-  items: number[];
+  items: Task[];
 };
 
 export default function Container(props: ContainerProps) {
   const { id, items } = props;
-
+  const idItems = items.map((value) => value.id) as string[];
   const { setNodeRef } = useDroppable({
     id,
   });
@@ -29,12 +30,20 @@ export default function Container(props: ContainerProps) {
   return (
     <SortableContext
       id={id}
-      items={items}
+      items={idItems}
       strategy={verticalListSortingStrategy}
     >
       <div ref={setNodeRef} style={containerStyle}>
-        {items.map((id) => (
-          <SortableItem key={id} id={id} />
+        {items.map((item) => (
+          <SortableItem
+            key={item.id}
+            id={item.id!}
+            title={item.title}
+            subtasks={`${item.subtasks.reduce(
+              (acc, currentvalue) => acc + (currentvalue.done ? 1 : 0),
+              0
+            )}/${item.subtasks.length}`}
+          />
         ))}
       </div>
     </SortableContext>

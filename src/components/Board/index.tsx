@@ -14,19 +14,28 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
-import { Item } from "./Item";
+import Item from "./Item";
 import Container from "./Container";
 import ColumnModal from "../ColumnModal";
 import TaskModal, { Task } from "../TaskModal";
+import uuid from "react-uuid";
 
-type Items = Record<UniqueIdentifier, number[]>;
+export type Items = Record<UniqueIdentifier, Task[]>;
 
 export default function Board() {
-  const [activeId, setActiveId] = useState<number | null>();
+  const [activeId, setActiveId] = useState<Task | null>();
   const [items, setItems] = useState<Items>({
-    root: [1, 2, 3],
-    container1: [4, 5, 6],
-    container2: [7, 8, 9],
+    root: [
+      {
+        id: uuid(),
+        title: "example",
+        description: "example",
+        subtasks: [{ name: "example", done: false }],
+        status: "root",
+      },
+    ],
+    container1: [],
+    container2: [],
     container3: [],
   });
   const [clonedItems, setClonedItems] = useState<Items | null>(null);
@@ -43,6 +52,7 @@ export default function Board() {
     setItems((prevItems) => ({ ...prevItems, [value]: [] }));
     setIsModalOpen(false);
   };
+  console.log(activeId);
 
   return (
     <DndContext
@@ -74,7 +84,13 @@ export default function Board() {
         </div>
       </div>
       <DragOverlay>
-        {activeId ? <Item id={activeId.toString()} /> : null}
+        {activeId ? (
+          <Item
+            id={activeId.id!.toString()}
+            title={activeId.title}
+            subtasks={activeId.subtasks}
+          />
+        ) : null}
       </DragOverlay>
       {isModalOpen && <ColumnModal submit={handleSubmit} />}
       {isModalTaskOpen && (
@@ -82,7 +98,7 @@ export default function Board() {
           submit={(values: Task) => {
             setItems((prev) => {
               const items = { ...prev };
-              items[values.status].push(99999);
+              items[values.status].push({ id: uuid(), ...values });
               return items;
             });
             setIsModalTaskOpen(false);
@@ -95,16 +111,25 @@ export default function Board() {
   function handleDragStart(event: DragStartEvent) {
     const { active } = event;
 
-    setActiveId(Number(active!.id));
+    const activeContainer = findContainer(active.id.toString());
+    if (!activeContainer) {
+      return;
+    }
+    const activeIndex = items[activeContainer].findIndex(
+      (value) => value.id === active.id
+    );
+    setActiveId(items[activeContainer][activeIndex]);
     setClonedItems(items);
   }
 
-  function findContainer(id: number) {
+  function findContainer(id: string) {
     if (id in items) {
       return id;
     }
 
-    return Object.keys(items).find((key) => items[key].includes(id));
+    return Object.keys(items).find((key) =>
+      items[key].find((value) => value.id === id)
+    );
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -112,7 +137,7 @@ export default function Board() {
     const { id } = active;
     const { id: overId }: any = over;
 
-    const activeContainer = findContainer(Number(id));
+    const activeContainer = findContainer(id.toString());
     const overContainer = findContainer(overId);
 
     if (
@@ -123,8 +148,12 @@ export default function Board() {
       return;
     }
 
-    const activeIndex = items[activeContainer].indexOf(Number(active.id));
-    const overIndex = items[overContainer].indexOf(overId);
+    const activeIndex = items[activeContainer].findIndex(
+      (value) => value.id === active.id
+    );
+    const overIndex = items[overContainer].findIndex(
+      (value) => value.id === overId
+    );
 
     if (activeIndex !== overIndex) {
       setItems((items) => ({
@@ -156,7 +185,7 @@ export default function Board() {
     const { id: overId }: any = over;
 
     // Find the containers
-    const activeContainer = findContainer(Number(id));
+    const activeContainer = findContainer(id.toString());
     const overContainer = findContainer(overId);
 
     if (
@@ -172,8 +201,12 @@ export default function Board() {
       const overItems = prev[overContainer];
 
       // Find the indexes for the items
-      const activeIndex = activeItems.indexOf(Number(id));
-      const overIndex = overItems.indexOf(overId);
+      const activeIndex = items[activeContainer].findIndex(
+        (value) => value.id === active.id
+      );
+      const overIndex = items[overContainer].findIndex(
+        (value) => value.id === overId
+      );
 
       let newIndex;
       if (overId in prev) {
@@ -190,7 +223,7 @@ export default function Board() {
       return {
         ...prev,
         [activeContainer]: [
-          ...prev[activeContainer].filter((item) => item !== active.id),
+          ...prev[activeContainer].filter((item) => item.id !== active.id),
         ],
         [overContainer]: [
           ...prev[overContainer].slice(0, newIndex),
