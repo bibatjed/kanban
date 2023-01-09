@@ -12,16 +12,11 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
-import SortableItem from "./SortableItem";
 import { Item } from "./Item";
 import Container from "./Container";
+import TaskModal from "../TaskModal";
 
 type Items = Record<UniqueIdentifier, number[]>;
 
@@ -40,6 +35,12 @@ export default function Board() {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleSubmit = (value: string) => {
+    setItems((prevItems) => ({ ...prevItems, [value]: [] }));
+    setIsModalOpen(false);
+  };
 
   return (
     <DndContext
@@ -60,17 +61,19 @@ export default function Board() {
                 border: "1px solid black",
               }}
             >
+              {key}
               <Container id={key} items={items} />
             </div>
           );
         })}
         <div>
-          <button> Add New Column</button>
+          <button onClick={() => setIsModalOpen(true)}> Add New Column</button>
         </div>
       </div>
       <DragOverlay>
         {activeId ? <Item id={activeId.toString()} /> : null}
       </DragOverlay>
+      {isModalOpen && <TaskModal submit={handleSubmit} />}
     </DndContext>
   );
 
