@@ -16,7 +16,8 @@ import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
 import { Item } from "./Item";
 import Container from "./Container";
-import TaskModal from "../TaskModal";
+import ColumnModal from "../ColumnModal";
+import TaskModal, { Task } from "../TaskModal";
 
 type Items = Record<UniqueIdentifier, number[]>;
 
@@ -37,6 +38,7 @@ export default function Board() {
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalTaskOpen, setIsModalTaskOpen] = useState(false);
   const handleSubmit = (value: string) => {
     setItems((prevItems) => ({ ...prevItems, [value]: [] }));
     setIsModalOpen(false);
@@ -51,6 +53,7 @@ export default function Board() {
       onDragOver={handleDragOver}
       onDragCancel={onDragCancel}
     >
+      <button onClick={() => setIsModalTaskOpen(true)}>Add New Task</button>
       <div style={{ display: "flex", gap: "100px" }}>
         {Object.entries(items).map(([key, items]) => {
           return (
@@ -73,7 +76,19 @@ export default function Board() {
       <DragOverlay>
         {activeId ? <Item id={activeId.toString()} /> : null}
       </DragOverlay>
-      {isModalOpen && <TaskModal submit={handleSubmit} />}
+      {isModalOpen && <ColumnModal submit={handleSubmit} />}
+      {isModalTaskOpen && (
+        <TaskModal
+          submit={(values: Task) => {
+            setItems((prev) => {
+              const items = { ...prev };
+              items[values.status].push(99999);
+              return items;
+            });
+            setIsModalTaskOpen(false);
+          }}
+        />
+      )}
     </DndContext>
   );
 
