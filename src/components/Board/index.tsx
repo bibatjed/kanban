@@ -33,6 +33,27 @@ export default function Board() {
         subtasks: [{ name: "example", done: false }],
         status: "root",
       },
+      {
+        id: uuid(),
+        title: "example",
+        description: "example",
+        subtasks: [{ name: "example", done: false }],
+        status: "root",
+      },
+      {
+        id: uuid(),
+        title: "example",
+        description: "example",
+        subtasks: [{ name: "example", done: false }],
+        status: "root",
+      },
+      {
+        id: uuid(),
+        title: "example",
+        description: "example",
+        subtasks: [{ name: "example", done: false }],
+        status: "root",
+      },
     ],
     container1: [],
     container2: [],
@@ -197,7 +218,6 @@ export default function Board() {
     }
 
     setItems((prev) => {
-      const activeItems = prev[activeContainer];
       const overItems = prev[overContainer];
 
       // Find the indexes for the items
@@ -220,6 +240,15 @@ export default function Board() {
         newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
       }
 
+      // const newItemList = { ...prev };
+      // newItemList[activeContainer].splice(activeIndex, 1);
+      // newItemList[overContainer].splice(
+      //   newIndex,
+      //   0,
+      //   items[activeContainer][activeIndex]
+      // );
+      // return newItemList;
+
       return {
         ...prev,
         [activeContainer]: [
@@ -227,7 +256,7 @@ export default function Board() {
         ],
         [overContainer]: [
           ...prev[overContainer].slice(0, newIndex),
-          items[activeContainer][activeIndex],
+          prev[activeContainer][activeIndex],
           ...prev[overContainer].slice(newIndex, prev[overContainer].length),
         ],
       };
