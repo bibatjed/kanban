@@ -20,6 +20,7 @@ import ColumnModal from "../ColumnModal";
 import TaskModal, { Task } from "../TaskModal";
 import uuid from "react-uuid";
 import StatusCircle from "../StatusCircle";
+import ColumnPlaceHolder from "../ColumnPlaceholder";
 
 export type Items = Record<UniqueIdentifier, Task[]>;
 
@@ -102,8 +103,9 @@ export default function Board() {
             </div>
           );
         })}
-        <div>
-          <button onClick={() => setIsModalOpen(true)}> Add New Column</button>
+        <div className="w-1/4">
+          <div className="mb-7 w-[445px] h-[24px]"></div>
+          <ColumnPlaceHolder />
         </div>
       </div>
       <DragOverlay>

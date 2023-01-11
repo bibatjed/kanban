@@ -6,7 +6,7 @@ function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <div className="h-screen">
+    <div className="h-min bg-kanban-light-grey-bg">
       <Board />
     </div>
   );
