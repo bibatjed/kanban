@@ -85,7 +85,7 @@ export default function Board() {
       onDragCancel={onDragCancel}
     >
       {/* <button onClick={() => setIsModalTaskOpen(true)}>Add New Task</button> */}
-      <div className="flex gap-5 bg-kanban-light-grey-bg w-full h-screen p-10">
+      <div className="flex gap-5 bg-kanban-light-grey-bg w-full min-h-[90%] p-10">
         {Object.entries(items).map(([key, items], idx) => {
           return (
             <div className="w-1/4">
