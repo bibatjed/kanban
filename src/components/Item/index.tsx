@@ -9,10 +9,7 @@ export default function Item({
   subtasks: { name: string; done: boolean }[];
 }) {
   return (
-    <div
-      className="p-3 flex flex-col gap-2 font-plus-jakarta-sans text-kanban-black border border-kanban-white shadow-md bg-kanban-white rounded-md"
-      {...props}
-    >
+    <div className="kanban-item" {...props}>
       <span className=" text-[15px] font-bold">{props.title}</span>
       <span className="text-xs font-medium text-kanban-medium-grey">
         {`${props.subtasks.reduce(

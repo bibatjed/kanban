@@ -17,9 +17,8 @@ export default function SortableItem(props: SortabileItemProps) {
 
   return (
     <div
-      className="p-3 flex flex-col gap-2 font-plus-jakarta-sans text-kanban-black border border-kanban-white shadow-md bg-kanban-white rounded-md"
+      className="kanban-item"
       ref={setNodeRef}
-      //@ts-ignore
       style={style}
       {...attributes}
       {...listeners}
