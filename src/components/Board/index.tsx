@@ -14,7 +14,7 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
-import Item from "./Item";
+import Item from "../Item";
 import Column from "../Column";
 import ColumnModal from "../ColumnModal";
 import TaskModal, { Task } from "../TaskModal";
@@ -107,13 +107,13 @@ export default function Board() {
         </div>
       </div>
       <DragOverlay>
-        {activeId ? (
+        {activeId && (
           <Item
             id={activeId.id!.toString()}
             title={activeId.title}
             subtasks={activeId.subtasks}
           />
-        ) : null}
+        )}
       </DragOverlay>
       {isModalOpen && <ColumnModal submit={handleSubmit} />}
       {isModalTaskOpen && (
