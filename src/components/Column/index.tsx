@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
-import { useDroppable } from "@dnd-kit/core";
 import {
   SortableContext,
+  useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
@@ -23,8 +23,7 @@ export default function Column(props: ColumnProps) {
     items.length === 0
       ? "border-dashed border-kanban-lines-light border-2 rounded-md"
       : "";
-  console.log(borderBroken);
-  const { setNodeRef } = useDroppable({
+  const { setNodeRef } = useSortable({
     id,
   });
 
