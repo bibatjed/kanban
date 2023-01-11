@@ -13,16 +13,21 @@ export default function SortableItem(props: DroppableProps) {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
   };
 
   return (
-    //@ts-ignore
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <span>{props.title}</span>
-      <span>{props.subtasks}</span>
+    <div
+      className="p-3 flex flex-col gap-2 font-plus-jakarta-sans text-kanban-black border border-kanban-white shadow-md bg-kanban-white rounded-md"
+      ref={setNodeRef}
+      //@ts-ignore
+      style={style}
+      {...attributes}
+      {...listeners}
+    >
+      <span className="text-[18px] font-semibold">{props.title}</span>
+      <span className="text-[12px] font-light text-kanban-medium-grey">
+        {props.subtasks}
+      </span>
     </div>
   );
 }

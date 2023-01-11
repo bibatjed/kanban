@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -8,13 +8,6 @@ import {
 import SortableItem from "./SortableItem";
 import { Task } from "../TaskModal";
 
-const containerStyle = {
-  background: "#dadada",
-  padding: 10,
-  margin: 10,
-  flex: 1,
-};
-
 type ContainerProps = {
   id: string;
   items: Task[];
@@ -22,7 +15,10 @@ type ContainerProps = {
 
 export default function Container(props: ContainerProps) {
   const { id, items } = props;
-  const idItems = items.map((value) => value.id) as string[];
+  const itemIds = useMemo(
+    () => items.map((item) => item.id),
+    [items]
+  ) as string[]; // ["1", "2", "3"]
   const { setNodeRef } = useDroppable({
     id,
   });
@@ -30,10 +26,13 @@ export default function Container(props: ContainerProps) {
   return (
     <SortableContext
       id={id}
-      items={idItems}
+      items={itemIds}
       strategy={verticalListSortingStrategy}
     >
-      <div ref={setNodeRef} style={containerStyle}>
+      <div
+        ref={setNodeRef}
+        className="flex flex-col gap-2 w-ful bg-kanban-light-grey-bg h-full"
+      >
         {items.map((item) => (
           <SortableItem
             key={item.id}
@@ -42,7 +41,7 @@ export default function Container(props: ContainerProps) {
             subtasks={`${item.subtasks.reduce(
               (acc, currentvalue) => acc + (currentvalue.done ? 1 : 0),
               0
-            )}/${item.subtasks.length}`}
+            )} of ${item.subtasks.length} subtasks`}
           />
         ))}
       </div>

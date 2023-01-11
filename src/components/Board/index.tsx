@@ -19,13 +19,14 @@ import Container from "./Container";
 import ColumnModal from "../ColumnModal";
 import TaskModal, { Task } from "../TaskModal";
 import uuid from "react-uuid";
+import StatusCircle from "../StatusCircle";
 
 export type Items = Record<UniqueIdentifier, Task[]>;
 
 export default function Board() {
   const [activeId, setActiveId] = useState<Task | null>();
   const [items, setItems] = useState<Items>({
-    root: [
+    todo: [
       {
         id: uuid(),
         title: "example",
@@ -35,29 +36,28 @@ export default function Board() {
       },
       {
         id: uuid(),
-        title: "example",
+        title: "example1",
         description: "example",
         subtasks: [{ name: "example", done: false }],
         status: "root",
       },
       {
         id: uuid(),
-        title: "example",
+        title: "example2",
         description: "example",
         subtasks: [{ name: "example", done: false }],
         status: "root",
       },
       {
         id: uuid(),
-        title: "example",
+        title: "example3",
         description: "example",
         subtasks: [{ name: "example", done: false }],
         status: "root",
       },
     ],
-    container1: [],
-    container2: [],
-    container3: [],
+    doing: [],
+    done: [],
   });
   const [clonedItems, setClonedItems] = useState<Items | null>(null);
   const sensors = useSensors(
@@ -73,7 +73,6 @@ export default function Board() {
     setItems((prevItems) => ({ ...prevItems, [value]: [] }));
     setIsModalOpen(false);
   };
-  console.log(activeId);
 
   return (
     <DndContext
@@ -84,18 +83,21 @@ export default function Board() {
       onDragOver={handleDragOver}
       onDragCancel={onDragCancel}
     >
-      <button onClick={() => setIsModalTaskOpen(true)}>Add New Task</button>
-      <div style={{ display: "flex", gap: "100px" }}>
-        {Object.entries(items).map(([key, items]) => {
+      {/* <button onClick={() => setIsModalTaskOpen(true)}>Add New Task</button> */}
+      <div className="flex gap-5 bg-kanban-light-grey-bg w-full h-screen p-10">
+        {Object.entries(items).map(([key, items], idx) => {
           return (
-            <div
-              style={{
-                minHeight: "100px",
-                minWidth: "100px",
-                border: "1px solid black",
-              }}
-            >
-              {key}
+            <div className="w-1/4">
+              <div className="flex items-center flex-row gap-2 mb-7">
+                <StatusCircle id={idx} />
+                <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey uppercase">
+                  {" "}
+                  {key}
+                </span>
+                <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey">
+                  ({items.length})
+                </span>
+              </div>
               <Container id={key} items={items} />
             </div>
           );
@@ -239,15 +241,6 @@ export default function Board() {
         const modifier = isBelowLastItem ? 1 : 0;
         newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
       }
-
-      // const newItemList = { ...prev };
-      // newItemList[activeContainer].splice(activeIndex, 1);
-      // newItemList[overContainer].splice(
-      //   newIndex,
-      //   0,
-      //   items[activeContainer][activeIndex]
-      // );
-      // return newItemList;
 
       return {
         ...prev,

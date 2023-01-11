@@ -9,14 +9,17 @@ export default function Item({
   subtasks: { name: string; done: boolean }[];
 }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column" }} {...props}>
-      <span>{props.title}</span>
-      <span>
+    <div
+      className="p-3 flex flex-col gap-2 font-plus-jakarta-sans text-kanban-black border border-kanban-white shadow-md bg-kanban-white rounded-md"
+      {...props}
+    >
+      <span className=" text-[15px] font-bold">{props.title}</span>
+      <span className="text-xs font-medium text-kanban-medium-grey">
         {`${props.subtasks.reduce(
           (acc, currentvalue) => acc + (currentvalue.done ? 1 : 0),
           0
-        )}
-          /${props.subtasks.length}`}
+        )} 
+          of ${props.subtasks.length} subtasks`}
       </span>{" "}
     </div>
   );
