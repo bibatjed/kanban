@@ -15,7 +15,7 @@ import {
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
 import Item from "./Item";
-import Container from "./Container";
+import Column from "../Column";
 import ColumnModal from "../ColumnModal";
 import TaskModal, { Task } from "../TaskModal";
 import uuid from "react-uuid";
@@ -98,7 +98,7 @@ export default function Board() {
                   ({items.length})
                 </span>
               </div>
-              <Container id={key} items={items} />
+              <Column id={key} items={items} />
             </div>
           );
         })}

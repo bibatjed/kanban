@@ -8,12 +8,12 @@ import {
 import SortableItem from "./SortableItem";
 import { Task } from "../TaskModal";
 
-type ContainerProps = {
+type ColumnProps = {
   id: string;
   items: Task[];
 };
 
-export default function Container(props: ContainerProps) {
+export default function Column(props: ColumnProps) {
   const { id, items } = props;
   const itemIds = useMemo(
     () => items.map((item) => item.id),
