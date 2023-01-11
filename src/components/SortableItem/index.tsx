@@ -1,12 +1,12 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-type DroppableProps = {
+type SortabileItemProps = {
   id: string;
   title: string;
   subtasks: string;
 };
-export default function SortableItem(props: DroppableProps) {
+export default function SortableItem(props: SortabileItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: props.id });
 

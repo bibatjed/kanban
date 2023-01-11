@@ -5,7 +5,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import SortableItem from "./SortableItem";
+import SortableItem from "../SortableItem";
 import { Task } from "../TaskModal";
 
 type ColumnProps = {
