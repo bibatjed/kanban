@@ -19,6 +19,11 @@ export default function Column(props: ColumnProps) {
     () => items.map((item) => item.id),
     [items]
   ) as string[]; // ["1", "2", "3"]
+  const borderBroken =
+    items.length === 0
+      ? "border-dashed border-kanban-lines-light border-2 rounded-md"
+      : "";
+  console.log(borderBroken);
   const { setNodeRef } = useDroppable({
     id,
   });
@@ -31,7 +36,7 @@ export default function Column(props: ColumnProps) {
     >
       <div
         ref={setNodeRef}
-        className="flex flex-col gap-2 w-ful bg-kanban-light-grey-bg h-full"
+        className={`flex flex-col gap-2 w-ful bg-kanban-light-grey-bg h-full ${borderBroken}`}
       >
         {items.map((item) => (
           <SortableItem

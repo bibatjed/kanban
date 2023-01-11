@@ -11,7 +11,7 @@ module.exports = {
       "kanban-black": "#000112",
       "kanban-dark-grey": "#2B2C37",
       "kanban-lines-dark": "#3E3F4E",
-      "kanban-lines-light": "#343BFA",
+      "kanban-lines-light": "#E4EBFA",
       "kanban-medium-grey": "#828FA3",
       "kanban-dark-gray": "#F4F7FD",
       "kanban-white": "#FFFFFF",
