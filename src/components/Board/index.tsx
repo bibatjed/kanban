@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  closestCenter,
+  closestCorners,
   DndContext,
   DragEndEvent,
   DragOverEvent,
@@ -78,7 +78,7 @@ export default function Board() {
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCenter}
+      collisionDetection={closestCorners}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onDragOver={handleDragOver}
