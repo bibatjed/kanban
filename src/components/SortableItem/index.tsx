@@ -24,6 +24,7 @@ export default function SortableItem(props: SortabileItemProps) {
   return (
     <div
       className="kanban-item"
+      onClick={() => console.log("clicked")}
       ref={setNodeRef}
       style={style}
       {...attributes}

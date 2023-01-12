@@ -16,7 +16,6 @@ import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
 import Item from "../Item";
 import Column from "../Column";
-import ColumnModal from "../ColumnModal";
 import TaskModal, { Task } from "../TaskModal";
 import uuid from "react-uuid";
 import StatusCircle from "../StatusCircle";
@@ -117,7 +116,6 @@ export default function Board() {
           />
         )}
       </DragOverlay>
-      {isModalOpen && <ColumnModal submit={handleSubmit} />}
       {isModalTaskOpen && (
         <TaskModal
           submit={(values: Task) => {
