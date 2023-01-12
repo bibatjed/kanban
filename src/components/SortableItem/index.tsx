@@ -3,12 +3,18 @@ import { CSS } from "@dnd-kit/utilities";
 
 type SortabileItemProps = {
   id: string;
+  columnId: string;
   title: string;
   subtasks: string;
 };
 export default function SortableItem(props: SortabileItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: props.id });
+    useSortable({
+      id: props.id,
+      data: {
+        columnId: props.columnId,
+      },
+    });
 
   const style = {
     transform: CSS.Transform.toString(transform),

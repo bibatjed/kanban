@@ -136,7 +136,7 @@ export default function Board() {
   function handleDragStart(event: DragStartEvent) {
     const { active } = event;
 
-    const activeContainer = findContainer(active.id.toString());
+    const activeContainer = active?.data?.current?.columnId;
     if (!activeContainer) {
       return;
     }
@@ -147,24 +147,11 @@ export default function Board() {
     setClonedItems(items);
   }
 
-  function findContainer(id: string) {
-    if (id in items) {
-      return id;
-    }
-
-    return Object.keys(items).find((key) =>
-      items[key].find((value) => value.id === id)
-    );
-  }
-
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-    const { id } = active;
-    const { id: overId }: any = over;
 
-    const activeContainer = findContainer(id.toString());
-    const overContainer = findContainer(overId);
-
+    const activeContainer = active?.data?.current?.columnId;
+    const overContainer = over?.data?.current?.columnId;
     if (
       !activeContainer ||
       !overContainer ||
@@ -177,7 +164,7 @@ export default function Board() {
       (value) => value.id === active.id
     );
     const overIndex = items[overContainer].findIndex(
-      (value) => value.id === overId
+      (value) => value.id === over?.id
     );
 
     if (activeIndex !== overIndex) {
@@ -206,13 +193,10 @@ export default function Board() {
 
   function handleDragOver(event: DragOverEvent) {
     const { active, over } = event;
-    const { id } = active;
-    const { id: overId }: any = over;
-
+    console.log(event);
     // Find the containers
-    const activeContainer = findContainer(id.toString());
-    const overContainer = findContainer(overId);
-
+    const activeContainer = active?.data?.current?.columnId;
+    const overContainer = over?.data?.current?.columnId;
     if (
       !activeContainer ||
       !overContainer ||
@@ -229,11 +213,11 @@ export default function Board() {
         (value) => value.id === active.id
       );
       const overIndex = items[overContainer].findIndex(
-        (value) => value.id === overId
+        (value) => value.id === over!.id
       );
 
       let newIndex;
-      if (overId in prev) {
+      if (over?.id || "" in prev) {
         // We're at the root droppable of a container
         newIndex = overItems.length + 1;
       } else {

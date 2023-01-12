@@ -25,6 +25,9 @@ export default function Column(props: ColumnProps) {
       : "";
   const { setNodeRef } = useSortable({
     id,
+    data: {
+      columnId: props.id,
+    },
   });
 
   return (
@@ -41,6 +44,7 @@ export default function Column(props: ColumnProps) {
           <SortableItem
             key={item.id}
             id={item.id!}
+            columnId={props.id}
             title={item.title}
             subtasks={`${item.subtasks.reduce(
               (acc, currentvalue) => acc + (currentvalue.done ? 1 : 0),
