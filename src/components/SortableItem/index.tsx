@@ -3,6 +3,7 @@ import { CSS } from "@dnd-kit/utilities";
 
 type SortabileItemProps = {
   id: string;
+  containerIndex: number;
   columnId: string;
   title: string;
   subtasks: string;
@@ -13,6 +14,7 @@ export default function SortableItem(props: SortabileItemProps) {
       id: props.id,
       data: {
         columnId: props.columnId,
+        containerIndex: props.containerIndex,
       },
     });
 

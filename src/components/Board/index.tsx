@@ -21,45 +21,55 @@ import uuid from "react-uuid";
 import StatusCircle from "../StatusCircle";
 import ColumnPlaceHolder from "../ColumnPlaceholder";
 
-export type Items = Record<UniqueIdentifier, Task[]>;
+export type Items = {
+  container: string;
+  task: Task[];
+};
 
 export default function Board() {
   const [activeId, setActiveId] = useState<Task | null>();
-  const [items, setItems] = useState<Items>({
-    todo: [
-      {
-        id: uuid(),
-        title: "example",
-        description: "example",
-        subtasks: [{ name: "example", done: false }],
-        status: "root",
-      },
-      {
-        id: uuid(),
-        title: "example1",
-        description: "example",
-        subtasks: [{ name: "example", done: false }],
-        status: "root",
-      },
-      {
-        id: uuid(),
-        title: "example2",
-        description: "example",
-        subtasks: [{ name: "example", done: false }],
-        status: "root",
-      },
-      {
-        id: uuid(),
-        title: "example3",
-        description: "example",
-        subtasks: [{ name: "example", done: false }],
-        status: "root",
-      },
-    ],
-    doing: [],
-    done: [],
-  });
-  const [clonedItems, setClonedItems] = useState<Items | null>(null);
+  const [items, setItems] = useState<Items[]>([
+    {
+      container: "todo",
+
+      task: [
+        {
+          id: uuid(),
+          title: "example",
+          description: "example",
+          subtasks: [{ name: "example", done: false }],
+          status: "root",
+        },
+        {
+          id: uuid(),
+          title: "example1",
+          description: "example",
+          subtasks: [{ name: "example", done: false }],
+          status: "root",
+        },
+        {
+          id: uuid(),
+          title: "example2",
+          description: "example",
+          subtasks: [{ name: "example", done: false }],
+          status: "root",
+        },
+        {
+          id: uuid(),
+          title: "example3",
+          description: "example",
+          subtasks: [{ name: "example", done: false }],
+          status: "root",
+        },
+      ],
+    },
+    {
+      container: "doing",
+      task: [],
+    },
+    { container: "done", task: [] },
+  ]);
+  const [clonedItems, setClonedItems] = useState<Items[] | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -73,6 +83,7 @@ export default function Board() {
     setItems((prevItems) => ({ ...prevItems, [value]: [] }));
     setIsModalOpen(false);
   };
+  console.log(activeId);
 
   return (
     <DndContext
@@ -85,20 +96,24 @@ export default function Board() {
     >
       {/* <button onClick={() => setIsModalTaskOpen(true)}>Add New Task</button> */}
       <div className="flex gap-5 bg-kanban-light-grey-bg w-full min-h-[90%] p-10">
-        {Object.entries(items).map(([key, items], idx) => {
+        {items.map((item, idx) => {
           return (
-            <div className="w-1/4">
+            <div key={idx} className="w-1/4">
               <div className="flex items-center flex-row gap-2 mb-7">
                 <StatusCircle id={idx} />
                 <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey uppercase">
                   {" "}
-                  {key}
+                  {item.container}
                 </span>
                 <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey">
-                  ({items.length})
+                  ({item.task.length})
                 </span>
               </div>
-              <Column id={key} items={items} />
+              <Column
+                id={item.container}
+                containerIndex={idx}
+                items={item.task}
+              />
             </div>
           );
         })}
@@ -116,7 +131,7 @@ export default function Board() {
           />
         )}
       </DragOverlay>
-      {isModalTaskOpen && (
+      {/* {isModalTaskOpen && (
         <TaskModal
           submit={(values: Task) => {
             setItems((prev) => {
@@ -127,53 +142,54 @@ export default function Board() {
             setIsModalTaskOpen(false);
           }}
         />
-      )}
+      )} */}
     </DndContext>
   );
 
   function handleDragStart(event: DragStartEvent) {
     const { active } = event;
 
-    const activeContainer = active?.data?.current?.columnId;
-    if (!activeContainer) {
+    const activeContainer = active?.data?.current?.containerIndex;
+    if (activeContainer == null) {
       return;
     }
-    const activeIndex = items[activeContainer].findIndex(
+    const activeIndex = items[activeContainer].task.findIndex(
       (value) => value.id === active.id
     );
-    setActiveId(items[activeContainer][activeIndex]);
+    setActiveId(items[activeContainer].task[activeIndex]);
     setClonedItems(items);
   }
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
 
-    const activeContainer = active?.data?.current?.columnId;
-    const overContainer = over?.data?.current?.columnId;
+    const activeContainer = active?.data?.current?.containerIndex;
+    const overContainer = over?.data?.current?.containerIndex;
     if (
-      !activeContainer ||
-      !overContainer ||
+      activeContainer == null ||
+      overContainer == null ||
       activeContainer !== overContainer
     ) {
       return;
     }
 
-    const activeIndex = items[activeContainer].findIndex(
+    const activeIndex = items[activeContainer].task.findIndex(
       (value) => value.id === active.id
     );
-    const overIndex = items[overContainer].findIndex(
+    const overIndex = items[overContainer].task.findIndex(
       (value) => value.id === over?.id
     );
 
     if (activeIndex !== overIndex) {
-      setItems((items) => ({
-        ...items,
-        [overContainer]: arrayMove(
-          items[overContainer],
+      setItems((items) => {
+        const newItem = structuredClone(items);
+        newItem[overContainer].task = arrayMove(
+          items[overContainer].task,
           activeIndex,
           overIndex
-        ),
-      }));
+        );
+        return newItem;
+      });
     }
 
     setActiveId(null);
@@ -188,29 +204,27 @@ export default function Board() {
     setActiveId(null);
     setClonedItems(null);
   }
-
   function handleDragOver(event: DragOverEvent) {
     const { active, over } = event;
-    console.log(event);
     // Find the containers
-    const activeContainer = active?.data?.current?.columnId;
-    const overContainer = over?.data?.current?.columnId;
+    const activeContainer = active?.data?.current?.containerIndex;
+    const overContainer = over?.data?.current?.containerIndex;
     if (
-      !activeContainer ||
-      !overContainer ||
+      activeContainer == null ||
+      overContainer == null ||
       activeContainer === overContainer
     ) {
       return;
     }
 
     setItems((prev) => {
-      const overItems = prev[overContainer];
+      const overItems = prev[overContainer].task;
 
       // Find the indexes for the items
-      const activeIndex = items[activeContainer].findIndex(
+      const activeIndex = items[activeContainer].task.findIndex(
         (value) => value.id === active.id
       );
-      const overIndex = items[overContainer].findIndex(
+      const overIndex = items[overContainer].task.findIndex(
         (value) => value.id === over!.id
       );
 
@@ -226,17 +240,19 @@ export default function Board() {
         newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
       }
 
-      return {
-        ...prev,
-        [activeContainer]: [
-          ...prev[activeContainer].filter((item) => item.id !== active.id),
-        ],
-        [overContainer]: [
-          ...prev[overContainer].slice(0, newIndex),
-          prev[activeContainer][activeIndex],
-          ...prev[overContainer].slice(newIndex, prev[overContainer].length),
-        ],
-      };
+      const newItem = structuredClone(prev);
+      newItem[activeContainer].task = prev[activeContainer].task.filter(
+        (item) => item.id !== active.id
+      );
+      newItem[overContainer].task = [
+        ...prev[overContainer].task.slice(0, newIndex),
+        prev[activeContainer].task[activeIndex],
+        ...prev[overContainer].task.slice(
+          newIndex,
+          prev[overContainer].task.length
+        ),
+      ];
+      return newItem;
     });
   }
 }

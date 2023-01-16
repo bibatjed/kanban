@@ -10,11 +10,12 @@ import { Task } from "../TaskModal";
 
 type ColumnProps = {
   id: string;
+  containerIndex: number;
   items: Task[];
 };
 
 export default function Column(props: ColumnProps) {
-  const { id, items } = props;
+  const { id, items, containerIndex } = props;
   const itemIds = useMemo(
     () => items.map((item) => item.id),
     [items]
@@ -26,7 +27,8 @@ export default function Column(props: ColumnProps) {
   const { setNodeRef } = useSortable({
     id,
     data: {
-      columnId: props.id,
+      columnId: id,
+      containerIndex: containerIndex,
     },
   });
 
@@ -44,7 +46,8 @@ export default function Column(props: ColumnProps) {
           <SortableItem
             key={item.id}
             id={item.id!}
-            columnId={props.id}
+            containerIndex={containerIndex}
+            columnId={id}
             title={item.title}
             subtasks={`${item.subtasks.reduce(
               (acc, currentvalue) => acc + (currentvalue.done ? 1 : 0),
