@@ -5,10 +5,11 @@ type ButtonProps = {
   children?: ReactNode | ReactNode[];
   variant: "primary" | "secondary" | "none";
   disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 };
 
 interface IButton extends ButtonProps {
-  onClick: () => void;
+  onClick?: () => void;
 }
 const colorSchemeOptions: Record<string, string> = {
   primary: "bg-kanban-main-purple text-kanban-white",
@@ -19,6 +20,7 @@ export default function jButton(props: IButton) {
   const { disabled = false } = props;
   return (
     <button
+      type={props.type}
       onClick={props.onClick}
       disabled={disabled}
       className={` p-2 text-sm w-full rounded-xl flex

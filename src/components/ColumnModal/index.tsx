@@ -13,6 +13,7 @@ type Columns = {
   new: string;
   index: number;
   itemLength: number;
+  error?: string;
 };
 type FormValues = {
   boardName: string;
@@ -83,11 +84,9 @@ export default function ColumnModal() {
   }
 
   function handleDeleteColumn(index: number) {
-    console.log(index);
     setFormValues((prev) => {
       const columns = [...prev.columns];
       columns.splice(index, 1);
-      console.log(columns);
       return {
         ...prev,
         columns: columns,
@@ -95,7 +94,44 @@ export default function ColumnModal() {
     });
   }
 
+  function checkColumnFields() {
+    const errorObj: Record<number, string> = {};
+    formValues.columns.forEach((value, index) => {
+      if (value.new === "" || value.new == null) {
+        errorObj[index] = "required";
+        return;
+      }
+
+      const findDuplicate = formValues.columns.findIndex(
+        (column, idx) => column.new === value.new
+      );
+
+      if (findDuplicate >= 0 && findDuplicate !== index) {
+        errorObj[index] = "used";
+        return;
+      }
+    });
+
+    if (Object.keys(errorObj).length === 0) {
+      return true;
+    }
+    setFormValues((prev) => {
+      return {
+        ...prev,
+        columns: prev.columns.map((value, index) => {
+          return {
+            ...value,
+            error: errorObj[index] || "",
+          };
+        }),
+      };
+    });
+  }
+
   function handleSubmit() {
+    if (!checkColumnFields()) {
+      return;
+    }
     const containers: ContainerState[] = [];
     for (let column of formValues.columns) {
       containers.push({
@@ -137,6 +173,7 @@ export default function ColumnModal() {
               return (
                 <div key={index} className="flex flex-row items-center gap-4">
                   <Input
+                    error={value.error}
                     name={index.toString()}
                     onChange={handleOnChange}
                     value={value.new}
