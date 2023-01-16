@@ -12,6 +12,7 @@ type Columns = {
   old: string | null;
   new: string;
   index: number;
+  itemLength: number;
 };
 type FormValues = {
   boardName: string;
@@ -30,6 +31,7 @@ export default function ColumnModal() {
           old: value.container,
           new: value.container,
           index: idx,
+          itemLength: value.task.length,
         };
       }),
     ],
@@ -45,6 +47,7 @@ export default function ColumnModal() {
               old: value.container,
               new: value.container,
               index: idx,
+              itemLength: value.task.length,
             };
           }),
         ],
@@ -59,6 +62,7 @@ export default function ColumnModal() {
         old: null,
         new: "",
         index: columns.length - 1,
+        itemLength: 0,
       });
       return {
         ...prev,
@@ -129,6 +133,7 @@ export default function ColumnModal() {
               Columns
             </span>
             {formValues.columns.map((value, index) => {
+              const disableDelete = value.itemLength > 0;
               return (
                 <div key={index} className="flex flex-row items-center gap-4">
                   <Input
@@ -136,13 +141,24 @@ export default function ColumnModal() {
                     onChange={handleOnChange}
                     value={value.new}
                   />{" "}
-                  <button
-                    onClick={() => {
-                      handleDeleteColumn(index);
-                    }}
-                  >
-                    <IconCross className="fill-kanban-medium-grey" />
-                  </button>
+                  <div>
+                    <Button
+                      onClick={() => {
+                        handleDeleteColumn(index);
+                      }}
+                      text=""
+                      disabled={disableDelete}
+                      variant="none"
+                    >
+                      <IconCross
+                        className={`${
+                          disableDelete
+                            ? "fill-gray-300"
+                            : "fill-kanban-medium-grey"
+                        }`}
+                      />
+                    </Button>
+                  </div>
                 </div>
               );
             })}
