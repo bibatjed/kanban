@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   closestCorners,
   DndContext,
@@ -8,7 +8,6 @@ import {
   DragStartEvent,
   KeyboardSensor,
   PointerSensor,
-  UniqueIdentifier,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -16,10 +15,11 @@ import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
 import Item from "../Item";
 import Column from "../Column";
-import TaskModal, { Task } from "../TaskModal";
-import uuid from "react-uuid";
+import { Task } from "../TaskModal";
 import StatusCircle from "../StatusCircle";
 import ColumnPlaceHolder from "../ColumnPlaceholder";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { updateBoard } from "../../reducer/column";
 
 export type Items = {
   container: string;
@@ -28,47 +28,8 @@ export type Items = {
 
 export default function Board() {
   const [activeId, setActiveId] = useState<Task | null>();
-  const [items, setItems] = useState<Items[]>([
-    {
-      container: "todo",
-
-      task: [
-        {
-          id: uuid(),
-          title: "example",
-          description: "example",
-          subtasks: [{ name: "example", done: false }],
-          status: "root",
-        },
-        {
-          id: uuid(),
-          title: "example1",
-          description: "example",
-          subtasks: [{ name: "example", done: false }],
-          status: "root",
-        },
-        {
-          id: uuid(),
-          title: "example2",
-          description: "example",
-          subtasks: [{ name: "example", done: false }],
-          status: "root",
-        },
-        {
-          id: uuid(),
-          title: "example3",
-          description: "example",
-          subtasks: [{ name: "example", done: false }],
-          status: "root",
-        },
-      ],
-    },
-    {
-      container: "doing",
-      task: [],
-    },
-    { container: "done", task: [] },
-  ]);
+  const container = useAppSelector((state) => state.containerReducers);
+  const dispatch = useAppDispatch();
   const [clonedItems, setClonedItems] = useState<Items[] | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -79,11 +40,10 @@ export default function Board() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalTaskOpen, setIsModalTaskOpen] = useState(false);
-  const handleSubmit = (value: string) => {
-    setItems((prevItems) => ({ ...prevItems, [value]: [] }));
-    setIsModalOpen(false);
-  };
-  console.log(activeId);
+  // const handleSubmit = (value: string) => {
+  //   setItems((prevItems) => ({ ...prevItems, [value]: [] }));
+  //   setIsModalOpen(false);
+  // };
 
   return (
     <DndContext
@@ -95,10 +55,10 @@ export default function Board() {
       onDragCancel={onDragCancel}
     >
       {/* <button onClick={() => setIsModalTaskOpen(true)}>Add New Task</button> */}
-      <div className="flex gap-5 bg-kanban-light-grey-bg w-full min-h-[90%] p-10">
-        {items.map((item, idx) => {
+      <div className="flex gap-5 bg-kanban-light-grey-bg w-full overflow-x-scroll min-h-[90%] p-10">
+        {container.map((item, idx) => {
           return (
-            <div key={idx} className="w-1/4">
+            <div key={idx} className="min-w-[320px]">
               <div className="flex items-center flex-row gap-2 mb-7">
                 <StatusCircle id={idx} />
                 <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey uppercase">
@@ -153,11 +113,11 @@ export default function Board() {
     if (activeContainer == null) {
       return;
     }
-    const activeIndex = items[activeContainer].task.findIndex(
+    const activeIndex = container[activeContainer].task.findIndex(
       (value) => value.id === active.id
     );
-    setActiveId(items[activeContainer].task[activeIndex]);
-    setClonedItems(items);
+    setActiveId(container[activeContainer].task[activeIndex]);
+    setClonedItems(container);
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -173,23 +133,21 @@ export default function Board() {
       return;
     }
 
-    const activeIndex = items[activeContainer].task.findIndex(
+    const activeIndex = container[activeContainer].task.findIndex(
       (value) => value.id === active.id
     );
-    const overIndex = items[overContainer].task.findIndex(
+    const overIndex = container[overContainer].task.findIndex(
       (value) => value.id === over?.id
     );
 
     if (activeIndex !== overIndex) {
-      setItems((items) => {
-        const newItem = structuredClone(items);
-        newItem[overContainer].task = arrayMove(
-          items[overContainer].task,
-          activeIndex,
-          overIndex
-        );
-        return newItem;
-      });
+      const newItem = structuredClone(container);
+      newItem[overContainer].task = arrayMove(
+        container[overContainer].task,
+        activeIndex,
+        overIndex
+      );
+      dispatch(updateBoard(newItem));
     }
 
     setActiveId(null);
@@ -199,7 +157,7 @@ export default function Board() {
     if (clonedItems) {
       // Reset items to their original state in case items have been
       // Dragged across containers
-      setItems(clonedItems);
+      // setItems(clonedItems);
     }
     setActiveId(null);
     setClonedItems(null);
@@ -217,42 +175,42 @@ export default function Board() {
       return;
     }
 
-    setItems((prev) => {
-      const overItems = prev[overContainer].task;
+    console.log("hello");
 
-      // Find the indexes for the items
-      const activeIndex = items[activeContainer].task.findIndex(
-        (value) => value.id === active.id
-      );
-      const overIndex = items[overContainer].task.findIndex(
-        (value) => value.id === over!.id
-      );
+    const overItems = container[overContainer].task;
 
-      let newIndex;
-      if (over?.id || "" in prev) {
-        // We're at the root droppable of a container
-        newIndex = overItems.length + 1;
-      } else {
-        const isBelowLastItem = over && overIndex === overItems.length - 1;
-        // draggingRect.offsetTop > over.rect.offsetTop + over.rect.height;
+    // Find the indexes for the items
+    const activeIndex = container[activeContainer].task.findIndex(
+      (value) => value.id === active.id
+    );
+    const overIndex = container[overContainer].task.findIndex(
+      (value) => value.id === over!.id
+    );
 
-        const modifier = isBelowLastItem ? 1 : 0;
-        newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
-      }
+    let newIndex;
+    if (over?.id) {
+      // We're at the root droppable of a container
+      newIndex = overItems.length + 1;
+    } else {
+      const isBelowLastItem = over && overIndex === overItems.length - 1;
+      // draggingRect.offsetTop > over.rect.offsetTop + over.rect.height;
 
-      const newItem = structuredClone(prev);
-      newItem[activeContainer].task = prev[activeContainer].task.filter(
-        (item) => item.id !== active.id
-      );
-      newItem[overContainer].task = [
-        ...prev[overContainer].task.slice(0, newIndex),
-        prev[activeContainer].task[activeIndex],
-        ...prev[overContainer].task.slice(
-          newIndex,
-          prev[overContainer].task.length
-        ),
-      ];
-      return newItem;
-    });
+      const modifier = isBelowLastItem ? 1 : 0;
+      newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
+    }
+
+    const newItem = structuredClone(container);
+    newItem[activeContainer].task = container[activeContainer].task.filter(
+      (item) => item.id !== active.id
+    );
+    newItem[overContainer].task = [
+      ...container[overContainer].task.slice(0, newIndex),
+      container[activeContainer].task[activeIndex],
+      ...container[overContainer].task.slice(
+        newIndex,
+        container[overContainer].task.length
+      ),
+    ];
+    dispatch(updateBoard(newItem));
   }
 }

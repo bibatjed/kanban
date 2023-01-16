@@ -1,29 +1,65 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
 import IconCross from "../../assets/icons/IconCross";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { ContainerState, updateBoard } from "../../reducer/column";
 import { closeColumnModal } from "../../reducer/modal";
 import Button from "../Button/Button";
 import DialogWrapper from "../DialogWrapper";
 import Input from "../Input";
 
+type Columns = {
+  old: string | null;
+  new: string;
+  index: number;
+};
 type FormValues = {
   boardName: string;
-  columns: string[];
+  columns: Columns[];
 };
 
 export default function ColumnModal() {
   const isOpen = useAppSelector((state) => state.counterReducers.columnModal);
+  const container = useAppSelector((state) => state.containerReducers);
   const dispatch = useAppDispatch();
   const [formValues, setFormValues] = useState<FormValues>({
     boardName: "Sample",
-    columns: ["hello", "sample", "sample2"],
+    columns: [
+      ...container.map((value, idx) => {
+        return {
+          old: value.container,
+          new: value.container,
+          index: idx,
+        };
+      }),
+    ],
   });
+
+  useEffect(() => {
+    setFormValues((prev) => {
+      return {
+        ...prev,
+        columns: [
+          ...container.map((value, idx) => {
+            return {
+              old: value.container,
+              new: value.container,
+              index: idx,
+            };
+          }),
+        ],
+      };
+    });
+  }, [isOpen]);
+
   function handleAddColumn() {
     setFormValues((prev) => {
       const columns = [...prev.columns];
-      columns.push("");
-      console.log(columns);
+      columns.push({
+        old: null,
+        new: "",
+        index: columns.length - 1,
+      });
       return {
         ...prev,
         columns,
@@ -34,7 +70,7 @@ export default function ColumnModal() {
   function handleOnChange(e: ChangeEvent<HTMLInputElement>) {
     setFormValues((prev) => {
       const columns = [...prev.columns];
-      columns[Number(e.target.name)] = e.target.value;
+      columns[Number(e.target.name)].new = e.target.value;
       return {
         ...prev,
         columns,
@@ -53,6 +89,18 @@ export default function ColumnModal() {
         columns: columns,
       };
     });
+  }
+
+  function handleSubmit() {
+    const containers: ContainerState[] = [];
+    for (let column of formValues.columns) {
+      containers.push({
+        container: column.new,
+        task: [...(container[column.index]?.task || [])],
+      });
+    }
+    dispatch(updateBoard(containers));
+    closeModal();
   }
   function closeModal() {
     dispatch(closeColumnModal());
@@ -86,7 +134,7 @@ export default function ColumnModal() {
                   <Input
                     name={index.toString()}
                     onChange={handleOnChange}
-                    value={value}
+                    value={value.new}
                   />{" "}
                   <button
                     onClick={() => {
@@ -110,7 +158,7 @@ export default function ColumnModal() {
               <IconAddTaskMobile className="fill-kanban-main-purple" />
             </Button>
             <Button
-              onClick={() => console.log("hello")}
+              onClick={handleSubmit}
               text="Create New Board"
               variant="primary"
             />
