@@ -38,13 +38,6 @@ export default function Board() {
     })
   );
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalTaskOpen, setIsModalTaskOpen] = useState(false);
-  // const handleSubmit = (value: string) => {
-  //   setItems((prevItems) => ({ ...prevItems, [value]: [] }));
-  //   setIsModalOpen(false);
-  // };
-
   return (
     <DndContext
       sensors={sensors}
@@ -177,8 +170,6 @@ export default function Board() {
     ) {
       return;
     }
-
-    console.log("hello");
 
     const overItems = container[overContainer].task;
 

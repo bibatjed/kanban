@@ -1,8 +1,8 @@
-import { UniqueIdentifier } from "@dnd-kit/core";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import uuid from "react-uuid";
 // Define a type for the slice state
 import { Task } from "../components/TaskModal";
+import produce from "immer";
 
 export type ContainerState = {
   container: string;
@@ -58,27 +58,18 @@ export const containerSlice = createSlice({
     updateBoard: (state, action: PayloadAction<ContainerState[]>) => {
       return action.payload;
     },
+    addNewTask: (state, action: PayloadAction<Task>) => {
+      const statusIndex = state.findIndex(
+        (item) => item.container === action.payload.status
+      );
+      const newState = produce(state, (draft) => {
+        draft[statusIndex].task.push(action.payload);
+      });
+
+      return newState;
+    },
   },
-  // openColumnModal: (state) => {
-  //   state.columnModal = true;
-  // },
-  // closeColumnModal: (state) => {
-  //   state.columnModal = false;
-  // },
-  // openTaskModal: (state) => {
-  //   state.taskModal = true;
-  // },
-  // closeTaskModal: (state) => {
-  //   state.taskModal = false;
-  // },
 });
 
-// export const {
-//   openColumnModal,
-//   closeColumnModal,
-//   closeTaskModal,
-//   openTaskModal,
-// } = containerSlice.actions;
-
-export const { updateBoard } = containerSlice.actions;
+export const { updateBoard, addNewTask } = containerSlice.actions;
 export default containerSlice.reducer;

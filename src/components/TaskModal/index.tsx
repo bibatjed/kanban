@@ -1,8 +1,10 @@
 import { ChangeEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import uuid from "react-uuid";
 import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
 import IconCross from "../../assets/icons/IconCross";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { addNewTask } from "../../reducer/column";
 import { closeTaskModal, openTaskModal } from "../../reducer/modal";
 import Button from "../Button/Button";
 import DialogWrapper from "../DialogWrapper";
@@ -19,7 +21,7 @@ export type Task = {
   id?: string;
   title: string;
   description: string;
-  subtasks: Subtasks[];
+  subtasks: Subtasks[] | [];
   status: string;
 };
 export default function TaskModal() {
@@ -74,6 +76,12 @@ export default function TaskModal() {
       status: value,
     }));
   }
+
+  function handleSubmit() {
+    dispatch(addNewTask({ id: uuid(), ...formValues }));
+    dispatch(closeTaskModal());
+  }
+
   return (
     <DialogWrapper
       title="Add New Task"
@@ -150,7 +158,7 @@ export default function TaskModal() {
               list={statusList}
             />
           </div>
-          <Button text="Create Task" variant="primary" />
+          <Button text="Create Task" onClick={handleSubmit} variant="primary" />
         </div>
       </div>
     </DialogWrapper>
