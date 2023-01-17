@@ -1,6 +1,7 @@
 import Board from "./components/Board";
 import ColumnModal from "./components/ColumnModal";
 import Header from "./components/Header";
+import TaskModal from "./components/TaskModal";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <Header />
       <Board />
       <ColumnModal />
+      <TaskModal />
     </div>
   );
 }

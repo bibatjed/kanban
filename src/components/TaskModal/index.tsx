@@ -1,4 +1,8 @@
 import { ChangeEvent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { closeTaskModal, openTaskModal } from "../../reducer/modal";
+import DialogWrapper from "../DialogWrapper";
 
 interface ITaskModal {
   submit: (e: Task) => void;
@@ -16,7 +20,9 @@ export type Task = {
   subtasks: Subtasks[];
   status: string;
 };
-export default function TaskModal(props: ITaskModal) {
+export default function TaskModal() {
+  const isOpen = useAppSelector((state) => state.counterReducers.taskModal);
+  const dispatch = useAppDispatch();
   const [formValues, setFormValues] = useState<Task>({
     title: "",
     description: "",
@@ -55,7 +61,11 @@ export default function TaskModal(props: ITaskModal) {
     });
   }
   return (
-    <div>
+    <DialogWrapper
+      title="Add New Task"
+      isOpen={isOpen}
+      onClose={() => dispatch(closeTaskModal())}
+    >
       <span>Title</span>
       <input name="title" value={formValues.title} onChange={onChangeCommon} />
       <span>Title</span>
@@ -84,7 +94,7 @@ export default function TaskModal(props: ITaskModal) {
         onChange={onChangeCommon}
       />{" "}
       status
-      <button onClick={() => props.submit(formValues)}>submit</button>
-    </div>
+      <button onClick={() => console.log("hello")}>submit</button>
+    </DialogWrapper>
   );
 }
