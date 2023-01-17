@@ -13,17 +13,17 @@ interface IButton extends ButtonProps {
 }
 const colorSchemeOptions: Record<string, string> = {
   primary: "bg-kanban-main-purple text-kanban-white",
-  secondary: "bg-kanban-lines-light text-kanban-main-purle",
+  secondary: "bg-kanban-lines-light text-kanban-main-purple",
   none: "",
 };
-export default function jButton(props: IButton) {
+export default function Button(props: IButton) {
   const { disabled = false } = props;
   return (
     <button
       type={props.type}
       onClick={props.onClick}
       disabled={disabled}
-      className={` p-3 text-sm w-full rounded-2xl flex
+      className={` p-3 text-sm w-full h-full rounded-2xl flex
       flex-row items-center justify-center font-plus-jakarta-sans
        gap-1 ${colorSchemeOptions[props.variant]}`}
     >

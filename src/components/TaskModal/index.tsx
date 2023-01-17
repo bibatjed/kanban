@@ -1,8 +1,12 @@
 import { ChangeEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
+import IconCross from "../../assets/icons/IconCross";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { closeTaskModal, openTaskModal } from "../../reducer/modal";
+import Button from "../Button/Button";
 import DialogWrapper from "../DialogWrapper";
+import Input from "../Input";
 
 interface ITaskModal {
   submit: (e: Task) => void;
@@ -66,35 +70,59 @@ export default function TaskModal() {
       isOpen={isOpen}
       onClose={() => dispatch(closeTaskModal())}
     >
-      <span>Title</span>
-      <input name="title" value={formValues.title} onChange={onChangeCommon} />
-      <span>Title</span>
-      <input
-        name="description"
-        value={formValues.description}
-        onChange={onChangeCommon}
-      />
-      {formValues.subtasks.map((value, idx) => {
-        return (
-          <div key={idx}>
-            {" "}
-            <input
-              onChange={(e) => onChangeSubtasks(e.target.value, idx)}
-              key={idx}
-              value={value.name}
-            />
-            <button onClick={() => handleDeleteSubtasks(idx)}>x</button>
-          </div>
-        );
-      })}
-      <button onClick={handleAddSubtasks}>Add New Tasks</button>
-      <input
-        name="status"
-        value={formValues.status}
-        onChange={onChangeCommon}
-      />{" "}
-      status
-      <button onClick={() => console.log("hello")}>submit</button>
+      {/* Dialog Body */}
+      <div className="mt-2 flex flex-col gap-4">
+        {/* BOARD NAME */}
+        <div className="flex flex-col gap-2">
+          <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
+            Title
+          </span>
+          <Input placeholder="e.g. Take coffee break" />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
+            Description
+          </span>
+          <Input />
+        </div>
+        {/* Columns  */}
+        <div className="flex flex-col gap-2">
+          <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
+            Subtasks
+          </span>
+          {formValues.subtasks.map((value, index) => {
+            return (
+              <div key={index} className="flex flex-row items-center gap-4">
+                <Input name={index.toString()} value={value.name} />{" "}
+                <div>
+                  <Button
+                    onClick={() => handleDeleteSubtasks(index)}
+                    text=""
+                    variant="none"
+                  >
+                    <IconCross className="fill-kanban-medium-grey" />
+                  </Button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Actions */}
+        <div className="flex flex-col gap-6">
+          {formValues.subtasks.length < 7 && (
+            <Button
+              text="Add New Subtasks"
+              onClick={handleAddSubtasks}
+              variant="secondary"
+            >
+              <IconAddTaskMobile className="fill-kanban-main-purple" />
+            </Button>
+          )}
+          <Button text="Create Task" variant="primary" />
+        </div>
+      </div>
     </DialogWrapper>
   );
 }
