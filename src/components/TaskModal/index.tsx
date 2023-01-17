@@ -7,11 +7,8 @@ import { closeTaskModal, openTaskModal } from "../../reducer/modal";
 import Button from "../Button/Button";
 import DialogWrapper from "../DialogWrapper";
 import Input from "../Input";
+import Select from "../Select";
 import TextArea from "../TextArea";
-
-interface ITaskModal {
-  submit: (e: Task) => void;
-}
 
 type Subtasks = {
   name: string;
@@ -27,12 +24,15 @@ export type Task = {
 };
 export default function TaskModal() {
   const isOpen = useAppSelector((state) => state.counterReducers.taskModal);
+  const data = useAppSelector((state) => state.containerReducers);
+
+  const statusList = data.map((value) => value.container);
   const dispatch = useAppDispatch();
   const [formValues, setFormValues] = useState<Task>({
     title: "",
     description: "",
     subtasks: [{ name: "", done: false }],
-    status: "",
+    status: statusList[0],
   });
 
   function handleAddSubtasks() {
@@ -47,23 +47,32 @@ export default function TaskModal() {
       subtasks: prev.subtasks.slice(id, id + 1),
     }));
   }
-  function onChangeCommon(e: ChangeEvent<HTMLInputElement>) {
+  function onChangeCommon(
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
     setFormValues((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   }
 
-  function onChangeSubtasks(value: string, id: number) {
+  function onChangeSubtasks(e: ChangeEvent<HTMLInputElement>) {
     setFormValues((prev) => {
       const subtasks = [...prev.subtasks];
-      subtasks[id].name = value;
+      subtasks[Number(e.target.name)].name = e.target.value;
 
       return {
         ...prev,
         subtasks,
       };
     });
+  }
+
+  function onChangeStatus(value: string) {
+    setFormValues((prev) => ({
+      ...prev,
+      status: value,
+    }));
   }
   return (
     <DialogWrapper
@@ -78,14 +87,18 @@ export default function TaskModal() {
           <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
             Title
           </span>
-          <Input placeholder="e.g. Take coffee break" />
+          <Input
+            name="title"
+            onChange={onChangeCommon}
+            placeholder="e.g. Take coffee break"
+          />
         </div>
 
         <div className="flex flex-col gap-2">
           <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
             Description
           </span>
-          <TextArea />
+          <TextArea value={formValues.description} onChange={onChangeCommon} />
         </div>
         {/* Columns  */}
         <div className="flex flex-col gap-2">
@@ -95,7 +108,12 @@ export default function TaskModal() {
           {formValues.subtasks.map((value, index) => {
             return (
               <div key={index} className="flex flex-row items-center gap-4">
-                <Input name={index.toString()} value={value.name} />{" "}
+                <Input
+                  placeholder="e.g. Make Coffee"
+                  name={index.toString()}
+                  onChange={onChangeSubtasks}
+                  value={value.name}
+                />{" "}
                 <div>
                   <Button
                     onClick={() => handleDeleteSubtasks(index)}
@@ -121,6 +139,17 @@ export default function TaskModal() {
               <IconAddTaskMobile className="fill-kanban-main-purple" />
             </Button>
           )}
+          <div className="flex relative flex-col gap-2">
+            <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
+              Status
+            </span>
+            <Select
+              name="status"
+              onChange={onChangeStatus}
+              value={formValues.status}
+              list={statusList}
+            />
+          </div>
           <Button text="Create Task" variant="primary" />
         </div>
       </div>
