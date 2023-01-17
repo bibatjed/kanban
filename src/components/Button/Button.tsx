@@ -23,7 +23,7 @@ export default function jButton(props: IButton) {
       type={props.type}
       onClick={props.onClick}
       disabled={disabled}
-      className={` p-2 text-sm w-full rounded-xl flex
+      className={` p-3 text-sm w-full rounded-2xl flex
       flex-row items-center justify-center font-plus-jakarta-sans
        gap-1 ${colorSchemeOptions[props.variant]}`}
     >
