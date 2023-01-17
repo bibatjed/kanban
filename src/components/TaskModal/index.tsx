@@ -7,6 +7,7 @@ import { closeTaskModal, openTaskModal } from "../../reducer/modal";
 import Button from "../Button/Button";
 import DialogWrapper from "../DialogWrapper";
 import Input from "../Input";
+import TextArea from "../TextArea";
 
 interface ITaskModal {
   submit: (e: Task) => void;
@@ -84,7 +85,7 @@ export default function TaskModal() {
           <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
             Description
           </span>
-          <Input />
+          <TextArea />
         </div>
         {/* Columns  */}
         <div className="flex flex-col gap-2">

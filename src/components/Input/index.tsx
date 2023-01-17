@@ -22,7 +22,7 @@ export default function Input(props: Partial<IProps>) {
           onChange={props.onChange}
           placeholder={placeholder}
           readOnly={isReadOnly}
-          className="w-full  read-only:pointer-events-none outline-none p-2 rounded-md font-plus-jakarta-sans placeholder-inherit text-sm placeholder-gray-400"
+          className="w-full read-only:pointer-events-none outline-none p-2 rounded-md font-plus-jakarta-sans placeholder-inherit text-sm placeholder-gray-400"
         />
         <label className="absolute text-kanban-red right-2 font-plus-jakarta-sans text-xs font-semibold capitalize -bottom-0">
           {props.error}
