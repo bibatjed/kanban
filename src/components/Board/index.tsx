@@ -77,10 +77,13 @@ export default function Board() {
             </div>
           );
         })}
-        <div className="w-1/4">
-          <div className="mb-7 w-[445px] h-[24px]"></div>
-          <ColumnPlaceHolder />
-        </div>
+
+        {Object.keys(container).length < 6 && (
+          <div className="min-w-[320px]">
+            <div className="mb-7 h-[24px]"></div>
+            <ColumnPlaceHolder />
+          </div>
+        )}
       </div>
       <DragOverlay>
         {activeId && (

@@ -203,13 +203,15 @@ export default function ColumnModal() {
 
           {/* Actions */}
           <div className="flex flex-col gap-6">
-            <Button
-              onClick={handleAddColumn}
-              text="Add New Column"
-              variant="secondary"
-            >
-              <IconAddTaskMobile className="fill-kanban-main-purple" />
-            </Button>
+            {formValues.columns.length < 6 && (
+              <Button
+                onClick={handleAddColumn}
+                text="Add New Column"
+                variant="secondary"
+              >
+                <IconAddTaskMobile className="fill-kanban-main-purple" />
+              </Button>
+            )}
             <Button
               onClick={handleSubmit}
               text="Create New Board"
