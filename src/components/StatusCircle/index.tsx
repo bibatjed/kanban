@@ -1,4 +1,11 @@
-const colorObject: string[] = ["bg-[#49C4E5]", "bg-[#8471F2]", "bg-[#62E2AE]"];
+const colorObject: string[] = [
+  "bg-[#49C4E5]",
+  "bg-[#8471F2]",
+  "bg-[#62E2AE]",
+  "bg-[#E5A449]",
+  "bg-[#2A3FDB]",
+  "bg-[#C36E6E]",
+];
 function ColorPicker(id: number) {
   return colorObject[id];
 }
