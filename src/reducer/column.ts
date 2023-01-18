@@ -148,6 +148,7 @@ export const containerSlice = createSlice({
 export const { updateBoard, onClickSubtasks, onChangeStatus, addNewTask } =
   containerSlice.actions;
 
+//TODO: use createSelector to improve performance
 function selectTaskByID(state: RootState, id: string) {
   let counter = 0;
   let found: Task | null = null;
