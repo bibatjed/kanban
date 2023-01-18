@@ -3,11 +3,11 @@ import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
 import IconCross from "../../assets/icons/IconCross";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { ContainerState, updateBoard } from "../../reducer/column";
-import { closeColumnModal } from "../../reducer/modal";
 import Button from "../Button/Button";
 import DialogWrapper from "../DialogWrapper";
 import Input from "../Input";
-
+import { modal } from "../../constants";
+import { closeModal as reducerCloseModal } from "../../reducer/modal";
 type Columns = {
   old: string | null;
   new: string;
@@ -20,8 +20,11 @@ type FormValues = {
   columns: Columns[];
 };
 
+const { ADD_COLUMN } = modal;
+
 export default function ColumnModal() {
-  const isOpen = useAppSelector((state) => state.counterReducers.columnModal);
+  const modal = useAppSelector((state) => state.modalReducers);
+  const isOpen = modal.isOpen && modal.modalType === ADD_COLUMN;
   const container = useAppSelector((state) => state.containerReducers);
   const dispatch = useAppDispatch();
   const [formValues, setFormValues] = useState<FormValues>({
@@ -39,22 +42,23 @@ export default function ColumnModal() {
   });
 
   useEffect(() => {
-    setFormValues((prev) => {
-      return {
-        ...prev,
-        columns: [
-          ...container.map((value, idx) => {
-            return {
-              old: value.container,
-              new: value.container,
-              index: idx,
-              itemLength: value.task.length,
-            };
-          }),
-        ],
-      };
-    });
-  }, [isOpen]);
+    if (modal.isOpen === true && modal.modalType === ADD_COLUMN)
+      setFormValues((prev) => {
+        return {
+          ...prev,
+          columns: [
+            ...container.map((value, idx) => {
+              return {
+                old: value.container,
+                new: value.container,
+                index: idx,
+                itemLength: value.task.length,
+              };
+            }),
+          ],
+        };
+      });
+  }, [modal.isOpen]);
 
   function handleAddColumn() {
     setFormValues((prev) => {
@@ -143,7 +147,7 @@ export default function ColumnModal() {
     closeModal();
   }
   function closeModal() {
-    dispatch(closeColumnModal());
+    dispatch(reducerCloseModal());
   }
 
   return (

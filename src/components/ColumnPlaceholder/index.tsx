@@ -1,10 +1,13 @@
 import IconAdd from "../../assets/icons/IconAddTaskMobile";
 import { useAppDispatch } from "../../hooks/redux";
-import { openColumnModal } from "../../reducer/modal";
+import { openModal } from "../../reducer/modal";
+import { modal } from "../../constants";
+
+const { ADD_COLUMN } = modal;
 export default function ColumnPlaceHolder() {
   const dispatch = useAppDispatch();
   function onClick() {
-    dispatch(openColumnModal());
+    dispatch(openModal({ type: ADD_COLUMN }));
   }
   return (
     <div

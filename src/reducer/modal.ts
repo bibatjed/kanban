@@ -1,14 +1,17 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { modal } from "../constants";
 
 // Define a type for the slice state
 type ModalState = {
-  columnModal: boolean;
-  taskModal: boolean;
+  isOpen: boolean;
+  modalType: string;
 };
+
+const { ADD_COLUMN } = modal;
 // Define the initial state using that type
 const initialState: ModalState = {
-  columnModal: false,
-  taskModal: false,
+  isOpen: false,
+  modalType: ADD_COLUMN,
 };
 
 export const counterSlice = createSlice({
@@ -16,27 +19,17 @@ export const counterSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    openColumnModal: (state) => {
-      state.columnModal = true;
+    openModal: (state, action: PayloadAction<AnyAction>) => {
+      state.isOpen = true;
+      state.modalType = action.payload.type;
     },
-    closeColumnModal: (state) => {
-      state.columnModal = false;
-    },
-    openTaskModal: (state) => {
-      state.taskModal = true;
-    },
-    closeTaskModal: (state) => {
-      state.taskModal = false;
+    closeModal: (state) => {
+      state.isOpen = false;
     },
   },
 });
 
-export const {
-  openColumnModal,
-  closeColumnModal,
-  closeTaskModal,
-  openTaskModal,
-} = counterSlice.actions;
+export const { closeModal, openModal } = counterSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 // export const selectCount = (state: RootState) => state.counterReducers.value;

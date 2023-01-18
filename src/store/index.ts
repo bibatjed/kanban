@@ -5,7 +5,7 @@ import container from "../reducer/column";
 
 const store = configureStore({
   reducer: {
-    counterReducers: modal,
+    modalReducers: modal,
     containerReducers: container,
   },
 });

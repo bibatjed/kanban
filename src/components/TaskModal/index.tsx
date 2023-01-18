@@ -4,9 +4,10 @@ import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
 import IconCross from "../../assets/icons/IconCross";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { addNewTask } from "../../reducer/column";
-import { closeTaskModal, openTaskModal } from "../../reducer/modal";
+import { closeModal } from "../../reducer/modal";
 import Button from "../Button/Button";
 import DialogWrapper from "../DialogWrapper";
+import { modal } from "../../constants";
 import Input from "../Input";
 import Select from "../Select";
 import TextArea from "../TextArea";
@@ -32,8 +33,10 @@ export type Task = {
   subtasks: Subtasks[] | [];
   status: string;
 };
+const { ADD_TASK } = modal;
 export default function TaskModal() {
-  const isOpen = useAppSelector((state) => state.counterReducers.taskModal);
+  const modal = useAppSelector((state) => state.modalReducers);
+  const isOpen = modal.isOpen && modal.modalType === ADD_TASK;
   const data = useAppSelector((state) => state.containerReducers);
 
   const statusList = data.map((value) => value.container);
@@ -129,14 +132,14 @@ export default function TaskModal() {
       return;
     }
     dispatch(addNewTask({ id: uuid(), ...formValues }));
-    dispatch(closeTaskModal());
+    dispatch(closeModal());
   }
 
   return (
     <DialogWrapper
       title="Add New Task"
       isOpen={isOpen}
-      onClose={() => dispatch(closeTaskModal())}
+      onClose={() => dispatch(closeModal())}
     >
       {/* Dialog Body */}
       <div className="mt-2 flex flex-col gap-4">

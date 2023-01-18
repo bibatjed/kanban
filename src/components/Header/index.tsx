@@ -1,9 +1,11 @@
 import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
 import LogoDark from "../../assets/logo-dark.svg";
 import { useAppDispatch } from "../../hooks/redux";
-import { openTaskModal } from "../../reducer/modal";
+import { openModal } from "../../reducer/modal";
 import Button from "../Button/Button";
 import MyDropdown from "../Dropdown";
+import { modal } from "../../constants";
+const { ADD_TASK } = modal;
 export default function Header() {
   const dispatch = useAppDispatch();
   return (
@@ -22,7 +24,7 @@ export default function Header() {
           <div className="w-40">
             <Button
               variant="primary"
-              onClick={() => dispatch(openTaskModal())}
+              onClick={() => dispatch(openModal({ type: ADD_TASK }))}
               text="Add New Task"
             >
               <IconAddTaskMobile className="fill-kanban-white" />
