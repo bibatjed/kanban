@@ -1,5 +1,4 @@
 import { ChangeEvent, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import uuid from "react-uuid";
 import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
 import IconCross from "../../assets/icons/IconCross";
@@ -15,11 +14,20 @@ import TextArea from "../TextArea";
 type Subtasks = {
   name: string;
   done: boolean;
+  error?: string;
+};
+
+type errorObj = {
+  title: string;
+  subtasks: {
+    [key: number]: string;
+  };
 };
 
 export type Task = {
   id?: string;
   title: string;
+  errorTitle?: string;
   description: string;
   subtasks: Subtasks[] | [];
   status: string;
@@ -44,17 +52,23 @@ export default function TaskModal() {
     }));
   }
   function handleDeleteSubtasks(id: number) {
-    setFormValues((prev) => ({
-      ...prev,
-      subtasks: prev.subtasks.slice(id, id + 1),
-    }));
+    setFormValues((prev) => {
+      const subtasks = [...prev.subtasks];
+      subtasks.splice(id, 1);
+      return {
+        ...prev,
+        subtasks: subtasks,
+      };
+    });
   }
   function onChangeCommon(
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
+    const errorTitle = e.target.name === "title" ? "" : formValues.errorTitle;
     setFormValues((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
+      errorTitle,
     }));
   }
 
@@ -77,7 +91,43 @@ export default function TaskModal() {
     }));
   }
 
+  function checkColumnFields() {
+    const errorObj: errorObj = {
+      title: "",
+      subtasks: {},
+    };
+
+    if (formValues.title == "") {
+      errorObj.title = "required";
+    }
+    formValues.subtasks.forEach((value, index) => {
+      if (value.name === "" || value.name == null) {
+        errorObj.subtasks[index] = "required";
+        return;
+      }
+    });
+
+    if (errorObj.title === "" && Object.keys(errorObj.subtasks).length === 0) {
+      return true;
+    }
+
+    setFormValues((prev) => {
+      return {
+        ...prev,
+        errorTitle: errorObj.title as string,
+        subtasks: prev.subtasks.map((value, index) => {
+          return {
+            ...value,
+            error: errorObj.subtasks[index] || "",
+          };
+        }),
+      };
+    });
+  }
   function handleSubmit() {
+    if (!checkColumnFields()) {
+      return;
+    }
     dispatch(addNewTask({ id: uuid(), ...formValues }));
     dispatch(closeTaskModal());
   }
@@ -96,6 +146,7 @@ export default function TaskModal() {
             Title
           </span>
           <Input
+            error={formValues.errorTitle}
             name="title"
             onChange={onChangeCommon}
             placeholder="e.g. Take coffee break"
@@ -121,6 +172,7 @@ export default function TaskModal() {
                   name={index.toString()}
                   onChange={onChangeSubtasks}
                   value={value.name}
+                  error={value.error}
                 />{" "}
                 <div>
                   <Button
