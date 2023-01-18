@@ -32,7 +32,11 @@ export default function Board() {
   const dispatch = useAppDispatch();
   const [clonedItems, setClonedItems] = useState<Items[] | null>(null);
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 1,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -51,7 +55,7 @@ export default function Board() {
       <div className="flex gap-5 bg-kanban-light-grey-bg w-full overflow-x-scroll min-h-[90%] p-10">
         {container.map((item, idx) => {
           return (
-            <div key={idx} className="min-w-[320px]">
+            <div key={idx} className="min-w-[250px]">
               <div className="flex items-center flex-row gap-2 mb-7">
                 <StatusCircle id={idx} />
                 <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey uppercase">
@@ -84,6 +88,7 @@ export default function Board() {
             id={activeId.id!.toString()}
             title={activeId.title}
             subtasks={activeId.subtasks}
+            subtaskComplete={activeId.subtaskComplete}
           />
         )}
       </DragOverlay>

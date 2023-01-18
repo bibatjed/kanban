@@ -1,22 +1,18 @@
-import React, { forwardRef } from "react";
-
 export default function Item({
   id,
+  subtaskComplete,
   ...props
 }: {
   id: string;
   title: string;
   subtasks: { name: string; done: boolean }[];
+  subtaskComplete: number;
 }) {
   return (
     <div className="kanban-item" {...props}>
       <span className=" text-[15px] font-bold">{props.title}</span>
       <span className="text-xs font-medium text-kanban-medium-grey">
-        {`${props.subtasks.reduce(
-          (acc, currentvalue) => acc + (currentvalue.done ? 1 : 0),
-          0
-        )} 
-          of ${props.subtasks.length} subtasks`}
+        {`${subtaskComplete} of ${props.subtasks?.length || 0} subtasks`}
       </span>{" "}
     </div>
   );

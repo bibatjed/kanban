@@ -2,9 +2,13 @@ import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { modal } from "../constants";
 
 // Define a type for the slice state
+type ModalDetail = {
+  id?: string;
+};
 type ModalState = {
   isOpen: boolean;
   modalType: string;
+  modalDetail?: ModalDetail;
 };
 
 const { ADD_COLUMN } = modal;
@@ -22,6 +26,7 @@ export const counterSlice = createSlice({
     openModal: (state, action: PayloadAction<AnyAction>) => {
       state.isOpen = true;
       state.modalType = action.payload.type;
+      state.modalDetail = action.payload.detail;
     },
     closeModal: (state) => {
       state.isOpen = false;

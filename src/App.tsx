@@ -2,6 +2,7 @@ import Board from "./components/Board";
 import ColumnModal from "./components/ColumnModal";
 import Header from "./components/Header";
 import TaskModal from "./components/TaskModal";
+import ViewTaskModal from "./components/TaskModal/ViewTaskModal";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Board />
       <ColumnModal />
       <TaskModal />
+      <ViewTaskModal />
     </div>
   );
 }

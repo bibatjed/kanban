@@ -38,23 +38,24 @@ export default function Column(props: ColumnProps) {
       items={itemIds}
       strategy={verticalListSortingStrategy}
     >
-      <div
-        ref={setNodeRef}
-        className={`flex flex-col gap-2 w-ful bg-kanban-light-grey-bg h-full ${borderBroken}`}
-      >
-        {items.map((item) => (
-          <SortableItem
-            key={item.id}
-            id={item.id!}
-            containerIndex={containerIndex}
-            columnId={id}
-            title={item.title}
-            subtasks={`${item.subtasks.reduce(
-              (acc, currentvalue) => acc + (currentvalue.done ? 1 : 0),
-              0
-            )} of ${item.subtasks.length} subtasks`}
-          />
-        ))}
+      <div className={`h-full ${borderBroken}`}>
+        <div
+          ref={setNodeRef}
+          className={`flex flex-col gap-2 w-full bg-kanban-light-grey-bg`}
+        >
+          {items.map((item) => (
+            <SortableItem
+              key={item.id}
+              id={item.id!}
+              containerIndex={containerIndex}
+              columnId={id}
+              title={item.title}
+              subtasks={`${item.subtaskComplete || 0} of ${
+                item.subtasks?.length
+              } subtasks`}
+            />
+          ))}
+        </div>
       </div>
     </SortableContext>
   );

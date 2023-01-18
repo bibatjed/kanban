@@ -1,8 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import uuid from "react-uuid";
 // Define a type for the slice state
 import { Task } from "../components/TaskModal";
 import produce from "immer";
+import { RootState } from "../store";
+import { useAppSelector } from "../hooks/redux";
 
 export type ContainerState = {
   container: string;
@@ -17,28 +19,32 @@ const initialState: ContainerState[] = [
         title: "example",
         description: "example",
         subtasks: [{ name: "example", done: false }],
-        status: "root",
+        status: "todo",
+        subtaskComplete: 0,
       },
       {
         id: uuid(),
         title: "example1",
         description: "example",
         subtasks: [{ name: "example", done: false }],
-        status: "root",
+        status: "todo",
+        subtaskComplete: 0,
       },
       {
         id: uuid(),
         title: "example2",
         description: "example",
         subtasks: [{ name: "example", done: false }],
-        status: "root",
+        status: "todo",
+        subtaskComplete: 0,
       },
       {
         id: uuid(),
         title: "example3",
         description: "example",
         subtasks: [{ name: "example", done: false }],
-        status: "root",
+        status: "todo",
+        subtaskComplete: 0,
       },
     ],
   },
@@ -68,8 +74,100 @@ export const containerSlice = createSlice({
 
       return newState;
     },
+    onClickSubtasks: (state, action: PayloadAction<AnyAction>) => {
+      let counter = 0;
+      let found: number | null = null;
+      while (counter < state.length) {
+        let find = state[counter].task.findIndex((value) => {
+          return value.id === action.payload.id;
+        });
+
+        if (find > -1) {
+          found = find;
+          break;
+        }
+
+        counter++;
+      }
+
+      const newState = produce(state, (draft) => {
+        const currentStatus =
+          draft[counter].task[found as number].subtasks[
+            action.payload.subtaskIdx
+          ].done;
+
+        if (currentStatus) {
+          draft[counter].task[found as number].subtaskComplete -= 1;
+          draft[counter].task[found as number].subtasks[
+            action.payload.subtaskIdx
+          ].done = false;
+          return;
+        }
+
+        draft[counter].task[found as number].subtaskComplete += 1;
+        draft[counter].task[found as number].subtasks[
+          action.payload.subtaskIdx
+        ].done = true;
+      });
+
+      return newState;
+    },
+    onChangeStatus: (state, action: PayloadAction<AnyAction>) => {
+      const newState = produce(state, (draft) => {
+        let oldStatusContainerIndex: number | null = null;
+        let taskIndex: number | null = null;
+        for (let [key, item] of state.entries()) {
+          const findTaskIndex = item.task.findIndex(
+            (value) => value.id === action.payload.id
+          );
+
+          if (findTaskIndex > -1) {
+            taskIndex = findTaskIndex;
+            oldStatusContainerIndex = key;
+            break;
+          }
+        }
+
+        const newStatusContainerIndex = draft.findIndex(
+          (value) => value.container === action.payload.status
+        );
+        const task: Task = draft[oldStatusContainerIndex as number].task.splice(
+          taskIndex as number,
+          1
+        )[0];
+
+        task.status = action.payload.status;
+        draft[newStatusContainerIndex].task.push(task);
+      });
+
+      return newState;
+    },
   },
 });
 
-export const { updateBoard, addNewTask } = containerSlice.actions;
+export const { updateBoard, onClickSubtasks, onChangeStatus, addNewTask } =
+  containerSlice.actions;
+
+function selectTaskByID(state: RootState, id: string) {
+  let counter = 0;
+  let found: Task | null = null;
+  while (counter < state.containerReducers.length) {
+    let find = state.containerReducers[counter].task.find((value) => {
+      return value.id === id;
+    });
+
+    if (find) {
+      found = find;
+      break;
+    }
+
+    counter++;
+  }
+
+  return found;
+}
+
+export const selectTask = (id: string) =>
+  useAppSelector((state) => selectTaskByID(state, id));
+
 export default containerSlice.reducer;

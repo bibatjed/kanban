@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import uuid from "react-uuid";
 import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
 import IconCross from "../../assets/icons/IconCross";
@@ -31,6 +31,7 @@ export type Task = {
   errorTitle?: string;
   description: string;
   subtasks: Subtasks[] | [];
+  subtaskComplete: number;
   status: string;
 };
 const { ADD_TASK } = modal;
@@ -45,8 +46,23 @@ export default function TaskModal() {
     title: "",
     description: "",
     subtasks: [{ name: "", done: false }],
+    subtaskComplete: 0,
     status: statusList[0],
   });
+
+  useEffect(() => {
+    if (modal.isOpen === true && modal.modalType === ADD_TASK)
+      setFormValues((prev) => {
+        return {
+          ...prev,
+          title: "",
+          description: "",
+          subtasks: [{ name: "", done: false }],
+          subtaskComplete: 0,
+          status: statusList[0],
+        };
+      });
+  }, [modal.isOpen]);
 
   function handleAddSubtasks() {
     setFormValues((prev) => ({
@@ -160,7 +176,11 @@ export default function TaskModal() {
           <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
             Description
           </span>
-          <TextArea value={formValues.description} onChange={onChangeCommon} />
+          <TextArea
+            name="description"
+            value={formValues.description}
+            onChange={onChangeCommon}
+          />
         </div>
         {/* Columns  */}
         <div className="flex flex-col gap-2">

@@ -1,14 +1,20 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-
-type SortabileItemProps = {
+import { useAppDispatch } from "../../hooks/redux";
+import { modal } from "../../constants";
+import { openModal } from "../../reducer/modal";
+type SortableItemProps = {
   id: string;
   containerIndex: number;
   columnId: string;
   title: string;
   subtasks: string;
 };
-export default function SortableItem(props: SortabileItemProps) {
+
+const { VIEW_TASK } = modal;
+
+export default function SortableItem(props: SortableItemProps) {
+  const dispatch = useAppDispatch();
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id: props.id,
@@ -26,7 +32,9 @@ export default function SortableItem(props: SortabileItemProps) {
   return (
     <div
       className="kanban-item"
-      onClick={() => console.log("clicked")}
+      onClick={() =>
+        dispatch(openModal({ type: VIEW_TASK, detail: { id: props.id } }))
+      }
       ref={setNodeRef}
       style={style}
       {...attributes}
