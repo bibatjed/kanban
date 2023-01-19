@@ -142,11 +142,30 @@ export const containerSlice = createSlice({
 
       return newState;
     },
+    onDeleteTask: (state, action: PayloadAction<AnyAction>) => {
+      const newState = produce(state, (draft) => {
+        for (let [key, item] of draft.entries()) {
+          const findTaskIndex = item.task.findIndex(
+            (value) => value.id === action.payload.id
+          );
+          if (findTaskIndex > -1) {
+            draft[key].task.splice(findTaskIndex, 1);
+            break;
+          }
+        }
+      });
+      return newState;
+    },
   },
 });
 
-export const { updateBoard, onClickSubtasks, onChangeStatus, addNewTask } =
-  containerSlice.actions;
+export const {
+  updateBoard,
+  onClickSubtasks,
+  onDeleteTask,
+  onChangeStatus,
+  addNewTask,
+} = containerSlice.actions;
 
 //TODO: use createSelector to improve performance
 function selectTaskByID(state: RootState, id: string) {

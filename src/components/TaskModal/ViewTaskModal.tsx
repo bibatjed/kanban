@@ -30,12 +30,17 @@ export default function ViewTaskModal() {
         text: "Delete Button",
         onClick: () => {
           console.log("hello");
-          dispatch(openModal({ type: DELETE_TASK }));
+          dispatch(
+            openModal({
+              type: DELETE_TASK,
+              detail: { id: task?.id, title: task?.title },
+            })
+          );
         },
         colorPallete: ["text-kanban-red-hover", "text-kanban-red"],
       },
     ],
-    [dispatch]
+    [dispatch, task]
   );
 
   function onChangeStatus(value: string) {

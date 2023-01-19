@@ -4,6 +4,7 @@ import { modal } from "../constants";
 // Define a type for the slice state
 type ModalDetail = {
   id?: string;
+  title?: string;
 };
 type ModalState = {
   isOpen: boolean;
