@@ -5,12 +5,14 @@ type DialogWrapperProps = {
   isOpen: boolean;
   title: string;
   children: ReactNode | ReactNode[];
+  titleColor?: string;
 };
 
 interface IDialogWrapper extends DialogWrapperProps {
   onClose: () => void;
 }
 export default function DialogWrapper(props: IDialogWrapper) {
+  const { titleColor = "black" } = props;
   return (
     <>
       <Transition appear show={props.isOpen} as={Fragment}>
@@ -41,7 +43,11 @@ export default function DialogWrapper(props: IDialogWrapper) {
                   {/* Dialog Header */}
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-plus-jakarta-sans font-semibold text-kanban-black"
+                    className={`text-lg font-plus-jakarta-sans font-semibold ${
+                      titleColor === "black"
+                        ? "text-kanban-black"
+                        : "text-kanban-red"
+                    }`}
                   >
                     {props.title}
                   </Dialog.Title>
