@@ -2,20 +2,41 @@ import DialogWrapper from "../DialogWrapper";
 
 import { modal } from "../../constants";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { closeModal } from "../../reducer/modal";
+import { closeModal, openModal } from "../../reducer/modal";
 import { onChangeStatus as changeStatus } from "../../reducer/column";
 import Select from "../Select";
 import CheckBox from "../CheckBox";
 import { onClickSubtasks, selectTask } from "../../reducer/column";
-const { VIEW_TASK } = modal;
+import MyDropdown from "../Dropdown";
+import { useMemo } from "react";
+const { VIEW_TASK, DELETE_TASK } = modal;
+
 export default function ViewTaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
   const isOpen = modal.isOpen && modal.modalType === VIEW_TASK;
   const task = selectTask(modal.modalDetail?.id as string);
   const data = useAppSelector((state) => state.containerReducers);
+  const dispatch = useAppDispatch();
 
   const statusList = data.map((value) => value.container);
-  const dispatch = useAppDispatch();
+  const MenuList = useMemo(
+    () => [
+      {
+        text: "Edit Button",
+        onClick: () => console.log("hello"),
+        colorPallete: ["text-gray-400", "text-kanban-medium-grey"],
+      },
+      {
+        text: "Delete Button",
+        onClick: () => {
+          console.log("hello");
+          dispatch(openModal({ type: DELETE_TASK }));
+        },
+        colorPallete: ["text-kanban-red-hover", "text-kanban-red"],
+      },
+    ],
+    [dispatch]
+  );
 
   function onChangeStatus(value: string) {
     dispatch(
@@ -32,6 +53,9 @@ export default function ViewTaskModal() {
       title={task?.title as string}
       onClose={() => dispatch(closeModal())}
     >
+      <div className="absolute top-6 right-7">
+        <MyDropdown menuItem={MenuList} />
+      </div>
       {/* Dialog Body */}
       <div className="mt-2 flex flex-col gap-4">
         <div className="flex flex-col gap-2">
