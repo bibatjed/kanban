@@ -30,7 +30,8 @@ export default function Header() {
               <IconAddTaskMobile className="fill-kanban-white" />
             </Button>
           </div>
-          <MyDropdown />
+          {/* TODO Implement function */}
+          {/* <MyDropdown /> */}
         </div>
       </div>
     </div>
