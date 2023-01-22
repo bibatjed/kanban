@@ -11,6 +11,7 @@ import { modal } from "../../constants";
 import Input from "../Input";
 import Select from "../Select";
 import TextArea from "../TextArea";
+import { taskCancelled } from "@reduxjs/toolkit/dist/listenerMiddleware/exceptions";
 
 type Subtasks = {
   name: string;
@@ -167,6 +168,7 @@ export default function TaskModal() {
           <Input
             error={formValues.errorTitle}
             name="title"
+            value={formValues.title}
             onChange={onChangeCommon}
             placeholder="e.g. Take coffee break"
           />

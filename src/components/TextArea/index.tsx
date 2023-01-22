@@ -14,6 +14,7 @@ export default function TextArea(props: ITextAreaProps) {
         <textarea
           name={props.name}
           onChange={props.onChange}
+          value={props.value}
           placeholder="e.g. It’s always good to take a break. This 15 minute break will recharge the batteries a little."
           className="w-full p-4 rounded-md font-plus-jakarta-sans h-full placeholder-inherit text-sm outline-none resize-none placeholder-gray-400"
         />

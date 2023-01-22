@@ -9,7 +9,7 @@ import CheckBox from "../CheckBox";
 import { onClickSubtasks, selectTask } from "../../reducer/column";
 import MyDropdown from "../Dropdown";
 import { useMemo } from "react";
-const { VIEW_TASK, DELETE_TASK } = modal;
+const { VIEW_TASK, EDIT_TASK, DELETE_TASK } = modal;
 
 export default function ViewTaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
@@ -17,26 +17,26 @@ export default function ViewTaskModal() {
   const task = selectTask(modal.modalDetail?.id as string);
   const data = useAppSelector((state) => state.containerReducers);
   const dispatch = useAppDispatch();
-
   const statusList = data.map((value) => value.container);
+
+  console.log(task?.status);
   const MenuList = useMemo(
     () => [
       {
         text: "Edit Button",
-        onClick: () => console.log("hello"),
+        onClick: () =>
+          dispatch(openModal({ type: EDIT_TASK, detail: { id: task?.id } })),
         colorPallete: ["text-gray-400", "text-kanban-medium-grey"],
       },
       {
         text: "Delete Button",
-        onClick: () => {
-          console.log("hello");
+        onClick: () =>
           dispatch(
             openModal({
               type: DELETE_TASK,
               detail: { id: task?.id, title: task?.title },
             })
-          );
-        },
+          ),
         colorPallete: ["text-kanban-red-hover", "text-kanban-red"],
       },
     ],

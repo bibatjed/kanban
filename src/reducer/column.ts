@@ -142,6 +142,41 @@ export const containerSlice = createSlice({
 
       return newState;
     },
+    onEditTask: (state, action: PayloadAction<Task>) => {
+      const newState = produce(state, (draft) => {
+        let oldStatusContainerIndex: number | null = null;
+        let taskIndex: number | null = null;
+        for (let [key, item] of state.entries()) {
+          const findTaskIndex = item.task.findIndex(
+            (value) => value.id === action.payload.id
+          );
+
+          if (findTaskIndex > -1) {
+            const originalStatus = draft[key].task[findTaskIndex].status;
+            const newStatus = action.payload.status;
+            if (originalStatus === newStatus) {
+              draft[key].task[findTaskIndex] = { ...action.payload };
+            }
+            taskIndex = findTaskIndex;
+            oldStatusContainerIndex = key;
+            break;
+          }
+        }
+
+        const newStatusContainerIndex = draft.findIndex(
+          (value) => value.container === action.payload.status
+        );
+        let task: Task = draft[oldStatusContainerIndex as number].task.splice(
+          taskIndex as number,
+          1
+        )[0];
+
+        task = { ...action.payload };
+
+        draft[newStatusContainerIndex].task.push(task);
+      });
+      return newState;
+    },
     onDeleteTask: (state, action: PayloadAction<AnyAction>) => {
       const newState = produce(state, (draft) => {
         for (let [key, item] of draft.entries()) {
@@ -165,6 +200,7 @@ export const {
   onDeleteTask,
   onChangeStatus,
   addNewTask,
+  onEditTask,
 } = containerSlice.actions;
 
 //TODO: use createSelector to improve performance

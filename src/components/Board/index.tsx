@@ -92,18 +92,6 @@ export default function Board() {
           />
         )}
       </DragOverlay>
-      {/* {isModalTaskOpen && (
-        <TaskModal
-          submit={(values: Task) => {
-            setItems((prev) => {
-              const items = { ...prev };
-              items[values.status].push({ id: uuid(), ...values });
-              return items;
-            });
-            setIsModalTaskOpen(false);
-          }}
-        />
-      )} */}
     </DndContext>
   );
 
@@ -168,6 +156,7 @@ export default function Board() {
     // Find the containers
     const activeContainer = active?.data?.current?.containerIndex;
     const overContainer = over?.data?.current?.containerIndex;
+    const newColumn = over?.data?.current?.columnId;
     if (
       activeContainer == null ||
       overContainer == null ||
@@ -202,9 +191,11 @@ export default function Board() {
     newItem[activeContainer].task = container[activeContainer].task.filter(
       (item) => item.id !== active.id
     );
+    const task = { ...container[activeContainer].task[activeIndex] };
+    task.status = newColumn;
     newItem[overContainer].task = [
       ...container[overContainer].task.slice(0, newIndex),
-      container[activeContainer].task[activeIndex],
+      task,
       ...container[overContainer].task.slice(
         newIndex,
         container[overContainer].task.length
