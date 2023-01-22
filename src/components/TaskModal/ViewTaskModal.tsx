@@ -19,7 +19,6 @@ export default function ViewTaskModal() {
   const dispatch = useAppDispatch();
   const statusList = data.map((value) => value.container);
 
-  console.log(task?.status);
   const MenuList = useMemo(
     () => [
       {
