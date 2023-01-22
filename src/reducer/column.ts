@@ -156,6 +156,7 @@ export const containerSlice = createSlice({
             const newStatus = action.payload.status;
             if (originalStatus === newStatus) {
               draft[key].task[findTaskIndex] = { ...action.payload };
+              return;
             }
             taskIndex = findTaskIndex;
             oldStatusContainerIndex = key;
