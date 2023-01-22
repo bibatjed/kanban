@@ -210,7 +210,6 @@ export const {
 } = containerSlice.actions;
 
 function selectTaskByID(state: ContainerState[], id: string) {
-  console.log("calling");
   let counter = 0;
   let found: Task | null = null;
   while (counter < state.length) {
