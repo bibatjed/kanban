@@ -7,17 +7,17 @@ import { onChangeStatus as changeStatus } from "../../reducer/column";
 import Select from "../Select";
 import CheckBox from "../CheckBox";
 import { onClickSubtasks, selectTask } from "../../reducer/column";
-import MyDropdown from "../Dropdown";
+import DropDown from "../Dropdown";
 import { useMemo } from "react";
 const { VIEW_TASK, EDIT_TASK, DELETE_TASK } = modal;
 
 export default function ViewTaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
   const isOpen = modal.isOpen && modal.modalType === VIEW_TASK;
-  const task = selectTask(modal.modalDetail?.id as string);
-  const data = useAppSelector((state) => state.containerReducers);
+  const state = useAppSelector((state) => state.containerReducers);
+  const task = selectTask(state, modal.modalDetail?.id as string);
   const dispatch = useAppDispatch();
-  const statusList = data.map((value) => value.container);
+  const statusList = state.map((value) => value.container);
 
   const MenuList = useMemo(
     () => [
@@ -58,7 +58,7 @@ export default function ViewTaskModal() {
       onClose={() => dispatch(closeModal())}
     >
       <div className="absolute top-6 right-7">
-        <MyDropdown menuItem={MenuList} />
+        <DropDown menuItem={MenuList} />
       </div>
       {/* Dialog Body */}
       <div className="mt-2 flex flex-col gap-4">

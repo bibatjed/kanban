@@ -1,7 +1,12 @@
-import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  AnyAction,
+  createSelector,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import uuid from "react-uuid";
 // Define a type for the slice state
-import { Task } from "../components/TaskModal";
+import { Task } from "../components/TaskModal/hooks/useTask";
 import produce from "immer";
 import { RootState } from "../store";
 import { useAppSelector } from "../hooks/redux";
@@ -204,12 +209,12 @@ export const {
   onEditTask,
 } = containerSlice.actions;
 
-//TODO: use createSelector to improve performance
-function selectTaskByID(state: RootState, id: string) {
+function selectTaskByID(state: ContainerState[], id: string) {
+  console.log("calling");
   let counter = 0;
   let found: Task | null = null;
-  while (counter < state.containerReducers.length) {
-    let find = state.containerReducers[counter].task.find((value) => {
+  while (counter < state.length) {
+    let find = state[counter].task.find((value) => {
       return value.id === id;
     });
 
@@ -224,7 +229,12 @@ function selectTaskByID(state: RootState, id: string) {
   return found;
 }
 
-export const selectTask = (id: string) =>
-  useAppSelector((state) => selectTaskByID(state, id));
+export const selectTask = createSelector(
+  [
+    (state: ContainerState[]) => state,
+    (state: ContainerState[], id: string) => id,
+  ],
+  (state, id) => selectTaskByID(state, id)
+);
 
 export default containerSlice.reducer;

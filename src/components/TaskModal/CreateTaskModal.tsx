@@ -1,4 +1,3 @@
-import { ChangeEvent, useEffect, useState } from "react";
 import uuid from "react-uuid";
 import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
 import IconCross from "../../assets/icons/IconCross";
@@ -11,30 +10,9 @@ import { modal } from "../../constants";
 import Input from "../Input";
 import Select from "../Select";
 import TextArea from "../TextArea";
-import { taskCancelled } from "@reduxjs/toolkit/dist/listenerMiddleware/exceptions";
+import useTask from "./hooks/useTask";
+import { useEffect } from "react";
 
-type Subtasks = {
-  name: string;
-  done: boolean;
-  error?: string;
-};
-
-type errorObj = {
-  title: string;
-  subtasks: {
-    [key: number]: string;
-  };
-};
-
-export type Task = {
-  id?: string;
-  title: string;
-  errorTitle?: string;
-  description: string;
-  subtasks: Subtasks[] | [];
-  subtaskComplete: number;
-  status: string;
-};
 const { ADD_TASK } = modal;
 export default function TaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
@@ -43,7 +21,16 @@ export default function TaskModal() {
 
   const statusList = data.map((value) => value.container);
   const dispatch = useAppDispatch();
-  const [formValues, setFormValues] = useState<Task>({
+  const {
+    formValues,
+    checkColumnFields,
+    handleAddSubtasks,
+    handleDeleteSubtasks,
+    onChangeCommon,
+    onChangeStatus,
+    onChangeSubtasks,
+    reset,
+  } = useTask({
     title: "",
     description: "",
     subtasks: [{ name: "", done: false }],
@@ -52,98 +39,11 @@ export default function TaskModal() {
   });
 
   useEffect(() => {
-    if (modal.isOpen === true && modal.modalType === ADD_TASK)
-      setFormValues((prev) => {
-        return {
-          ...prev,
-          title: "",
-          description: "",
-          subtasks: [{ name: "", done: false }],
-          subtaskComplete: 0,
-          status: statusList[0],
-        };
-      });
-  }, [modal.isOpen]);
-
-  function handleAddSubtasks() {
-    setFormValues((prev) => ({
-      ...prev,
-      subtasks: [...prev.subtasks, { name: "", done: false }],
-    }));
-  }
-  function handleDeleteSubtasks(id: number) {
-    setFormValues((prev) => {
-      const subtasks = [...prev.subtasks];
-      subtasks.splice(id, 1);
-      return {
-        ...prev,
-        subtasks: subtasks,
-      };
-    });
-  }
-  function onChangeCommon(
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) {
-    const errorTitle = e.target.name === "title" ? "" : formValues.errorTitle;
-    setFormValues((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-      errorTitle,
-    }));
-  }
-
-  function onChangeSubtasks(e: ChangeEvent<HTMLInputElement>) {
-    setFormValues((prev) => {
-      const subtasks = [...prev.subtasks];
-      subtasks[Number(e.target.name)].name = e.target.value;
-
-      return {
-        ...prev,
-        subtasks,
-      };
-    });
-  }
-
-  function onChangeStatus(value: string) {
-    setFormValues((prev) => ({
-      ...prev,
-      status: value,
-    }));
-  }
-
-  function checkColumnFields() {
-    const errorObj: errorObj = {
-      title: "",
-      subtasks: {},
-    };
-
-    if (formValues.title == "") {
-      errorObj.title = "required";
+    if (isOpen && modal.modalType === ADD_TASK) {
+      reset();
     }
-    formValues.subtasks.forEach((value, index) => {
-      if (value.name === "" || value.name == null) {
-        errorObj.subtasks[index] = "required";
-        return;
-      }
-    });
+  }, [isOpen, modal.modalType]);
 
-    if (errorObj.title === "" && Object.keys(errorObj.subtasks).length === 0) {
-      return true;
-    }
-
-    setFormValues((prev) => {
-      return {
-        ...prev,
-        errorTitle: errorObj.title as string,
-        subtasks: prev.subtasks.map((value, index) => {
-          return {
-            ...value,
-            error: errorObj.subtasks[index] || "",
-          };
-        }),
-      };
-    });
-  }
   function handleSubmit() {
     if (!checkColumnFields()) {
       return;

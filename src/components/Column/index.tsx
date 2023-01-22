@@ -6,7 +6,7 @@ import {
 } from "@dnd-kit/sortable";
 
 import SortableItem from "../SortableItem";
-import { Task } from "../TaskModal";
+import { Task } from "../TaskModal/hooks/useTask";
 
 type ColumnProps = {
   id: string;

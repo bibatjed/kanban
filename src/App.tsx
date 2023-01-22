@@ -1,7 +1,7 @@
 import Board from "./components/Board";
 import ColumnModal from "./components/ColumnModal";
 import Header from "./components/Header";
-import TaskModal from "./components/TaskModal";
+import CreateTaskModal from "./components/TaskModal/CreateTaskModal";
 import DeleteTaskModal from "./components/TaskModal/DeleteTaskModal";
 import EditTaskModal from "./components/TaskModal/EditTaskModal";
 import ViewTaskModal from "./components/TaskModal/ViewTaskModal";
@@ -12,7 +12,7 @@ function App() {
       <Header />
       <Board />
       <ColumnModal />
-      <TaskModal />
+      <CreateTaskModal />
       <ViewTaskModal />
       <EditTaskModal />
       <DeleteTaskModal />
