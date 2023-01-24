@@ -14,7 +14,7 @@ export default function Sidebar() {
     <div
       className={`${
         isOpen ? "" : "-translate-x-full"
-      } transition-all duration-200 flex flex-col justify-between bg-kanban-white fixed h-[calc(100%-6rem)] pt-2 pb-3 w-full max-w-[18.13rem] border-r-[1px] border-kanban-lines-light`}
+      } transition-all duration-200 flex flex-col justify-between bg-kanban-white fixed h-[calc(100%-5.7rem)] pt-2 pb-3 w-full max-w-[18.13rem] border-r-[1px] border-kanban-lines-light z-50`}
     >
       <div className="pr-10 flex flex-col gap-2.5">
         <span className="pl-8 font-plus-jakarta-sans uppercase text-[13px] font-medium tracking-widest text-kanban-medium-grey">

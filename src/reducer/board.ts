@@ -13,49 +13,142 @@ export type ContainerState = {
   container: string;
   task: Task[];
 };
-const initialState: ContainerState[] = [
+
+export type Board = {
+  name: string;
+  columns: ContainerState[];
+};
+
+//TODO: RESOLVE TYPE ISSUES
+
+const initialState: Board[] = [
   {
-    container: "todo",
-    task: [
+    name: "Example",
+    columns: [
       {
-        id: uuid(),
-        title: "example",
-        description: "example",
-        subtasks: [{ name: "example", done: false }],
-        status: "todo",
-        subtaskComplete: 0,
+        container: "todo",
+        task: [
+          {
+            id: uuid(),
+            title: "example",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example1",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example2",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example3",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example3",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example3",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example3",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example3",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example3",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example3",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example3",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example3",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example3",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+          {
+            id: uuid(),
+            title: "example3",
+            description: "example",
+            subtasks: [{ name: "example", done: false }],
+            status: "todo",
+            subtaskComplete: 0,
+          },
+        ],
       },
       {
-        id: uuid(),
-        title: "example1",
-        description: "example",
-        subtasks: [{ name: "example", done: false }],
-        status: "todo",
-        subtaskComplete: 0,
+        container: "doing",
+        task: [],
       },
-      {
-        id: uuid(),
-        title: "example2",
-        description: "example",
-        subtasks: [{ name: "example", done: false }],
-        status: "todo",
-        subtaskComplete: 0,
-      },
-      {
-        id: uuid(),
-        title: "example3",
-        description: "example",
-        subtasks: [{ name: "example", done: false }],
-        status: "todo",
-        subtaskComplete: 0,
-      },
+      { container: "done", task: [] },
     ],
   },
-  {
-    container: "doing",
-    task: [],
-  },
-  { container: "done", task: [] },
 ];
 // Define the initial state using that type
 
@@ -64,8 +157,14 @@ export const boardSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    updateBoard: (state, action: PayloadAction<ContainerState[]>) => {
-      return action.payload;
+    updateBoard: (
+      state,
+      action: PayloadAction<{ column: ContainerState[]; boardIndex: number }>
+    ) => {
+      const newState = produce(state, (draft) => {
+        draft[0].columns = action.payload.column;
+      });
+      return newState;
     },
     addNewTask: (state, action: PayloadAction<Task>) => {
       const statusIndex = state.findIndex(

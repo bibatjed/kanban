@@ -18,7 +18,7 @@ export default function EditTaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
   const isOpen = modal.isOpen && modal.modalType === EDIT_TASK;
   const state = useAppSelector((state) => state.containerReducers);
-  const task = selectTask(state, modal.modalDetail?.id as string);
+  const task = selectTask(state, modal.modalDetail!.id);
   const statusList = state.map((value) => value.container);
   const dispatch = useAppDispatch();
 

@@ -9,15 +9,15 @@ import ViewTaskModal from "./components/TaskModal/ViewTaskModal";
 
 function App() {
   return (
-    <div className="h-screen overflow-y-hidden bg-kanban-light-grey-bg">
+    <div className="h-screen bg-kanban-light-grey-bg">
       <Header />
       <Sidebar />
       <Board />
-      <ColumnModal />
+      {/* <ColumnModal />
       <CreateTaskModal />
       <ViewTaskModal />
       <EditTaskModal />
-      <DeleteTaskModal />
+      <DeleteTaskModal /> */}
     </div>
   );
 }

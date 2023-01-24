@@ -15,11 +15,11 @@ type ColumnProps = {
 };
 
 export default function Column(props: ColumnProps) {
-  const { id, items, containerIndex } = props;
-  const itemIds = useMemo(
-    () => items.map((item) => item.id),
+  const { id, items = [], containerIndex } = props;
+  const itemIds: string[] = useMemo(
+    () => items.map((item) => item.id!),
     [items]
-  ) as string[]; // ["1", "2", "3"]
+  );
   const borderBroken =
     items.length === 0
       ? "border-dashed border-kanban-lines-light border-2 rounded-md"

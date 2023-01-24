@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import modal from "../reducer/modal";
 import container from "../reducer/board";
 import sidebar from "../reducer/sidebar";
+import boardDetails from "../reducer/boardDetails";
 // ...
 
 const store = configureStore({
@@ -9,6 +10,7 @@ const store = configureStore({
     modalReducers: modal,
     containerReducers: container,
     sidebarReducers: sidebar,
+    boardDetailsReducers: boardDetails,
   },
 });
 

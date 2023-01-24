@@ -8,6 +8,7 @@ import {
   DragStartEvent,
   KeyboardSensor,
   PointerSensor,
+  TraversalOrder,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -19,7 +20,7 @@ import { Task } from "../TaskModal/hooks/useTask";
 import StatusCircle from "../StatusCircle";
 import ColumnPlaceHolder from "../ColumnPlaceholder";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { updateBoard } from "../../reducer/board";
+import { ContainerState, updateBoard } from "../../reducer/board";
 import SideBarShow from "../SidebarShow";
 
 export type Items = {
@@ -29,7 +30,10 @@ export type Items = {
 
 export default function Board() {
   const [activeId, setActiveId] = useState<Task | null>();
-  const container = useAppSelector((state) => state.containerReducers);
+  const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
+  const containerResult = useAppSelector((state) => state.containerReducers);
+  const container: ContainerState[] =
+    containerResult[boardDetails.boardSelectedIndex].columns;
   const isSidebarOpen = useAppSelector((state) => state.sidebarReducers.isOpen);
   const dispatch = useAppDispatch();
   const [clonedItems, setClonedItems] = useState<Items[] | null>(null);
@@ -52,40 +56,44 @@ export default function Board() {
       onDragEnd={handleDragEnd}
       onDragOver={handleDragOver}
       onDragCancel={onDragCancel}
+      //NOTE: ADD TO ENABLED AUTO SCROLL
+      autoScroll={{ order: TraversalOrder.ReversedTreeOrder }}
     >
       <div
         className={`${
           isSidebarOpen ? "pl-80" : ""
-        } transition-all duration-200 flex gap-5 bg-kanban-light-grey-bg w-full overflow-x-scroll min-h-[90%] p-10`}
+        } transition-all duration-200 bg-kanban-light-grey-bg overflow-y-auto w-full h-[90%] p-10 pt-5`}
       >
-        {container.map((item, idx) => {
-          return (
-            <div key={idx} className="min-w-[250px]">
-              <div className="flex items-center flex-row gap-2 mb-7">
-                <StatusCircle id={idx} />
-                <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey uppercase">
-                  {" "}
-                  {item.container}
-                </span>
-                <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey">
-                  ({item.task.length})
-                </span>
+        <div className="flex flex-row gap-5 min-h-[97%]">
+          {container.map((item, idx) => {
+            return (
+              <div key={idx} className="min-w-[250px]">
+                <div className="flex items-center flex-row gap-2 mb-7">
+                  <StatusCircle id={idx} />
+                  <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey uppercase">
+                    {" "}
+                    {item.container}
+                  </span>
+                  <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey">
+                    ({item.task.length})
+                  </span>
+                </div>
+                <Column
+                  id={item.container}
+                  containerIndex={idx}
+                  items={item.task}
+                />
               </div>
-              <Column
-                id={item.container}
-                containerIndex={idx}
-                items={item.task}
-              />
-            </div>
-          );
-        })}
+            );
+          })}
 
-        {Object.keys(container).length < 6 && (
-          <div className="min-w-[320px]">
-            <div className="mb-7 h-[24px]"></div>
-            <ColumnPlaceHolder />
-          </div>
-        )}
+          {Object.keys(container).length < 6 && (
+            <div className="min-w-[250px]">
+              <div className="mb-7 h-[24px]"></div>
+              <ColumnPlaceHolder />
+            </div>
+          )}
+        </div>
         <SideBarShow />
       </div>
       <DragOverlay>
@@ -142,7 +150,12 @@ export default function Board() {
         activeIndex,
         overIndex
       );
-      dispatch(updateBoard(newItem));
+      dispatch(
+        updateBoard({
+          column: newItem,
+          boardIndex: boardDetails.boardSelectedIndex,
+        })
+      );
     }
 
     setActiveId(null);
@@ -207,6 +220,11 @@ export default function Board() {
         container[overContainer].task.length
       ),
     ];
-    dispatch(updateBoard(newItem));
+    dispatch(
+      updateBoard({
+        column: newItem,
+        boardIndex: boardDetails.boardSelectedIndex,
+      })
+    );
   }
 }
