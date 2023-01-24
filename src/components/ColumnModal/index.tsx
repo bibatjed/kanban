@@ -138,9 +138,12 @@ export default function ColumnModal() {
     }
     const containers: ContainerState[] = [];
     for (let column of formValues.columns) {
+      const task = column.old
+        ? container.find((item) => item.container === column.old)!.task
+        : [];
       containers.push({
         container: column.new,
-        task: [...(container[column.index]?.task || [])],
+        task: [...task],
       });
     }
     dispatch(updateBoard(containers));
