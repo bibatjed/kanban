@@ -3,7 +3,7 @@ import useTask, { Task } from "./hooks/useTask";
 import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
 import IconCross from "../../assets/icons/IconCross";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { onEditTask, selectTask } from "../../reducer/column";
+import { onEditTask, selectTask } from "../../reducer/board";
 import { closeModal } from "../../reducer/modal";
 import Button from "../Button/Button";
 import DialogWrapper from "../DialogWrapper";

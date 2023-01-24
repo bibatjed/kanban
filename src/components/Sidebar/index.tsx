@@ -4,9 +4,18 @@ import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
 import Switch from "../Switch";
 import IconBoard from "../../assets/icons/IconBoard";
 import IconEye from "../../assets/icons/IconEye";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { closeSidebar } from "../../reducer/sidebar";
 export default function Sidebar() {
+  const isOpen = useAppSelector((state) => state.sidebarReducers.isOpen);
+  const dispatch = useAppDispatch();
+
   return (
-    <div className="flex flex-col justify-between bg-kanban-white fixed h-[calc(100%-6rem)] pt-2 pb-3 w-full max-w-[18.13rem] border-r-[1px] border-kanban-lines-light">
+    <div
+      className={`${
+        isOpen ? "" : "-translate-x-full"
+      } transition-all duration-200 flex flex-col justify-between bg-kanban-white fixed h-[calc(100%-6rem)] pt-2 pb-3 w-full max-w-[18.13rem] border-r-[1px] border-kanban-lines-light`}
+    >
       <div className="pr-10 flex flex-col gap-2.5">
         <span className="pl-8 font-plus-jakarta-sans uppercase text-[13px] font-medium tracking-widest text-kanban-medium-grey">
           All boards (1)
@@ -31,12 +40,15 @@ export default function Sidebar() {
           <Switch />
           <img src={SunIcon} className="w-4 aspect-square" alt="sun" />
         </div>
-        <div className="flex flex-row items-center gap-2 group pl-2">
+        <button
+          onClick={() => dispatch(closeSidebar())}
+          className="flex flex-row items-center gap-2 group pl-2"
+        >
           <IconEye className="fill-kanban-medium-grey group-hover:opacity-60" />
           <span className="font-plus-jakarta-sans text-[13px] font-semibold text-kanban-medium-grey group-hover:opacity-60">
             Hide Sidebar
           </span>
-        </div>
+        </button>
       </div>
     </div>
   );

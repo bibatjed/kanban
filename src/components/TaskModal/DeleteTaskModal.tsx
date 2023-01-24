@@ -1,7 +1,7 @@
 import DialogWrapper from "../DialogWrapper";
 import { closeModal } from "../../reducer/modal";
 import { modal } from "../../constants";
-import { onDeleteTask } from "../../reducer/column";
+import { onDeleteTask } from "../../reducer/board";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import Button from "../Button/Button";
 

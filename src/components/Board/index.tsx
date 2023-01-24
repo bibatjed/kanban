@@ -19,7 +19,8 @@ import { Task } from "../TaskModal/hooks/useTask";
 import StatusCircle from "../StatusCircle";
 import ColumnPlaceHolder from "../ColumnPlaceholder";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { updateBoard } from "../../reducer/column";
+import { updateBoard } from "../../reducer/board";
+import SideBarShow from "../SidebarShow";
 
 export type Items = {
   container: string;
@@ -29,6 +30,7 @@ export type Items = {
 export default function Board() {
   const [activeId, setActiveId] = useState<Task | null>();
   const container = useAppSelector((state) => state.containerReducers);
+  const isSidebarOpen = useAppSelector((state) => state.sidebarReducers.isOpen);
   const dispatch = useAppDispatch();
   const [clonedItems, setClonedItems] = useState<Items[] | null>(null);
   const sensors = useSensors(
@@ -51,8 +53,11 @@ export default function Board() {
       onDragOver={handleDragOver}
       onDragCancel={onDragCancel}
     >
-      {/* <button onClick={() => setIsModalTaskOpen(true)}>Add New Task</button> */}
-      <div className="flex gap-5 bg-kanban-light-grey-bg w-full overflow-x-scroll min-h-[90%] p-10">
+      <div
+        className={`${
+          isSidebarOpen ? "pl-80" : ""
+        } transition-all duration-200 flex gap-5 bg-kanban-light-grey-bg w-full overflow-x-scroll min-h-[90%] p-10`}
+      >
         {container.map((item, idx) => {
           return (
             <div key={idx} className="min-w-[250px]">
@@ -81,6 +86,7 @@ export default function Board() {
             <ColumnPlaceHolder />
           </div>
         )}
+        <SideBarShow />
       </div>
       <DragOverlay>
         {activeId && (

@@ -11,7 +11,7 @@ function App() {
   return (
     <div className="h-screen overflow-y-hidden bg-kanban-light-grey-bg">
       <Header />
-      {/* <Sidebar /> */}
+      <Sidebar />
       <Board />
       <ColumnModal />
       <CreateTaskModal />

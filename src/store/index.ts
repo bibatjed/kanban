@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import modal from "../reducer/modal";
-import container from "../reducer/column";
+import container from "../reducer/board";
+import sidebar from "../reducer/sidebar";
 // ...
 
 const store = configureStore({
   reducer: {
     modalReducers: modal,
     containerReducers: container,
+    sidebarReducers: sidebar,
   },
 });
 

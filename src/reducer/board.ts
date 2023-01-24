@@ -8,8 +8,6 @@ import uuid from "react-uuid";
 // Define a type for the slice state
 import { Task } from "../components/TaskModal/hooks/useTask";
 import produce from "immer";
-import { RootState } from "../store";
-import { useAppSelector } from "../hooks/redux";
 
 export type ContainerState = {
   container: string;
@@ -61,7 +59,7 @@ const initialState: ContainerState[] = [
 ];
 // Define the initial state using that type
 
-export const containerSlice = createSlice({
+export const boardSlice = createSlice({
   name: "container",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
@@ -207,7 +205,7 @@ export const {
   onChangeStatus,
   addNewTask,
   onEditTask,
-} = containerSlice.actions;
+} = boardSlice.actions;
 
 function selectTaskByID(state: ContainerState[], id: string) {
   let counter = 0;
@@ -236,4 +234,4 @@ export const selectTask = createSelector(
   (state, id) => selectTaskByID(state, id)
 );
 
-export default containerSlice.reducer;
+export default boardSlice.reducer;

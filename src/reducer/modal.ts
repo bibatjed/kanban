@@ -19,7 +19,7 @@ const initialState: ModalState = {
   modalType: ADD_COLUMN,
 };
 
-export const counterSlice = createSlice({
+export const modalSlice = createSlice({
   name: "modal",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
@@ -35,9 +35,9 @@ export const counterSlice = createSlice({
   },
 });
 
-export const { closeModal, openModal } = counterSlice.actions;
+export const { closeModal, openModal } = modalSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 // export const selectCount = (state: RootState) => state.counterReducers.value;
 
-export default counterSlice.reducer;
+export default modalSlice.reducer;
