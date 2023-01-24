@@ -1,5 +1,5 @@
 export default function IconAddTaskMobile(props: {
-  className: string;
+  className?: string;
   height?: string;
   width?: string;
 }) {
