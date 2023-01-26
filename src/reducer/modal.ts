@@ -3,13 +3,13 @@ import { modal } from "../constants";
 
 // Define a type for the slice state
 type ModalDetail = {
-  id?: string;
+  id: string;
   title?: string;
 };
 type ModalState = {
   isOpen: boolean;
   modalType: string;
-  modalDetail?: ModalDetail;
+  modalDetail: ModalDetail;
 };
 
 const { ADD_COLUMN } = modal;
@@ -17,6 +17,10 @@ const { ADD_COLUMN } = modal;
 const initialState: ModalState = {
   isOpen: false,
   modalType: ADD_COLUMN,
+  modalDetail: {
+    id: "",
+    title: "",
+  },
 };
 
 export const modalSlice = createSlice({
@@ -27,7 +31,8 @@ export const modalSlice = createSlice({
     openModal: (state, action: PayloadAction<AnyAction>) => {
       state.isOpen = true;
       state.modalType = action.payload.type;
-      state.modalDetail = action.payload.detail;
+      state.modalDetail.id = action.payload.detail?.id || "";
+      state.modalDetail.title = action.payload.detail?.title || "";
     },
     closeModal: (state) => {
       state.isOpen = false;

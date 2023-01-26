@@ -13,11 +13,11 @@ function App() {
       <Header />
       <Sidebar />
       <Board />
-      {/* <ColumnModal />
+      <ColumnModal />
       <CreateTaskModal />
       <ViewTaskModal />
       <EditTaskModal />
-      <DeleteTaskModal /> */}
+      <DeleteTaskModal />
     </div>
   );
 }

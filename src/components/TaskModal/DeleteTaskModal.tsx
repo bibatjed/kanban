@@ -9,10 +9,17 @@ const { DELETE_TASK } = modal;
 export default function DeleteTaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
   const isOpen = modal.isOpen && modal.modalType === DELETE_TASK;
+  const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const dispatch = useAppDispatch();
 
   function handleDelete() {
-    dispatch(onDeleteTask({ type: "", id: modal.modalDetail?.id }));
+    dispatch(
+      onDeleteTask({
+        type: "",
+        id: modal.modalDetail?.id,
+        boardIndex: boardDetails.boardSelectedIndex,
+      })
+    );
     dispatch(closeModal());
   }
 

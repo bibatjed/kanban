@@ -25,7 +25,9 @@ const { ADD_COLUMN } = modal;
 export default function ColumnModal() {
   const modal = useAppSelector((state) => state.modalReducers);
   const isOpen = modal.isOpen && modal.modalType === ADD_COLUMN;
-  const container = useAppSelector((state) => state.containerReducers);
+  const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
+  const state = useAppSelector((state) => state.containerReducers);
+  const container = state[boardDetails.boardSelectedIndex].columns;
   const dispatch = useAppDispatch();
   const [formValues, setFormValues] = useState<FormValues>({
     boardName: "Sample",
@@ -146,7 +148,12 @@ export default function ColumnModal() {
         task: [...task],
       });
     }
-    dispatch(updateBoard(containers));
+    dispatch(
+      updateBoard({
+        column: containers,
+        boardIndex: boardDetails.boardSelectedIndex,
+      })
+    );
     closeModal();
   }
   function closeModal() {

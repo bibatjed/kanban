@@ -21,7 +21,7 @@ const initialState: boarDetailsState = {
 // Define the initial state using that type
 
 export const boardDetailsSlice = createSlice({
-  name: "container",
+  name: "boardDetails",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {

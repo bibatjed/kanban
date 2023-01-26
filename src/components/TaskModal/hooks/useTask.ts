@@ -29,16 +29,21 @@ const initialState: Task = {
   subtaskComplete: 0,
   status: "",
 };
-export default function useTask(task: Task) {
+export default function useTask(task: Task, isOpen: boolean = false) {
   const [formValues, setFormValues] = useState<Task>(task || initialState);
 
+  console.log(formValues);
+
   useEffect(() => {
-    setFormValues((prev) => {
-      return {
-        ...task,
-      };
-    });
-  }, [task?.id]);
+    if (isOpen) {
+      setFormValues((prev) => {
+        return {
+          ...prev,
+          ...task,
+        };
+      });
+    }
+  }, [task?.id, isOpen]);
 
   const reset = useCallback(() => {
     setFormValues(task);
@@ -74,13 +79,20 @@ export default function useTask(task: Task) {
 
   function onChangeSubtasks(e: ChangeEvent<HTMLInputElement>) {
     setFormValues((prev) => {
-      const subtasks = [...prev.subtasks];
-      subtasks[Number(e.target.name)].name = e.target.value;
+      try {
+        const subtasks = structuredClone(prev.subtasks);
+        subtasks[Number(e.target.name)].name = e.target.value;
 
-      return {
-        ...prev,
-        subtasks,
-      };
+        return {
+          ...prev,
+          subtasks,
+        };
+      } catch (e) {
+        console.log(e);
+        return {
+          ...prev,
+        };
+      }
     });
   }
 

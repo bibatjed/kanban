@@ -3,7 +3,7 @@ import DialogWrapper from "../DialogWrapper";
 import { modal } from "../../constants";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { closeModal, openModal } from "../../reducer/modal";
-import { onChangeStatus as changeStatus } from "../../reducer/board";
+import board, { onChangeStatus as changeStatus } from "../../reducer/board";
 import Select from "../Select";
 import CheckBox from "../CheckBox";
 import { onClickSubtasks, selectTask } from "../../reducer/board";
@@ -13,11 +13,17 @@ const { VIEW_TASK, EDIT_TASK, DELETE_TASK } = modal;
 
 export default function ViewTaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
+  const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const isOpen = modal.isOpen && modal.modalType === VIEW_TASK;
   const state = useAppSelector((state) => state.containerReducers);
-  const task = selectTask(state, modal.modalDetail?.id as string);
+  const columns = state[boardDetails.boardSelectedIndex].columns;
+  const task = selectTask(
+    state,
+    modal.modalDetail.id,
+    boardDetails.boardSelectedIndex
+  );
   const dispatch = useAppDispatch();
-  const statusList = state.map((value) => value.container);
+  const statusList = columns.map((value) => value.container);
 
   const MenuList = useMemo(
     () => [
@@ -46,8 +52,9 @@ export default function ViewTaskModal() {
     dispatch(
       changeStatus({
         type: "",
-        id: modal.modalDetail?.id as string,
+        id: modal.modalDetail.id,
         status: value,
+        boardIndex: boardDetails.boardSelectedIndex,
       })
     );
   }
@@ -86,6 +93,7 @@ export default function ViewTaskModal() {
                         id: modal.modalDetail!.id as string,
                         type: "",
                         subtaskIdx: idx,
+                        boardIndex: boardDetails.boardSelectedIndex,
                       })
                     )
                   }

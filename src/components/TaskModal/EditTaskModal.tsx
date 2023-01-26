@@ -1,4 +1,3 @@
-import { ChangeEvent, useEffect, useState } from "react";
 import useTask, { Task } from "./hooks/useTask";
 import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
 import IconCross from "../../assets/icons/IconCross";
@@ -11,15 +10,20 @@ import { modal } from "../../constants";
 import Input from "../Input";
 import Select from "../Select";
 import TextArea from "../TextArea";
-import { RootState } from "../../store";
 
 const { EDIT_TASK } = modal;
 export default function EditTaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
+  const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const isOpen = modal.isOpen && modal.modalType === EDIT_TASK;
   const state = useAppSelector((state) => state.containerReducers);
-  const task = selectTask(state, modal.modalDetail!.id);
-  const statusList = state.map((value) => value.container);
+  const task = selectTask(
+    state,
+    modal.modalDetail.id,
+    boardDetails.boardSelectedIndex
+  );
+  const columns = state[boardDetails.boardSelectedIndex].columns;
+  const statusList = columns.map((value) => value.container);
   const dispatch = useAppDispatch();
 
   const {
@@ -30,7 +34,7 @@ export default function EditTaskModal() {
     onChangeCommon,
     onChangeStatus,
     onChangeSubtasks,
-  } = useTask(task as Task);
+  } = useTask(task as Task, isOpen);
 
   function handleSubmit() {
     if (!checkColumnFields()) {
@@ -44,7 +48,12 @@ export default function EditTaskModal() {
       0
     );
 
-    dispatch(onEditTask({ ...formValues, subtaskComplete }));
+    dispatch(
+      onEditTask({
+        task: { ...formValues, subtaskComplete },
+        boardIndex: boardDetails.boardSelectedIndex,
+      })
+    );
     dispatch(closeModal());
   }
 

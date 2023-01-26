@@ -14,12 +14,14 @@ import useTask from "./hooks/useTask";
 import { useEffect } from "react";
 
 const { ADD_TASK } = modal;
+
 export default function TaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
+  const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const isOpen = modal.isOpen && modal.modalType === ADD_TASK;
   const data = useAppSelector((state) => state.containerReducers);
-
-  const statusList = data.map((value) => value.container);
+  const columns = data[boardDetails.boardSelectedIndex].columns;
+  const statusList = columns.map((value) => value.container);
   const dispatch = useAppDispatch();
   const {
     formValues,
@@ -48,7 +50,12 @@ export default function TaskModal() {
     if (!checkColumnFields()) {
       return;
     }
-    dispatch(addNewTask({ id: uuid(), ...formValues }));
+    dispatch(
+      addNewTask({
+        task: { id: uuid(), ...formValues },
+        boardIndex: boardDetails.boardSelectedIndex,
+      })
+    );
     dispatch(closeModal());
   }
 
