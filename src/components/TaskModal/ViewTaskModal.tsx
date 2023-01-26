@@ -28,13 +28,13 @@ export default function ViewTaskModal() {
   const MenuList = useMemo(
     () => [
       {
-        text: "Edit Button",
+        text: "Edit Task",
         onClick: () =>
           dispatch(openModal({ type: EDIT_TASK, detail: { id: task?.id } })),
         colorPallete: ["text-gray-400", "text-kanban-medium-grey"],
       },
       {
-        text: "Delete Button",
+        text: "Delete Task",
         onClick: () =>
           dispatch(
             openModal({
