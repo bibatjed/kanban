@@ -32,8 +32,6 @@ const initialState: Task = {
 export default function useTask(task: Task, isOpen: boolean = false) {
   const [formValues, setFormValues] = useState<Task>(task || initialState);
 
-  console.log(formValues);
-
   useEffect(() => {
     if (isOpen) {
       setFormValues((prev) => {
@@ -88,7 +86,6 @@ export default function useTask(task: Task, isOpen: boolean = false) {
           subtasks,
         };
       } catch (e) {
-        console.log(e);
         return {
           ...prev,
         };
