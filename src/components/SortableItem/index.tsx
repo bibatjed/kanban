@@ -29,16 +29,18 @@ export default function SortableItem(props: SortableItemProps) {
     transition,
   };
 
+  function handleOnClick() {
+    dispatch(openModal({ type: VIEW_TASK, detail: { id: props.id } }));
+  }
+
   return (
     <div
       className="kanban-item"
-      onClick={() =>
-        dispatch(openModal({ type: VIEW_TASK, detail: { id: props.id } }))
-      }
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
+      onClick={handleOnClick}
     >
       <span className="text-[18px] font-semibold">{props.title}</span>
       <span className="text-[12px] font-light text-kanban-medium-grey">
@@ -46,4 +48,8 @@ export default function SortableItem(props: SortableItemProps) {
       </span>
     </div>
   );
+}
+
+function Hello() {
+  return <div>ello</div>;
 }
