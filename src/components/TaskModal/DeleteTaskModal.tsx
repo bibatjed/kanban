@@ -35,7 +35,7 @@ export default function DeleteTaskModal() {
     >
       <div className="mt-4 flex flex-col gap-7">
         <p className="text-[13px] font-medium font-plus-jakarta-sans text-kanban-medium-grey">
-          Are you sure you wnt to delete '{modal.modalDetail?.title}' task and
+          Are you sure you want to delete '{modal.modalDetail?.title}' task and
           its subtasks? This action cannot be reversed.
         </p>
         <div className="flex flex-row gap-3 h-10">
