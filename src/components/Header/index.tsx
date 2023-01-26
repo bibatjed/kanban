@@ -3,11 +3,32 @@ import LogoDark from "../../assets/logo-dark.svg";
 import { useAppDispatch } from "../../hooks/redux";
 import { openModal } from "../../reducer/modal";
 import Button from "../Button/Button";
-import MyDropdown from "../Dropdown";
+import DropDown from "../Dropdown";
 import { modal } from "../../constants";
-const { ADD_TASK } = modal;
+import { useMemo } from "react";
+const { EDIT_BOARD, DELETE_BOARD, ADD_TASK } = modal;
 export default function Header() {
   const dispatch = useAppDispatch();
+  const MenuList = useMemo(
+    () => [
+      {
+        text: "Edit Board",
+        onClick: () => dispatch(openModal({ type: EDIT_BOARD })),
+        colorPallete: ["text-gray-400", "text-kanban-medium-grey"],
+      },
+      {
+        text: "Delete Board",
+        onClick: () =>
+          dispatch(
+            openModal({
+              type: DELETE_BOARD,
+            })
+          ),
+        colorPallete: ["text-kanban-red-hover", "text-kanban-red"],
+      },
+    ],
+    [dispatch]
+  );
   return (
     <div className="w-full gap-10 flex bg-kanban-white">
       <div className="border p-8 pr-28 border-kanban-lines-light">
@@ -30,8 +51,7 @@ export default function Header() {
               <IconAddTaskMobile className="fill-kanban-white" />
             </Button>
           </div>
-          {/* TODO Implement function */}
-          {/* <MyDropdown /> */}
+          <DropDown menuItem={MenuList} />
         </div>
       </div>
     </div>

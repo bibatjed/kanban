@@ -60,86 +60,6 @@ const initialState: Board[] = [
             status: "todo",
             subtaskComplete: 0,
           },
-          {
-            id: uuid(),
-            title: "example3",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
-            subtaskComplete: 0,
-          },
-          {
-            id: uuid(),
-            title: "example3",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
-            subtaskComplete: 0,
-          },
-          {
-            id: uuid(),
-            title: "example3",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
-            subtaskComplete: 0,
-          },
-          {
-            id: uuid(),
-            title: "example3",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
-            subtaskComplete: 0,
-          },
-          {
-            id: uuid(),
-            title: "example3",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
-            subtaskComplete: 0,
-          },
-          {
-            id: uuid(),
-            title: "example3",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
-            subtaskComplete: 0,
-          },
-          {
-            id: uuid(),
-            title: "example3",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
-            subtaskComplete: 0,
-          },
-          {
-            id: uuid(),
-            title: "example3",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
-            subtaskComplete: 0,
-          },
-          {
-            id: uuid(),
-            title: "example3",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
-            subtaskComplete: 0,
-          },
-          {
-            id: uuid(),
-            title: "example3",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
-            subtaskComplete: 0,
-          },
         ],
       },
       {
@@ -147,6 +67,15 @@ const initialState: Board[] = [
         task: [],
       },
       { container: "done", task: [] },
+    ],
+  },
+  {
+    name: "Example1",
+    columns: [
+      {
+        container: "todo",
+        task: [],
+      },
     ],
   },
 ];
@@ -312,6 +241,14 @@ export const boardSlice = createSlice({
       });
       return newState;
     },
+
+    onDeleteBoard: (state, action: PayloadAction<AnyAction>) => {
+      const newState = produce(state, (draft) => {
+        const boardIndex = action.payload.boardIndex;
+        draft.splice(boardIndex, boardIndex + 1);
+      });
+      return newState;
+    },
   },
 });
 
@@ -322,12 +259,13 @@ export const {
   onChangeStatus,
   addNewTask,
   onEditTask,
+  onDeleteBoard,
 } = boardSlice.actions;
 
 function selectTaskByID(state: Board[], id: string, boardIndex: number) {
   let counter = 0;
   let found: Task | null = null;
-  while (counter < state[boardIndex].columns.length) {
+  while (counter < state[boardIndex]?.columns.length) {
     let find = state[boardIndex].columns[counter].task.find((value) => {
       return value.id === id;
     });

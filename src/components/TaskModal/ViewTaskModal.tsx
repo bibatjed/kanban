@@ -16,7 +16,7 @@ export default function ViewTaskModal() {
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const isOpen = modal.isOpen && modal.modalType === VIEW_TASK;
   const state = useAppSelector((state) => state.containerReducers);
-  const columns = state[boardDetails.boardSelectedIndex].columns;
+  const columns = state[boardDetails.boardSelectedIndex]?.columns ?? [];
   const task = selectTask(
     state,
     modal.modalDetail.id,

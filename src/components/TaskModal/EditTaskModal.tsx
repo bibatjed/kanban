@@ -22,7 +22,7 @@ export default function EditTaskModal() {
     modal.modalDetail.id,
     boardDetails.boardSelectedIndex
   );
-  const columns = state[boardDetails.boardSelectedIndex].columns;
+  const columns = state[boardDetails.boardSelectedIndex]?.columns ?? [];
   const statusList = columns.map((value) => value.container);
   const dispatch = useAppDispatch();
 

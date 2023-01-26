@@ -20,7 +20,7 @@ export default function TaskModal() {
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const isOpen = modal.isOpen && modal.modalType === ADD_TASK;
   const data = useAppSelector((state) => state.containerReducers);
-  const columns = data[boardDetails.boardSelectedIndex].columns;
+  const columns = data[boardDetails.boardSelectedIndex]?.columns ?? [];
   const statusList = columns.map((value) => value.container);
   const dispatch = useAppDispatch();
   const {

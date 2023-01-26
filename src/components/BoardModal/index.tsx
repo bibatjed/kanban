@@ -27,7 +27,7 @@ export default function ColumnModal() {
   const isOpen = modal.isOpen && modal.modalType === ADD_COLUMN;
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const state = useAppSelector((state) => state.containerReducers);
-  const container = state[boardDetails.boardSelectedIndex].columns;
+  const container = state[boardDetails.boardSelectedIndex]?.columns ?? [];
   const dispatch = useAppDispatch();
   const [formValues, setFormValues] = useState<FormValues>({
     boardName: "Sample",

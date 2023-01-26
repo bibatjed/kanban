@@ -4,17 +4,14 @@ import {
   createSlice,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import uuid from "react-uuid";
 // Define a type for the slice state
 import produce from "immer";
 
 export type boarDetailsState = {
-  boardSelected: string;
   boardSelectedIndex: number;
 };
 
 const initialState: boarDetailsState = {
-  boardSelected: "",
   boardSelectedIndex: 0,
 };
 
@@ -26,12 +23,11 @@ export const boardDetailsSlice = createSlice({
   initialState,
   reducers: {
     addDetails: (state, action: PayloadAction<AnyAction>) => {
-      state.boardSelected = action.payload.boardSelected;
       state.boardSelectedIndex = action.payload.boardSelectedIndex;
     },
   },
 });
 
-export const {} = boardDetailsSlice.actions;
+export const { addDetails } = boardDetailsSlice.actions;
 
 export default boardDetailsSlice.reducer;

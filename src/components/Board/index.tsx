@@ -33,7 +33,7 @@ export default function Board() {
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const containerResult = useAppSelector((state) => state.containerReducers);
   const container: ContainerState[] =
-    containerResult[boardDetails.boardSelectedIndex].columns;
+    containerResult[boardDetails.boardSelectedIndex]?.columns ?? [];
   const isSidebarOpen = useAppSelector((state) => state.sidebarReducers.isOpen);
   const dispatch = useAppDispatch();
   const [clonedItems, setClonedItems] = useState<Items[] | null>(null);
