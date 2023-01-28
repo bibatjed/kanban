@@ -1,5 +1,6 @@
 import Board from "./components/Board";
 import ColumnModal from "./components/BoardModal";
+import CreateBoardModal from "./components/BoardModal/CreateBoardModal";
 import DeleteBoardModal from "./components/BoardModal/DeleteBoardModal";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
@@ -15,6 +16,7 @@ function App() {
       <Sidebar />
       <Board />
       <ColumnModal />
+      <CreateBoardModal />
       <DeleteBoardModal />
       <CreateTaskModal />
       <ViewTaskModal />

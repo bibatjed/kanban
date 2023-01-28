@@ -11,7 +11,6 @@ import { closeModal as reducerCloseModal } from "../../reducer/modal";
 type Columns = {
   old: string | null;
   new: string;
-  index: number;
   itemLength: number;
   error?: string;
 };
@@ -53,7 +52,6 @@ export default function ColumnModal() {
               return {
                 old: value.container,
                 new: value.container,
-                index: idx,
                 itemLength: value.task.length,
               };
             }),
@@ -68,7 +66,6 @@ export default function ColumnModal() {
       columns.push({
         old: null,
         new: "",
-        index: columns.length - 1,
         itemLength: 0,
       });
       return {
@@ -228,7 +225,7 @@ export default function ColumnModal() {
             )}
             <Button
               onClick={handleSubmit}
-              text="Create New Board"
+              text="Save Changes"
               variant="primary"
             />
           </div>

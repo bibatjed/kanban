@@ -8,6 +8,7 @@ import uuid from "react-uuid";
 // Define a type for the slice state
 import { Task } from "../components/TaskModal/hooks/useTask";
 import produce from "immer";
+import { BoardFormValues } from "../components/BoardModal/CreateBoardModal";
 
 export type ContainerState = {
   container: string;
@@ -249,6 +250,23 @@ export const boardSlice = createSlice({
       });
       return newState;
     },
+    onAddNewBoard: (state, action: PayloadAction<BoardFormValues>) => {
+      const newState = produce(state, (draft) => {
+        const columnName = action.payload.columns.map((item) => item.new);
+        const columns = columnName.map((name) => {
+          return {
+            container: name,
+            task: [],
+          };
+        });
+
+        draft.push({
+          name: action.payload.boardName,
+          columns,
+        });
+      });
+      return newState;
+    },
   },
 });
 
@@ -260,6 +278,7 @@ export const {
   addNewTask,
   onEditTask,
   onDeleteBoard,
+  onAddNewBoard,
 } = boardSlice.actions;
 
 function selectTaskByID(state: Board[], id: string, boardIndex: number) {

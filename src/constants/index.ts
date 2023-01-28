@@ -1,4 +1,5 @@
 export const modal = {
+  CREATE_BOARD: "createBoard",
   ADD_COLUMN: "addColumn",
   EDIT_BOARD: "editBoard",
   DELETE_BOARD: "deleteBoard",

@@ -7,6 +7,10 @@ import IconEye from "../../assets/icons/IconEye";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { closeSidebar } from "../../reducer/sidebar";
 import { addDetails } from "../../reducer/boardDetails";
+import { openModal } from "../../reducer/modal";
+import { modal } from "../../constants";
+
+const { CREATE_BOARD } = modal;
 export default function Sidebar() {
   const isOpen = useAppSelector((state) => state.sidebarReducers.isOpen);
   const currentSelected = useAppSelector(
@@ -61,7 +65,10 @@ export default function Sidebar() {
             </button>
           );
         })}
-        <button className="pl-8 mt-3 flex flex-row items-center gap-5 group">
+        <button
+          onClick={() => dispatch(openModal({ type: CREATE_BOARD }))}
+          className="pl-8 mt-3 flex flex-row items-center gap-5 group"
+        >
           <IconBoard className="fill-kanban-main-purple group-hover:fill-kanban-main-purple-hover" />
           <span className="flex flex-row items-center gap-1 group-hover:text-kanban-main-purple-hover font-plus-jakarta-sans text-sm font-semibold text-kanban-main-purple">
             <IconAddTaskMobile className="fill-kanban-main-purple group-hover:fill-kanban-main-purple-hover" />
