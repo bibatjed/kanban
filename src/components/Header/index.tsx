@@ -1,6 +1,6 @@
 import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
 import LogoDark from "../../assets/logo-dark.svg";
-import { useAppDispatch } from "../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { openModal } from "../../reducer/modal";
 import Button from "../Button/Button";
 import DropDown from "../Dropdown";
@@ -9,6 +9,9 @@ import { useMemo } from "react";
 const { EDIT_BOARD, DELETE_BOARD, ADD_TASK } = modal;
 export default function Header() {
   const dispatch = useAppDispatch();
+  const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
+  const state = useAppSelector((state) => state.containerReducers);
+  const boardName = state[boardDetails.boardSelectedIndex]?.name ?? "";
   const MenuList = useMemo(
     () => [
       {
@@ -39,7 +42,7 @@ export default function Header() {
 
       <div className="flex flex-1 items-center justify-between">
         <span className="font-plus-jakarta-sans text-2xl font-extrabold">
-          Platform Launch
+          {boardName}
         </span>
         <div className="flex flex-row items-center gap-7 mr-9">
           <div className="w-40">

@@ -9,7 +9,7 @@ export default function SideBarShow() {
     <div
       className={`${
         isOpen ? "-translate-x-full" : ""
-      } transition-all duration-100 ease-in fixed bottom-8 left-0 group`}
+      } transition-all duration-100 ease-in fixed bottom-20 left-0 group`}
     >
       <button
         onClick={() => dispatch(openSidebar())}
