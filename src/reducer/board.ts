@@ -267,6 +267,29 @@ export const boardSlice = createSlice({
       });
       return newState;
     },
+    onEditBoard: (
+      state,
+      action: PayloadAction<{ board: BoardFormValues; boardIndex: number }>
+    ) => {
+      const boardIndex = action.payload.boardIndex;
+      const newState = produce(state, (draft) => {
+        const columns = action.payload.board.columns.map((item) => {
+          const task = item.old
+            ? state[boardIndex].columns.find(
+                (columnItem) => columnItem.container === item.old
+              )!.task
+            : [];
+          return {
+            container: item.new,
+            task,
+          };
+        });
+
+        draft[boardIndex].name = action.payload.board.boardName;
+        draft[boardIndex].columns = columns;
+      });
+      return newState;
+    },
   },
 });
 
@@ -278,6 +301,7 @@ export const {
   addNewTask,
   onEditTask,
   onDeleteBoard,
+  onEditBoard,
   onAddNewBoard,
 } = boardSlice.actions;
 

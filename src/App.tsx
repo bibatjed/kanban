@@ -2,6 +2,7 @@ import Board from "./components/Board";
 import ColumnModal from "./components/BoardModal";
 import CreateBoardModal from "./components/BoardModal/CreateBoardModal";
 import DeleteBoardModal from "./components/BoardModal/DeleteBoardModal";
+import EditBoardModal from "./components/BoardModal/EditBoardModal";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import CreateTaskModal from "./components/TaskModal/CreateTaskModal";
@@ -17,6 +18,7 @@ function App() {
       <Board />
       <ColumnModal />
       <CreateBoardModal />
+      <EditBoardModal />
       <DeleteBoardModal />
       <CreateTaskModal />
       <ViewTaskModal />

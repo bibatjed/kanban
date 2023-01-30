@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 type ButtonProps = {
-  text: string;
+  text?: string;
   children?: ReactNode | ReactNode[];
   variant: "primary" | "secondary" | "tertiary" | "none";
   disabled?: boolean;

@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
   ContainerState,
   onAddNewBoard,
+  onEditBoard,
   updateBoard,
 } from "../../reducer/board";
 import Button from "../Button/Button";
@@ -12,7 +13,6 @@ import DialogWrapper from "../DialogWrapper";
 import Input from "../Input";
 import { modal } from "../../constants";
 import { closeModal as reducerCloseModal } from "../../reducer/modal";
-import { addDetails } from "../../reducer/boardDetails";
 
 type errorObj = {
   boardName: string;
@@ -23,6 +23,7 @@ type errorObj = {
 type Columns = {
   old: string | null;
   new: string;
+  itemLength: number;
   error?: string;
 };
 export type BoardFormValues = {
@@ -31,32 +32,46 @@ export type BoardFormValues = {
   columns: Columns[];
 };
 
-const { CREATE_BOARD } = modal;
+const { EDIT_BOARD } = modal;
 
-export default function CreateBoardModal() {
+export default function EditBoardModal() {
   const modal = useAppSelector((state) => state.modalReducers);
-  const isOpen = modal.isOpen && modal.modalType === CREATE_BOARD;
+  const isOpen = modal.isOpen && modal.modalType === EDIT_BOARD;
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const state = useAppSelector((state) => state.containerReducers);
   const container = state[boardDetails.boardSelectedIndex]?.columns ?? [];
-  const boardNames = state.map((item) => item.name.toLowerCase());
+  const boardName = state[boardDetails.boardSelectedIndex]?.name ?? "";
+  const boardNames = state
+    .filter((item) => item.name.toLowerCase() !== boardName.toLowerCase())
+    .map((item) => item.name.toLowerCase());
+
   const dispatch = useAppDispatch();
   const [formValues, setFormValues] = useState<BoardFormValues>({
-    boardName: "",
-    columns: [],
+    boardName,
+    columns: container.map((value, idx) => {
+      return {
+        old: value.container,
+        new: value.container,
+        index: idx,
+        itemLength: value.task.length,
+      };
+    }),
   });
 
   useEffect(() => {
-    if (modal.isOpen === true && modal.modalType === CREATE_BOARD)
-      setFormValues((_) => {
+    if (modal.isOpen === true && modal.modalType === EDIT_BOARD)
+      setFormValues((prev) => {
         return {
-          boardName: "",
-          columns: [
-            {
-              old: null,
-              new: "",
-            },
-          ],
+          ...prev,
+          boardName,
+          columns: container.map((value, idx) => {
+            return {
+              old: value.container,
+              new: value.container,
+              index: idx,
+              itemLength: value.task.length,
+            };
+          }),
         };
       });
   }, [modal.isOpen]);
@@ -67,6 +82,7 @@ export default function CreateBoardModal() {
       columns.push({
         old: null,
         new: "",
+        itemLength: 0,
       });
       return {
         ...prev,
@@ -160,8 +176,12 @@ export default function CreateBoardModal() {
       return;
     }
 
-    dispatch(onAddNewBoard(formValues));
-    dispatch(addDetails({ type: "", boardSelectedIndex: boardNames.length }));
+    dispatch(
+      onEditBoard({
+        board: formValues,
+        boardIndex: boardDetails.boardSelectedIndex,
+      })
+    );
     closeModal();
   }
   function closeModal() {
@@ -169,12 +189,12 @@ export default function CreateBoardModal() {
   }
 
   return (
-    <DialogWrapper title="Add New Board" isOpen={isOpen} onClose={closeModal}>
+    <DialogWrapper title="Edit Board" isOpen={isOpen} onClose={closeModal}>
       {/* Dialog Body */}
       <div className="mt-2 flex flex-col gap-4">
         {/* BOARD NAME */}
         <div className="flex flex-col gap-2">
-          <span className="font-plus-jakarta-sans text-sm font-light">
+          <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
             Board Name
           </span>
           <Input
@@ -187,10 +207,11 @@ export default function CreateBoardModal() {
 
         {/* Columns  */}
         <div className="flex flex-col gap-2">
-          <span className="font-plus-jakarta-sans text-sm font-light">
+          <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
             Columns
           </span>
           {formValues.columns.map((value, index) => {
+            const disableDelete = value.itemLength > 0;
             return (
               <div key={index} className="flex flex-row items-center gap-4">
                 <Input
@@ -204,10 +225,16 @@ export default function CreateBoardModal() {
                     onClick={() => {
                       handleDeleteColumn(index);
                     }}
-                    text=""
+                    disabled={disableDelete}
                     variant="none"
                   >
-                    <IconCross className={`${"fill-kanban-medium-grey"}`} />
+                    <IconCross
+                      className={`${
+                        disableDelete
+                          ? "fill-gray-300"
+                          : "fill-kanban-medium-grey"
+                      }`}
+                    />
                   </Button>
                 </div>
               </div>
@@ -228,7 +255,7 @@ export default function CreateBoardModal() {
           )}
           <Button
             onClick={handleSubmit}
-            text="Create New Board"
+            text="Save Changes"
             variant="primary"
           />
         </div>
