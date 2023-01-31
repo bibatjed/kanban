@@ -35,7 +35,7 @@ export default function Dropdown(props: DropdownProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-52 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-2 w-52 origin-top-right rounded-md dark:bg-kanban-very-dark-gray bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-2 py-1 ">
             {props.menuItem.map((item, index) => {
               return (
