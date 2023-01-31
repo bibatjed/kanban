@@ -37,7 +37,7 @@ export default function Header() {
     [dispatch]
   );
   return (
-    <div className="w-full gap-10 flex transition-all duration-150 ease-in border-b-[2px] dark:border-b-kanban-lines-dark border-b-kanban-lines-light  dark:bg-kanban-dark-grey bg-kanban-white">
+    <div className="w-full gap-10 flex transition-all duration-150 ease-in border-b-[1px] dark:border-b-kanban-lines-dark border-b-kanban-lines-light  dark:bg-kanban-dark-grey bg-kanban-white">
       <div className="border-r-[1px] p-8 pr-28 transition-all duration-150 ease-in dark:border-kanban-lines-dark border-kanban-lines-light">
         <div className="w-36">
           <img

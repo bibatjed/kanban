@@ -32,7 +32,7 @@ export default function Sidebar() {
     <div
       className={`${
         isOpen ? "" : "-translate-x-full"
-      } transition-all duration-200 flex flex-col justify-between bg-kanban-white fixed h-[calc(100%-5.7rem)] pt-8 pb-3 w-full max-w-[18.13rem] border-r-[1px] border-kanban-lines-light z-10`}
+      } transition-all duration-200 flex flex-col justify-between dark:bg-kanban-dark-grey dark:border-r-kanban-lines-dark bg-kanban-white fixed h-[calc(100%-5.7rem)] pt-8 pb-3 w-full max-w-[18.06rem] border-r-[1px] border-kanban-lines-light z-10`}
     >
       <div className="pr-10 flex flex-col gap-2">
         <span className="pl-8 pb-2 font-plus-jakarta-sans uppercase text-[13px] font-medium tracking-widest text-kanban-medium-grey">
@@ -78,8 +78,8 @@ export default function Sidebar() {
           </span>
         </button>
       </div>
-      <div className="px-7 flex flex-col gap-3">
-        <div className="flex flex-row bg-opacity-60 items-center justify-center gap-5 p-3 bg-kanban-lines-light rounded-lg">
+      <div className="px-7 mb-10 flex flex-col gap-3">
+        <div className="flex flex-row bg-opacity-60 items-center transition-all duration-150 ease-in dark:bg-kanban-lines-dark justify-center gap-5 p-3 dark bg-kanban-lines-light rounded-lg">
           <img src={MoonIcon} className="w-4 aspect-square" alt="moon" />
           <Switch value={theme} onChange={handleChangeTheme} />
           <img src={SunIcon} className="w-4 aspect-square" alt="sun" />
