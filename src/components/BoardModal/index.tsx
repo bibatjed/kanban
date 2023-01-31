@@ -168,7 +168,7 @@ export default function ColumnModal() {
         <div className="mt-2 flex flex-col gap-4">
           {/* BOARD NAME */}
           <div className="flex flex-col gap-2">
-            <span className="font-plus-jakarta-sans text-sm font-light">
+            <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
               Board Name
             </span>
             <Input isReadOnly={true} />
@@ -176,7 +176,7 @@ export default function ColumnModal() {
 
           {/* Columns  */}
           <div className="flex flex-col gap-2">
-            <span className="font-plus-jakarta-sans text-sm font-light">
+            <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
               Columns
             </span>
             {formValues.columns.map((value, index) => {
