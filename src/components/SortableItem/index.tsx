@@ -42,8 +42,8 @@ export default function SortableItem(props: SortableItemProps) {
       {...listeners}
       onClick={handleOnClick}
     >
-      <span className="text-[18px] font-semibold">{props.title}</span>
-      <span className="text-[12px] font-light text-kanban-medium-grey">
+      <span className="text-base font-semibold">{props.title}</span>
+      <span className="text-xs font-medium text-kanban-medium-grey">
         {props.subtasks}
       </span>
     </div>
