@@ -39,13 +39,13 @@ export default function DialogWrapper(props: IDialogWrapper) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform rounded-2xl bg-white p-7 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform rounded-2xl dark:bg-kanban-dark-grey bg-white p-7 text-left align-middle shadow-xl transition-all">
                   {/* Dialog Header */}
                   <Dialog.Title
                     as="h3"
                     className={`text-lg font-plus-jakarta-sans font-semibold ${
                       titleColor === "black"
-                        ? "text-kanban-black"
+                        ? "text-kanban-black dark:text-kanban-white"
                         : "text-kanban-red"
                     }`}
                   >
