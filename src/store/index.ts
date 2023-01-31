@@ -3,10 +3,12 @@ import modal from "../reducer/modal";
 import container from "../reducer/board";
 import sidebar from "../reducer/sidebar";
 import boardDetails from "../reducer/boardDetails";
+import theme from "../reducer/theme";
 // ...
 
 const store = configureStore({
   reducer: {
+    themeReducers: theme,
     modalReducers: modal,
     containerReducers: container,
     sidebarReducers: sidebar,

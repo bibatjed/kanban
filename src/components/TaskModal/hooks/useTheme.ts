@@ -1,21 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { theme } from "../../../constants";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { onChangeTheme } from "../../../reducer/theme";
 
 const { DARK, LIGHT } = theme;
 
 export default function useTheme() {
-  const defaultDark = window.matchMedia("(prefers-color-scheme: dark)")?.matches
-    ? DARK
-    : LIGHT;
-  const localStorageTheme = localStorage.getItem("theme") || null;
-  const initialTheme = localStorageTheme ? localStorageTheme : defaultDark;
-  const [theme, setTheme] = useState(initialTheme);
-  const handleChangeTheme = () => {
-    setTheme((prevTheme) => {
-      localStorage.setItem("theme", prevTheme === DARK ? LIGHT : DARK);
-      return prevTheme === DARK ? LIGHT : DARK;
-    });
-  };
+  const dispatch = useAppDispatch();
+  const theme = useAppSelector((state) => state.themeReducers.theme);
+  const handleChangeTheme = () => dispatch(onChangeTheme());
 
   useEffect(() => {
     if (theme === DARK) {
