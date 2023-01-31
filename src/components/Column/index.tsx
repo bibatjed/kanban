@@ -38,12 +38,10 @@ export default function Column(props: ColumnProps) {
       items={itemIds}
       strategy={verticalListSortingStrategy}
     >
-      <div
-        className={`h-full transition-all duration-150 ease-in ${borderBroken}`}
-      >
+      <div className={`h-full ${borderBroken}`}>
         <div
           ref={setNodeRef}
-          className={`flex flex-col gap-2 w-full transition-all duration-150 ease-in dark:bg-kanban-very-dark-gray bg-kanban-light-grey-bg`}
+          className={`flex flex-col gap-2 w-full transition-colors duration-150 ease-in dark:bg-kanban-very-dark-gray bg-kanban-light-grey-bg`}
         >
           {items.map((item) => (
             <SortableItem
