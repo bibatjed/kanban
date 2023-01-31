@@ -194,7 +194,6 @@ export default function ColumnModal() {
                       onClick={() => {
                         handleDeleteColumn(index);
                       }}
-                      text=""
                       disabled={disableDelete}
                       variant="none"
                     >

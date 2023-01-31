@@ -8,3 +8,8 @@ export const modal = {
   EDIT_TASK: "editTask",
   DELETE_TASK: "deleteTask",
 };
+
+export const theme = {
+  DARK: "dark",
+  LIGHT: "light",
+};

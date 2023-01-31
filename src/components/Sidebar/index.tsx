@@ -9,9 +9,11 @@ import { closeSidebar } from "../../reducer/sidebar";
 import { addDetails } from "../../reducer/boardDetails";
 import { openModal } from "../../reducer/modal";
 import { modal } from "../../constants";
+import useTheme from "../TaskModal/hooks/useTheme";
 
 const { CREATE_BOARD } = modal;
 export default function Sidebar() {
+  const { handleChangeTheme, theme } = useTheme();
   const isOpen = useAppSelector((state) => state.sidebarReducers.isOpen);
   const currentSelected = useAppSelector(
     (state) => state.boardDetailsReducers.boardSelectedIndex
@@ -79,7 +81,7 @@ export default function Sidebar() {
       <div className="px-7 flex flex-col gap-3">
         <div className="flex flex-row bg-opacity-60 items-center justify-center gap-5 p-3 bg-kanban-lines-light rounded-lg">
           <img src={MoonIcon} className="w-4 aspect-square" alt="moon" />
-          <Switch />
+          <Switch value={theme} onChange={handleChangeTheme} />
           <img src={SunIcon} className="w-4 aspect-square" alt="sun" />
         </div>
         <button
