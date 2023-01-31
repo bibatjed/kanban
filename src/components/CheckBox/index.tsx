@@ -16,7 +16,9 @@ export default function CheckBox(props: ICheckBox) {
     >
       <div
         className={`${
-          props.value ? "bg-kanban-main-purple" : "bg-kanban-white"
+          props.value
+            ? "bg-kanban-main-purple"
+            : "bg-kanban-white dark:bg-kanban-dark-grey"
         } p-[1px] w-5 h-5  flex justify-center items-center transition-all ease-in duration-100`}
       >
         <div className="flex w-[10px] h-[10px] items-center justify-center">
