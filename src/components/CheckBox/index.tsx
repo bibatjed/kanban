@@ -12,7 +12,7 @@ export default function CheckBox(props: ICheckBox) {
   return (
     <div
       onClick={props.onClick}
-      className="flex items-center px-3 py-2 gap-3 rounded-md w-full cursor-pointer select-none bg-kanban-lines-light"
+      className="flex items-center px-3 py-2 gap-3 rounded-md w-full cursor-pointer select-none dark:bg-kanban-very-dark-gray bg-kanban-lines-light"
     >
       <div
         className={`${
@@ -30,8 +30,10 @@ export default function CheckBox(props: ICheckBox) {
       </div>
       <p
         className={`${
-          props.value ? "line-through text-gray-600" : "text-kanban-black"
-        } text-[12.5px] font-plus-jakarta-sans transition-all duration-100 ease-in`}
+          props.value
+            ? "line-through text-gray-600"
+            : "text-kanban-black dark:text-kanban-white"
+        } text-[13px] font-plus-jakarta-sans transition-all duration-100 ease-in`}
       >
         {props.text}
       </p>
