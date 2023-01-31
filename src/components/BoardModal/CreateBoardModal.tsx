@@ -174,7 +174,7 @@ export default function CreateBoardModal() {
       <div className="mt-2 flex flex-col gap-4">
         {/* BOARD NAME */}
         <div className="flex flex-col gap-2">
-          <span className="font-plus-jakarta-sans text-sm font-light">
+          <span className="font-plus-jakarta-sans text-sm text-kanban-medium-grey font-semibold">
             Board Name
           </span>
           <Input
@@ -187,7 +187,7 @@ export default function CreateBoardModal() {
 
         {/* Columns  */}
         <div className="flex flex-col gap-2">
-          <span className="font-plus-jakarta-sans text-sm font-light">
+          <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
             Columns
           </span>
           {formValues.columns.map((value, index) => {
