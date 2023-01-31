@@ -62,38 +62,36 @@ export default function Board() {
       <div
         className={`${
           isSidebarOpen ? "pl-80" : ""
-        } transition-all duration-200 bg-kanban-light-grey-bg overflow-y-auto w-full h-[90%] p-10 pt-5`}
+        } transition-all duration-200 dark:bg-kanban-very-dark-gray flex gap-7 bg-kanban-light-grey-bg overflow-y-auto w-full h-[100%] p-10 pt-5`}
       >
-        <div className="flex flex-row gap-5 min-h-[97%]">
-          {container.map((item, idx) => {
-            return (
-              <div key={idx} className="min-w-[250px]">
-                <div className="flex items-center flex-row gap-2 mb-7">
-                  <StatusCircle id={idx} />
-                  <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey uppercase">
-                    {" "}
-                    {item.container}
-                  </span>
-                  <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey">
-                    ({item.task.length})
-                  </span>
-                </div>
-                <Column
-                  id={item.container}
-                  containerIndex={idx}
-                  items={item.task}
-                />
+        {container.map((item, idx) => {
+          return (
+            <div key={idx} className="min-w-[250px] h-[calc(100%_-_120px)]">
+              <div className="flex items-center flex-row gap-2 mb-7">
+                <StatusCircle id={idx} />
+                <span className="font-plus-jakarta-sans text-[15px] tracking-wider text-kanban-medium-grey uppercase">
+                  {" "}
+                  {item.container}
+                </span>
+                <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey">
+                  ({item.task.length})
+                </span>
               </div>
-            );
-          })}
-
-          {Object.keys(container).length < 6 && (
-            <div className="min-w-[250px]">
-              <div className="mb-7 h-[24px]"></div>
-              <ColumnPlaceHolder />
+              <Column
+                id={item.container}
+                containerIndex={idx}
+                items={item.task}
+              />
             </div>
-          )}
-        </div>
+          );
+        })}
+
+        {container.length < 6 && (
+          <div className="min-w-[250px] h-[calc(100%_-_120px)]">
+            <div className="mb-7 h-[24px]"></div>
+            <ColumnPlaceHolder />
+          </div>
+        )}
         <SideBarShow />
       </div>
       <DragOverlay>

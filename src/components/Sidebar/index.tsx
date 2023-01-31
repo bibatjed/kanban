@@ -79,7 +79,7 @@ export default function Sidebar() {
         </button>
       </div>
       <div className="px-7 mb-10 flex flex-col gap-3">
-        <div className="flex flex-row bg-opacity-60 items-center transition-all duration-150 ease-in dark:bg-kanban-lines-dark justify-center gap-5 p-3 dark bg-kanban-lines-light rounded-lg">
+        <div className="flex flex-row bg-opacity-60 items-center transition-all duration-150 ease-in dark:bg-kanban-very-dark-gray justify-center gap-5 p-3 dark bg-kanban-lines-light rounded-lg">
           <img src={MoonIcon} className="w-4 aspect-square" alt="moon" />
           <Switch value={theme} onChange={handleChangeTheme} />
           <img src={SunIcon} className="w-4 aspect-square" alt="sun" />

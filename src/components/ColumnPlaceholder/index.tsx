@@ -12,7 +12,7 @@ export default function ColumnPlaceHolder() {
   return (
     <div
       onClick={onClick}
-      className="w-full h-full bg-gradient-to-b from-kanban-lines-light to-kanban-medium-grey cursor-pointer rounded-md flex justify-center group"
+      className="w-full h-full transition-all duration-150 ease-in dark:from-kanban-lines-dark dark:to-kanban-dark-grey bg-gradient-to-b from-kanban-lines-light to-kanban-medium-grey cursor-pointer rounded-md flex justify-center group"
     >
       <div className="flex items-center justify-center gap-3">
         <IconAdd className="fill-kanban-medium-grey group-hover:fill-kanban-main-purple" />

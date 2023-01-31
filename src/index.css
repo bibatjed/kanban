@@ -3,7 +3,7 @@
 @tailwind utilities;
 @layer components {
   .kanban-item {
-    @apply p-3 flex flex-col gap-2 font-plus-jakarta-sans text-kanban-black border border-kanban-white shadow-md bg-kanban-white rounded-md 
+    @apply p-3 flex flex-col gap-2 font-plus-jakarta-sans text-kanban-black border border-kanban-white shadow-md bg-kanban-white rounded-md  dark:border-kanban-lines-dark dark:bg-kanban-dark-grey dark:text-kanban-white transition-all duration-150 ease-in
   }
 }
 :root {

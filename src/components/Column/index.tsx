@@ -22,7 +22,7 @@ export default function Column(props: ColumnProps) {
   );
   const borderBroken =
     items.length === 0
-      ? "border-dashed border-kanban-lines-light border-2 rounded-md"
+      ? "border-dashed border-kanban-lines-light dark:border-kanban-lines-dark border-2 rounded-md"
       : "";
   const { setNodeRef } = useSortable({
     id,
@@ -38,10 +38,12 @@ export default function Column(props: ColumnProps) {
       items={itemIds}
       strategy={verticalListSortingStrategy}
     >
-      <div className={`h-full ${borderBroken}`}>
+      <div
+        className={`h-full transition-all duration-150 ease-in ${borderBroken}`}
+      >
         <div
           ref={setNodeRef}
-          className={`flex flex-col gap-2 w-full bg-kanban-light-grey-bg`}
+          className={`flex flex-col gap-2 w-full transition-all duration-150 ease-in dark:bg-kanban-very-dark-gray bg-kanban-light-grey-bg`}
         >
           {items.map((item) => (
             <SortableItem
