@@ -3,12 +3,12 @@ import {
   createSelector,
   createSlice,
   PayloadAction,
-} from "@reduxjs/toolkit";
-import uuid from "react-uuid";
+} from '@reduxjs/toolkit';
+import uuid from 'react-uuid';
 // Define a type for the slice state
-import { Task } from "../components/TaskModal/hooks/useTask";
-import produce from "immer";
-import { BoardFormValues } from "../components/BoardModal/CreateBoardModal";
+import { Task } from '../components/TaskModal/hooks/useTask';
+import produce from 'immer';
+import { BoardFormValues } from '../components/BoardModal/hooks/useBoardModal';
 
 export type ContainerState = {
   container: string;
@@ -24,57 +24,57 @@ export type Board = {
 
 const initialState: Board[] = [
   {
-    name: "Example",
+    name: 'Example',
     columns: [
       {
-        container: "todo",
+        container: 'todo',
         task: [
           {
             id: uuid(),
-            title: "example",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
+            title: 'example',
+            description: 'example',
+            subtasks: [{ name: 'example', done: false }],
+            status: 'todo',
             subtaskComplete: 0,
           },
           {
             id: uuid(),
-            title: "example1",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
+            title: 'example1',
+            description: 'example',
+            subtasks: [{ name: 'example', done: false }],
+            status: 'todo',
             subtaskComplete: 0,
           },
           {
             id: uuid(),
-            title: "example2",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
+            title: 'example2',
+            description: 'example',
+            subtasks: [{ name: 'example', done: false }],
+            status: 'todo',
             subtaskComplete: 0,
           },
           {
             id: uuid(),
-            title: "example3",
-            description: "example",
-            subtasks: [{ name: "example", done: false }],
-            status: "todo",
+            title: 'example3',
+            description: 'example',
+            subtasks: [{ name: 'example', done: false }],
+            status: 'todo',
             subtaskComplete: 0,
           },
         ],
       },
       {
-        container: "doing",
+        container: 'doing',
         task: [],
       },
-      { container: "done", task: [] },
+      { container: 'done', task: [] },
     ],
   },
   {
-    name: "Example1",
+    name: 'Example1',
     columns: [
       {
-        container: "todo",
+        container: 'todo',
         task: [],
       },
     ],
@@ -83,7 +83,7 @@ const initialState: Board[] = [
 // Define the initial state using that type
 
 export const boardSlice = createSlice({
-  name: "container",
+  name: 'container',
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
