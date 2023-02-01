@@ -1,13 +1,13 @@
-import { useState, ChangeEvent, useEffect } from "react";
-import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
-import IconCross from "../../assets/icons/IconCross";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { ContainerState, updateBoard } from "../../reducer/board";
-import Button from "../Button/Button";
-import DialogWrapper from "../DialogWrapper";
-import Input from "../Input";
-import { modal } from "../../constants";
-import { closeModal as reducerCloseModal } from "../../reducer/modal";
+import IconAddTaskMobile from '../../assets/icons/IconAddTaskMobile';
+import IconCross from '../../assets/icons/IconCross';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { ContainerState, onEditBoard } from '../../reducer/board';
+import Button from '../Button/Button';
+import DialogWrapper from '../DialogWrapper';
+import Input from '../Input';
+import { modal } from '../../constants';
+import { closeModal as reducerCloseModal } from '../../reducer/modal';
+import useBoardModal from './hooks/useBoardModal';
 type Columns = {
   old: string | null;
   new: string;
@@ -21,115 +21,39 @@ type FormValues = {
 
 const { ADD_COLUMN } = modal;
 
-export default function ColumnModal() {
+export default function AddColumModal() {
   const modal = useAppSelector((state) => state.modalReducers);
   const isOpen = modal.isOpen && modal.modalType === ADD_COLUMN;
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const state = useAppSelector((state) => state.containerReducers);
   const container = state[boardDetails.boardSelectedIndex]?.columns ?? [];
+  const boardName = state[boardDetails.boardSelectedIndex]?.name ?? '';
   const dispatch = useAppDispatch();
-  const [formValues, setFormValues] = useState<FormValues>({
-    boardName: "Sample",
-    columns: [
-      ...container.map((value, idx) => {
-        return {
-          old: value.container,
-          new: value.container,
-          index: idx,
-          itemLength: value.task.length,
-        };
-      }),
-    ],
-  });
 
-  useEffect(() => {
-    if (modal.isOpen === true && modal.modalType === ADD_COLUMN)
-      setFormValues((prev) => {
-        return {
-          ...prev,
-          columns: [
-            ...container.map((value, idx) => {
-              return {
-                old: value.container,
-                new: value.container,
-                itemLength: value.task.length,
-              };
-            }),
-          ],
-        };
-      });
-  }, [modal.isOpen]);
-
-  function handleAddColumn() {
-    setFormValues((prev) => {
-      const columns = [...prev.columns];
-      columns.push({
-        old: null,
-        new: "",
-        itemLength: 0,
-      });
-      return {
-        ...prev,
-        columns,
-      };
-    });
-  }
-
-  function handleOnChange(e: ChangeEvent<HTMLInputElement>) {
-    setFormValues((prev) => {
-      const columns = [...prev.columns];
-      columns[Number(e.target.name)].new = e.target.value;
-      return {
-        ...prev,
-        columns,
-      };
-    });
-  }
-
-  function handleDeleteColumn(index: number) {
-    setFormValues((prev) => {
-      const columns = [...prev.columns];
-      columns.splice(index, 1);
-      return {
-        ...prev,
-        columns: columns,
-      };
-    });
-  }
-
-  function checkColumnFields() {
-    const errorObj: Record<number, string> = {};
-    formValues.columns.forEach((value, index) => {
-      if (value.new === "" || value.new == null) {
-        errorObj[index] = "required";
-        return;
-      }
-
-      const findDuplicate = formValues.columns.findIndex(
-        (column, idx) => column.new === value.new
-      );
-
-      if (findDuplicate >= 0 && findDuplicate !== index) {
-        errorObj[index] = "used";
-        return;
-      }
-    });
-
-    if (Object.keys(errorObj).length === 0) {
-      return true;
-    }
-    setFormValues((prev) => {
-      return {
-        ...prev,
-        columns: prev.columns.map((value, index) => {
+  const {
+    formValues,
+    errorValues,
+    handleAddColumn,
+    handleOnChangeArray,
+    handleDeleteColumn,
+    checkColumnFields,
+  } = useBoardModal(
+    {
+      boardName: boardName,
+      columns: [
+        ...container.map((value, idx) => {
           return {
-            ...value,
-            error: errorObj[index] || "",
+            old: value.container,
+            new: value.container,
+            index: idx,
+            itemLength: value.task.length,
           };
         }),
-      };
-    });
-  }
+      ],
+    },
+    [],
+    isOpen
+  );
 
   function handleSubmit() {
     if (!checkColumnFields()) {
@@ -146,8 +70,8 @@ export default function ColumnModal() {
       });
     }
     dispatch(
-      updateBoard({
-        column: containers,
+      onEditBoard({
+        board: formValues,
         boardIndex: boardDetails.boardSelectedIndex,
       })
     );
@@ -171,7 +95,7 @@ export default function ColumnModal() {
             <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
               Board Name
             </span>
-            <Input isReadOnly={true} />
+            <Input value={formValues.boardName} isReadOnly={true} />
           </div>
 
           {/* Columns  */}
@@ -184,11 +108,11 @@ export default function ColumnModal() {
               return (
                 <div key={index} className="flex flex-row items-center gap-4">
                   <Input
-                    error={value.error}
-                    name={index.toString()}
-                    onChange={handleOnChange}
+                    error={errorValues.columns[index]}
+                    dataId={index}
+                    onChange={handleOnChangeArray}
                     value={value.new}
-                  />{" "}
+                  />{' '}
                   <div>
                     <Button
                       onClick={() => {
@@ -200,8 +124,8 @@ export default function ColumnModal() {
                       <IconCross
                         className={`${
                           disableDelete
-                            ? "fill-gray-300"
-                            : "fill-kanban-medium-grey"
+                            ? 'fill-gray-300'
+                            : 'fill-kanban-medium-grey'
                         }`}
                       />
                     </Button>
