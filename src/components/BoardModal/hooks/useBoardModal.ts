@@ -12,7 +12,9 @@ type BoardFormError = {
 type Columns = {
   old: string | null;
   new: string;
+  itemLength: number;
 };
+
 export type BoardFormValues = {
   boardName: string;
   columns: Columns[];
@@ -44,6 +46,7 @@ export default function useBoardModal(
       columns.push({
         old: null,
         new: '',
+        itemLength: 0,
       });
       return {
         ...prev,

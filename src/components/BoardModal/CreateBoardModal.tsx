@@ -30,7 +30,7 @@ export default function CreateBoardModal() {
   } = useBoardModal(
     {
       boardName: '',
-      columns: [{ old: null, new: '' }],
+      columns: [{ old: null, new: '', itemLength: 0 }],
     },
     boardNames,
     isOpen
