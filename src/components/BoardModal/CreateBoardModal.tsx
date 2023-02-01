@@ -36,8 +36,6 @@ export default function CreateBoardModal() {
     isOpen
   );
 
-  console.log(formValues.columns);
-
   function handleSubmit() {
     if (!checkColumnFields()) {
       return;
