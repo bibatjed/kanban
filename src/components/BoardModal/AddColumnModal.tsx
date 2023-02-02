@@ -25,7 +25,7 @@ export default function AddColumModal() {
   const modal = useAppSelector((state) => state.modalReducers);
   const isOpen = modal.isOpen && modal.modalType === ADD_COLUMN;
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
-  const state = useAppSelector((state) => state.containerReducers);
+  const state = useAppSelector((state) => state.boardReducers);
   const container = state[boardDetails.boardSelectedIndex]?.columns ?? [];
   const boardName = state[boardDetails.boardSelectedIndex]?.name ?? '';
   const dispatch = useAppDispatch();

@@ -1,25 +1,16 @@
-import {
-  AnyAction,
-  createSelector,
-  createSlice,
-  PayloadAction,
-} from "@reduxjs/toolkit";
-// Define a type for the slice state
-import produce from "immer";
+import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import InitialStateParser from '../helper/initialStateParser';
 
-export type boarDetailsState = {
+export type boardDetailsState = {
   boardSelectedIndex: number;
 };
 
-const initialState: boarDetailsState = {
+const initialState = InitialStateParser<boardDetailsState>('boardDetails', {
   boardSelectedIndex: 0,
-};
-
-// Define the initial state using that type
+});
 
 export const boardDetailsSlice = createSlice({
-  name: "boardDetails",
-  // `createSlice` will infer the state type from the `initialState` argument
+  name: 'boardDetails',
   initialState,
   reducers: {
     addDetails: (state, action: PayloadAction<AnyAction>) => {

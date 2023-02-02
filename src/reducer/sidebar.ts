@@ -1,18 +1,16 @@
-import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import InitialStateParser from '../helper/initialStateParser';
 
-// Define a type for the slice state
 type SidebarState = {
   isOpen: boolean;
 };
 
-// Define the initial state using that type
-const initialState: SidebarState = {
+const initialState = InitialStateParser<SidebarState>('sidebar', {
   isOpen: false,
-};
+});
 
 export const sidebarSlice = createSlice({
-  name: "modal",
-  // `createSlice` will infer the state type from the `initialState` argument
+  name: 'sidebar',
   initialState,
   reducers: {
     openSidebar: (state) => {

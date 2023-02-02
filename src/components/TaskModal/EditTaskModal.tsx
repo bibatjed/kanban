@@ -1,22 +1,22 @@
-import useTask, { Task } from "./hooks/useTask";
-import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
-import IconCross from "../../assets/icons/IconCross";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { onEditTask, selectTask } from "../../reducer/board";
-import { closeModal } from "../../reducer/modal";
-import Button from "../Button/Button";
-import DialogWrapper from "../DialogWrapper";
-import { modal } from "../../constants";
-import Input from "../Input";
-import Select from "../Select";
-import TextArea from "../TextArea";
+import useTask, { Task } from './hooks/useTask';
+import IconAddTaskMobile from '../../assets/icons/IconAddTaskMobile';
+import IconCross from '../../assets/icons/IconCross';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { onEditTask, selectTask } from '../../reducer/board';
+import { closeModal } from '../../reducer/modal';
+import Button from '../Button/Button';
+import DialogWrapper from '../DialogWrapper';
+import { modal } from '../../constants';
+import Input from '../Input';
+import Select from '../Select';
+import TextArea from '../TextArea';
 
 const { EDIT_TASK } = modal;
 export default function EditTaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const isOpen = modal.isOpen && modal.modalType === EDIT_TASK;
-  const state = useAppSelector((state) => state.containerReducers);
+  const state = useAppSelector((state) => state.boardReducers);
   const task = selectTask(
     state,
     modal.modalDetail.id,
@@ -103,7 +103,7 @@ export default function EditTaskModal() {
                   onChange={onChangeSubtasks}
                   value={value.name}
                   error={value.error}
-                />{" "}
+                />{' '}
                 <div>
                   <Button
                     onClick={() => handleDeleteSubtasks(index)}
@@ -129,7 +129,7 @@ export default function EditTaskModal() {
               <IconAddTaskMobile className="fill-kanban-main-purple" />
             </Button>
           )}
-          <div className="flex relative flex-col gap-2">
+          <div className="relative flex flex-col gap-2">
             <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
               Status
             </span>

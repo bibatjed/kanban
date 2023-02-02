@@ -8,6 +8,8 @@ import Input from '../Input';
 import { modal } from '../../constants';
 import { closeModal as reducerCloseModal } from '../../reducer/modal';
 import useBoardModal from './hooks/useBoardModal';
+import { useEffect, useRef } from 'react';
+import { shallowEqual } from 'react-redux';
 
 const { EDIT_BOARD } = modal;
 
@@ -15,7 +17,7 @@ export default function EditBoardModal() {
   const modal = useAppSelector((state) => state.modalReducers);
   const isOpen = modal.isOpen && modal.modalType === EDIT_BOARD;
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
-  const state = useAppSelector((state) => state.containerReducers);
+  const state = useAppSelector((state) => state.boardReducers);
   const container = state[boardDetails.boardSelectedIndex]?.columns ?? [];
   const boardName = state[boardDetails.boardSelectedIndex]?.name ?? '';
   const boardNames = state
@@ -23,7 +25,6 @@ export default function EditBoardModal() {
     .map((item) => item.name.toLowerCase());
 
   const dispatch = useAppDispatch();
-
   const {
     formValues,
     errorValues,

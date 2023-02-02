@@ -9,6 +9,7 @@ import uuid from 'react-uuid';
 import { Task } from '../components/TaskModal/hooks/useTask';
 import produce from 'immer';
 import { BoardFormValues } from '../components/BoardModal/hooks/useBoardModal';
+import InitialStateParser from '../helper/initialStateParser';
 
 export type ContainerState = {
   container: string;
@@ -20,9 +21,7 @@ export type Board = {
   columns: ContainerState[];
 };
 
-//TODO: RESOLVE TYPE ISSUES
-
-const initialState: Board[] = [
+const initialState = InitialStateParser<Board[]>('board', [
   {
     name: 'Example',
     columns: [
@@ -79,7 +78,7 @@ const initialState: Board[] = [
       },
     ],
   },
-];
+]);
 // Define the initial state using that type
 
 export const boardSlice = createSlice({

@@ -1,17 +1,17 @@
-import uuid from "react-uuid";
-import IconAddTaskMobile from "../../assets/icons/IconAddTaskMobile";
-import IconCross from "../../assets/icons/IconCross";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { addNewTask } from "../../reducer/board";
-import { closeModal } from "../../reducer/modal";
-import Button from "../Button/Button";
-import DialogWrapper from "../DialogWrapper";
-import { modal } from "../../constants";
-import Input from "../Input";
-import Select from "../Select";
-import TextArea from "../TextArea";
-import useTask from "./hooks/useTask";
-import { useEffect } from "react";
+import uuid from 'react-uuid';
+import IconAddTaskMobile from '../../assets/icons/IconAddTaskMobile';
+import IconCross from '../../assets/icons/IconCross';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { addNewTask } from '../../reducer/board';
+import { closeModal } from '../../reducer/modal';
+import Button from '../Button/Button';
+import DialogWrapper from '../DialogWrapper';
+import { modal } from '../../constants';
+import Input from '../Input';
+import Select from '../Select';
+import TextArea from '../TextArea';
+import useTask from './hooks/useTask';
+import { useEffect } from 'react';
 
 const { ADD_TASK } = modal;
 
@@ -19,7 +19,7 @@ export default function TaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const isOpen = modal.isOpen && modal.modalType === ADD_TASK;
-  const data = useAppSelector((state) => state.containerReducers);
+  const data = useAppSelector((state) => state.boardReducers);
   const columns = data[boardDetails.boardSelectedIndex]?.columns ?? [];
   const statusList = columns.map((value) => value.container);
   const dispatch = useAppDispatch();
@@ -33,9 +33,9 @@ export default function TaskModal() {
     onChangeSubtasks,
     reset,
   } = useTask({
-    title: "",
-    description: "",
-    subtasks: [{ name: "", done: false }],
+    title: '',
+    description: '',
+    subtasks: [{ name: '', done: false }],
     subtaskComplete: 0,
     status: statusList[0],
   });
@@ -105,7 +105,7 @@ export default function TaskModal() {
                   onChange={onChangeSubtasks}
                   value={value.name}
                   error={value.error}
-                />{" "}
+                />{' '}
                 <div>
                   <Button
                     onClick={() => handleDeleteSubtasks(index)}
@@ -131,7 +131,7 @@ export default function TaskModal() {
               <IconAddTaskMobile className="fill-kanban-main-purple" />
             </Button>
           )}
-          <div className="flex relative flex-col gap-2">
+          <div className="relative flex flex-col gap-2">
             <span className="font-plus-jakarta-sans text-sm font-semibold text-kanban-medium-grey">
               Status
             </span>

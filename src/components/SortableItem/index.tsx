@@ -1,8 +1,8 @@
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { useAppDispatch } from "../../hooks/redux";
-import { modal } from "../../constants";
-import { openModal } from "../../reducer/modal";
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { useAppDispatch } from '../../hooks/redux';
+import { modal } from '../../constants';
+import { openModal } from '../../reducer/modal';
 type SortableItemProps = {
   id: string;
   containerIndex: number;

@@ -15,7 +15,7 @@ const { CREATE_BOARD } = modal;
 export default function CreateBoardModal() {
   const modal = useAppSelector((state) => state.modalReducers);
   const isOpen = modal.isOpen && modal.modalType === CREATE_BOARD;
-  const state = useAppSelector((state) => state.containerReducers);
+  const state = useAppSelector((state) => state.boardReducers);
   const boardNames = state.map((item) => item.name.toLowerCase());
   const dispatch = useAppDispatch();
 

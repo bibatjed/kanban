@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   closestCorners,
   DndContext,
@@ -11,17 +11,17 @@ import {
   TraversalOrder,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
-import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+} from '@dnd-kit/core';
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
-import Item from "../Item";
-import Column from "../Column";
-import { Task } from "../TaskModal/hooks/useTask";
-import StatusCircle from "../StatusCircle";
-import ColumnPlaceHolder from "../ColumnPlaceholder";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { ContainerState, updateBoard } from "../../reducer/board";
-import SideBarShow from "../SidebarShow";
+import Item from '../Item';
+import Column from '../Column';
+import { Task } from '../TaskModal/hooks/useTask';
+import StatusCircle from '../StatusCircle';
+import ColumnPlaceHolder from '../ColumnPlaceholder';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { ContainerState, updateBoard } from '../../reducer/board';
+import SideBarShow from '../SidebarShow';
 
 export type Items = {
   container: string;
@@ -31,7 +31,7 @@ export type Items = {
 export default function Board() {
   const [activeId, setActiveId] = useState<Task | null>();
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
-  const containerResult = useAppSelector((state) => state.containerReducers);
+  const containerResult = useAppSelector((state) => state.boardReducers);
   const container: ContainerState[] =
     containerResult[boardDetails.boardSelectedIndex]?.columns ?? [];
   const isSidebarOpen = useAppSelector((state) => state.sidebarReducers.isOpen);
@@ -61,16 +61,16 @@ export default function Board() {
     >
       <div
         className={`${
-          isSidebarOpen ? "pl-80" : ""
-        } transition-all duration-200 dark:bg-kanban-very-dark-gray flex gap-7 bg-kanban-light-grey-bg overflow-y-auto w-full h-[100%] p-10 pt-5`}
+          isSidebarOpen ? 'pl-80' : ''
+        } flex h-[100%] w-full gap-7 overflow-y-auto bg-kanban-light-grey-bg p-10 pt-5 transition-all duration-200 dark:bg-kanban-very-dark-gray`}
       >
         {container.map((item, idx) => {
           return (
-            <div key={idx} className="min-w-[250px] h-[calc(100%_-_120px)]">
-              <div className="flex items-center flex-row gap-2 mb-7">
+            <div key={idx} className="h-[calc(100%_-_120px)] min-w-[250px]">
+              <div className="mb-7 flex flex-row items-center gap-2">
                 <StatusCircle id={idx} />
-                <span className="font-plus-jakarta-sans text-[15px] tracking-wider text-kanban-medium-grey uppercase">
-                  {" "}
+                <span className="font-plus-jakarta-sans text-[15px] uppercase tracking-wider text-kanban-medium-grey">
+                  {' '}
                   {item.container}
                 </span>
                 <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey">
@@ -87,7 +87,7 @@ export default function Board() {
         })}
 
         {container.length < 6 && (
-          <div className="min-w-[250px] h-[calc(100%_-_120px)]">
+          <div className="h-[calc(100%_-_120px)] min-w-[250px]">
             <div className="mb-7 h-[24px]"></div>
             <ColumnPlaceHolder />
           </div>

@@ -1,5 +1,7 @@
-import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { modal } from "../constants";
+import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { modal } from '../constants';
+import InitialStateParser from '../helper/initialStateParser';
+import { RootState } from '../store';
 
 // Define a type for the slice state
 type ModalDetail = {
@@ -14,25 +16,25 @@ type ModalState = {
 
 const { ADD_COLUMN } = modal;
 // Define the initial state using that type
-const initialState: ModalState = {
+const initialState = InitialStateParser<ModalState>('modal', {
   isOpen: false,
   modalType: ADD_COLUMN,
   modalDetail: {
-    id: "",
-    title: "",
+    id: '',
+    title: '',
   },
-};
+});
 
 export const modalSlice = createSlice({
-  name: "modal",
+  name: 'modal',
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     openModal: (state, action: PayloadAction<AnyAction>) => {
       state.isOpen = true;
       state.modalType = action.payload.type;
-      state.modalDetail.id = action.payload.detail?.id || "";
-      state.modalDetail.title = action.payload.detail?.title || "";
+      state.modalDetail.id = action.payload.detail?.id || '';
+      state.modalDetail.title = action.payload.detail?.title || '';
     },
     closeModal: (state) => {
       state.isOpen = false;
