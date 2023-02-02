@@ -11,6 +11,7 @@ import produce from 'immer';
 import { BoardFormValues } from '../components/BoardModal/hooks/useBoardModal';
 import InitialStateParser from '../helper/initialStateParser';
 
+import { arrayMove } from '@dnd-kit/sortable';
 export type ContainerState = {
   container: string;
   task: Task[];
@@ -92,6 +93,37 @@ export const boardSlice = createSlice({
     ) => {
       const newState = produce(state, (draft) => {
         draft[0].columns = action.payload.column;
+      });
+      return newState;
+    },
+    onHandleDragEnd: (
+      state,
+      action: PayloadAction<{
+        activeContainer: number;
+        overContainer: number;
+        overId: string;
+        activeId: string;
+        boardIndex: number;
+      }>
+    ) => {
+      const { activeContainer, overContainer, overId, activeId, boardIndex } =
+        action.payload;
+      const newState = produce(state, (draft) => {
+        const activeIndex = draft[boardIndex].columns[
+          activeContainer
+        ].task.findIndex((value) => value.id === activeId);
+
+        const overIndex = draft[boardIndex].columns[
+          overContainer
+        ].task.findIndex((value) => value.id === overId);
+
+        if (activeIndex !== overIndex) {
+          draft[boardIndex].columns[overContainer].task = arrayMove(
+            draft[boardIndex].columns[overContainer].task,
+            activeIndex,
+            overIndex
+          );
+        }
       });
       return newState;
     },
@@ -302,6 +334,7 @@ export const {
   onDeleteBoard,
   onEditBoard,
   onAddNewBoard,
+  onHandleDragEnd,
 } = boardSlice.actions;
 
 function selectTaskByID(state: Board[], id: string, boardIndex: number) {
