@@ -87,13 +87,58 @@ export const boardSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    updateBoard: (
+    onHandleDragOver: (
       state,
-      action: PayloadAction<{ column: ContainerState[]; boardIndex: number }>
+      action: PayloadAction<{
+        activeContainer: number;
+        overContainer: number;
+        overId: string;
+        activeId: string;
+        boardIndex: number;
+      }>
     ) => {
+      const { activeContainer, overContainer, overId, activeId, boardIndex } =
+        action.payload;
+
       const newState = produce(state, (draft) => {
-        draft[0].columns = action.payload.column;
+        const overItems = draft[boardIndex].columns[overContainer].task;
+
+        // Find the indexes for the items
+        const activeIndex = draft[boardIndex].columns[
+          activeContainer
+        ].task.findIndex((value) => value.id === activeId);
+
+        const overIndex = draft[boardIndex].columns[
+          overContainer
+        ].task.findIndex((value) => value.id === overId);
+
+        //remove item from old container
+        const item = draft[boardIndex].columns[activeContainer].task.splice(
+          activeIndex,
+          1
+        );
+
+        const newContainer = draft[boardIndex].columns[overContainer].container;
+
+        //assign newIndex
+        const newIndex =
+          overIndex === overItems.length - 1
+            ? overItems.length
+            : overIndex < 0
+            ? 0
+            : overIndex;
+
+        //update status of selected item
+        item[0].status = newContainer;
+
+        //add item to new container
+        draft[boardIndex].columns[overContainer].task.splice(
+          newIndex,
+          0,
+          item[0]
+        );
       });
+
       return newState;
     },
     onHandleDragEnd: (
@@ -324,19 +369,6 @@ export const boardSlice = createSlice({
   },
 });
 
-export const {
-  updateBoard,
-  onClickSubtasks,
-  onDeleteTask,
-  onChangeStatus,
-  addNewTask,
-  onEditTask,
-  onDeleteBoard,
-  onEditBoard,
-  onAddNewBoard,
-  onHandleDragEnd,
-} = boardSlice.actions;
-
 function selectTaskByID(state: Board[], id: string, boardIndex: number) {
   let counter = 0;
   let found: Task | null = null;
@@ -364,5 +396,18 @@ export const selectTask = createSelector(
   ],
   (state, id, boardIndex) => selectTaskByID(state, id, boardIndex)
 );
+
+export const {
+  onHandleDragOver,
+  onHandleDragEnd,
+  onClickSubtasks,
+  onDeleteTask,
+  onChangeStatus,
+  addNewTask,
+  onEditTask,
+  onDeleteBoard,
+  onEditBoard,
+  onAddNewBoard,
+} = boardSlice.actions;
 
 export default boardSlice.reducer;

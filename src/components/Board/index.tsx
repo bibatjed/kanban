@@ -8,7 +8,6 @@ import {
   DragStartEvent,
   KeyboardSensor,
   MouseSensor,
-  PointerSensor,
   TouchSensor,
   TraversalOrder,
   useSensor,
@@ -25,7 +24,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   ContainerState,
   onHandleDragEnd,
-  updateBoard,
+  onHandleDragOver,
 } from '../../reducer/board';
 import SideBarShow from '../SidebarShow';
 import { useMediaQuery } from 'react-responsive';
@@ -76,12 +75,13 @@ export default function Board() {
     setActiveId(container[activeContainer].task[activeIndex]);
     setClonedItems(container);
   }
+
   function handleDragOver(event: DragOverEvent) {
     const { active, over } = event;
+
     // Find the containers
     const activeContainer = active?.data?.current?.containerIndex;
     const overContainer = over?.data?.current?.containerIndex;
-    const newColumn = over?.data?.current?.columnId;
     if (
       activeContainer == null ||
       overContainer == null ||
@@ -90,45 +90,12 @@ export default function Board() {
       return;
     }
 
-    const overItems = container[overContainer].task;
-
-    // Find the indexes for the items
-    const activeIndex = container[activeContainer].task.findIndex(
-      (value) => value.id === active.id
-    );
-    const overIndex = container[overContainer].task.findIndex(
-      (value) => value.id === over!.id
-    );
-
-    let newIndex;
-    if (over?.id) {
-      // We're at the root droppable of a container
-      newIndex = overItems.length + 1;
-    } else {
-      const isBelowLastItem = over && overIndex === overItems.length - 1;
-      // draggingRect.offsetTop > over.rect.offsetTop + over.rect.height;
-
-      const modifier = isBelowLastItem ? 1 : 0;
-      newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
-    }
-
-    const newItem = structuredClone(container);
-    newItem[activeContainer].task = container[activeContainer].task.filter(
-      (item) => item.id !== active.id
-    );
-    const task = { ...container[activeContainer].task[activeIndex] };
-    task.status = newColumn;
-    newItem[overContainer].task = [
-      ...container[overContainer].task.slice(0, newIndex),
-      task,
-      ...container[overContainer].task.slice(
-        newIndex,
-        container[overContainer].task.length
-      ),
-    ];
     dispatch(
-      updateBoard({
-        column: newItem,
+      onHandleDragOver({
+        activeContainer,
+        overContainer,
+        activeId: active.id.toString(),
+        overId: over?.id.toString() || '',
         boardIndex: boardDetails.boardSelectedIndex,
       })
     );

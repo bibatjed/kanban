@@ -49,7 +49,3 @@ export default function SortableItem(props: SortableItemProps) {
     </div>
   );
 }
-
-function Hello() {
-  return <div>ello</div>;
-}
