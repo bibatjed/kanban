@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   closestCorners,
   DndContext,
@@ -27,7 +27,6 @@ import {
   onHandleDragOver,
 } from '../../reducer/board';
 import SideBarShow from '../SidebarShow';
-import { useMediaQuery } from 'react-responsive';
 
 export type Items = {
   container: string;
@@ -35,15 +34,11 @@ export type Items = {
 };
 
 export default function Board() {
-  const isMobile = useMediaQuery({
-    query: '(max-width: 764px)',
-  });
   const [activeId, setActiveId] = useState<Task | null>();
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const containerResult = useAppSelector((state) => state.boardReducers);
   const container: ContainerState[] =
     containerResult[boardDetails.boardSelectedIndex]?.columns ?? [];
-  const isSidebarOpen = useAppSelector((state) => state.sidebarReducers.isOpen);
   const dispatch = useAppDispatch();
   const [clonedItems, setClonedItems] = useState<Items[] | null>(null);
   const sensors = useSensors(
@@ -147,41 +142,35 @@ export default function Board() {
       //NOTE: ADD TO ENABLED AUTO SCROLL
       autoScroll={{ order: TraversalOrder.ReversedTreeOrder }}
     >
-      <div
-        className={`${
-          isSidebarOpen && !isMobile ? 'pl-80' : ''
-        } flex h-[100%] w-full gap-7 overflow-y-auto bg-kanban-light-grey-bg p-10 pt-5 transition-all duration-200 dark:bg-kanban-very-dark-gray`}
-      >
-        {container.map((item, idx) => {
-          return (
-            <div key={idx} className="h-[calc(100%_-_120px)] min-w-[250px]">
-              <div className="mb-7 flex flex-row items-center gap-2">
-                <StatusCircle id={idx} />
-                <span className="font-plus-jakarta-sans text-[15px] uppercase tracking-wider text-kanban-medium-grey">
-                  {' '}
-                  {item.container}
-                </span>
-                <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey">
-                  ({item.task.length})
-                </span>
-              </div>
-              <Column
-                id={item.container}
-                containerIndex={idx}
-                items={item.task}
-              />
+      {container.map((item, idx) => {
+        return (
+          <div key={idx} className="h-[calc(100%_-_120px)] min-w-[250px]">
+            <div className="mb-7 flex flex-row items-center gap-2">
+              <StatusCircle id={idx} />
+              <span className="font-plus-jakarta-sans text-[15px] uppercase tracking-wider text-kanban-medium-grey">
+                {' '}
+                {item.container}
+              </span>
+              <span className="font-plus-jakarta-sans text-[15px] text-kanban-medium-grey">
+                ({item.task.length})
+              </span>
             </div>
-          );
-        })}
-
-        {container.length < 6 && (
-          <div className="h-[calc(100%_-_120px)] min-w-[250px]">
-            <div className="mb-7 h-[24px]"></div>
-            <ColumnPlaceHolder />
+            <Column
+              id={item.container}
+              containerIndex={idx}
+              items={item.task}
+            />
           </div>
-        )}
-        {!isMobile && <SideBarShow />}
-      </div>
+        );
+      })}
+
+      {container.length < 6 && (
+        <div className="h-[calc(100%_-_120px)] min-w-[250px]">
+          <div className="mb-7 h-[24px]"></div>
+          <ColumnPlaceHolder />
+        </div>
+      )}
+
       <DragOverlay>
         {activeId && (
           <Item
