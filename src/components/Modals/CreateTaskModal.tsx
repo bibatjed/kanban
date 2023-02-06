@@ -6,19 +6,15 @@ import { addNewTask } from '../../reducer/board';
 import { closeModal } from '../../reducer/modal';
 import Button from '../Button/Button';
 import DialogWrapper from '../DialogWrapper';
-import { modal } from '../../constants';
 import Input from '../Input';
 import Select from '../Select';
 import TextArea from '../TextArea';
 import useTask from './hooks/useTask';
-import { useEffect } from 'react';
 
-const { ADD_TASK } = modal;
-
-export default function TaskModal() {
+export default function CreateTaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
+  const isOpen = modal.isOpen;
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
-  const isOpen = modal.isOpen && modal.modalType === ADD_TASK;
   const data = useAppSelector((state) => state.boardReducers);
   const columns = data[boardDetails.boardSelectedIndex]?.columns ?? [];
   const statusList = columns.map((value) => value.container);
@@ -31,7 +27,6 @@ export default function TaskModal() {
     onChangeCommon,
     onChangeStatus,
     onChangeSubtasks,
-    reset,
   } = useTask({
     title: '',
     description: '',
@@ -39,12 +34,6 @@ export default function TaskModal() {
     subtaskComplete: 0,
     status: statusList[0],
   });
-
-  useEffect(() => {
-    if (isOpen && modal.modalType === ADD_TASK) {
-      reset();
-    }
-  }, [isOpen, modal.modalType]);
 
   function handleSubmit() {
     if (!checkColumnFields()) {
@@ -61,8 +50,8 @@ export default function TaskModal() {
 
   return (
     <DialogWrapper
-      title="Add New Task"
       isOpen={isOpen}
+      title="Add New Task"
       onClose={() => dispatch(closeModal())}
     >
       {/* Dialog Body */}

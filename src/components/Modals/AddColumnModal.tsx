@@ -5,25 +5,11 @@ import { ContainerState, onEditBoard } from '../../reducer/board';
 import Button from '../Button/Button';
 import DialogWrapper from '../DialogWrapper';
 import Input from '../Input';
-import { modal } from '../../constants';
 import { closeModal as reducerCloseModal } from '../../reducer/modal';
 import useBoardModal from './hooks/useBoardModal';
-type Columns = {
-  old: string | null;
-  new: string;
-  itemLength: number;
-  error?: string;
-};
-type FormValues = {
-  boardName: string;
-  columns: Columns[];
-};
-
-const { ADD_COLUMN } = modal;
 
 export default function AddColumModal() {
-  const modal = useAppSelector((state) => state.modalReducers);
-  const isOpen = modal.isOpen && modal.modalType === ADD_COLUMN;
+  const isOpen = useAppSelector((state) => state.modalReducers.isOpen);
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const state = useAppSelector((state) => state.boardReducers);
   const container = state[boardDetails.boardSelectedIndex]?.columns ?? [];
@@ -51,23 +37,12 @@ export default function AddColumModal() {
         }),
       ],
     },
-    [],
-    isOpen
+    []
   );
 
   function handleSubmit() {
     if (!checkColumnFields()) {
       return;
-    }
-    const containers: ContainerState[] = [];
-    for (let column of formValues.columns) {
-      const task = column.old
-        ? container.find((item) => item.container === column.old)!.task
-        : [];
-      containers.push({
-        container: column.new,
-        task: [...task],
-      });
     }
     dispatch(
       onEditBoard({
@@ -84,8 +59,8 @@ export default function AddColumModal() {
   return (
     <>
       <DialogWrapper
-        title="Add New Column"
         isOpen={isOpen}
+        title="Add New Column"
         onClose={closeModal}
       >
         {/* Dialog Body */}

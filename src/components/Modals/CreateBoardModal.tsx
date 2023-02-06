@@ -1,30 +1,21 @@
 import IconAddTaskMobile from '../../assets/icons/IconAddTaskMobile';
 import IconCross from '../../assets/icons/IconCross';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { onEditBoard } from '../../reducer/board';
+import { onAddNewBoard } from '../../reducer/board';
 import Button from '../Button/Button';
 import DialogWrapper from '../DialogWrapper';
 import Input from '../Input';
 import { modal } from '../../constants';
 import { closeModal as reducerCloseModal } from '../../reducer/modal';
+import { addDetails } from '../../reducer/boardDetails';
 import useBoardModal from './hooks/useBoardModal';
-import { useEffect, useRef } from 'react';
-import { shallowEqual } from 'react-redux';
 
-const { EDIT_BOARD } = modal;
-
-export default function EditBoardModal() {
-  const modal = useAppSelector((state) => state.modalReducers);
-  const isOpen = modal.isOpen && modal.modalType === EDIT_BOARD;
-  const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
+export default function CreateBoardModal() {
+  const isOpen = useAppSelector((state) => state.modalReducers.isOpen);
   const state = useAppSelector((state) => state.boardReducers);
-  const container = state[boardDetails.boardSelectedIndex]?.columns ?? [];
-  const boardName = state[boardDetails.boardSelectedIndex]?.name ?? '';
-  const boardNames = state
-    .filter((item) => item.name.toLowerCase() !== boardName.toLowerCase())
-    .map((item) => item.name.toLowerCase());
-
+  const boardNames = state.map((item) => item.name.toLowerCase());
   const dispatch = useAppDispatch();
+
   const {
     formValues,
     errorValues,
@@ -35,29 +26,19 @@ export default function EditBoardModal() {
     checkColumnFields,
   } = useBoardModal(
     {
-      boardName,
-      columns: container.map((value) => {
-        return {
-          old: value.container,
-          new: value.container,
-          itemLength: value.task.length,
-        };
-      }),
+      boardName: '',
+      columns: [{ old: null, new: '', itemLength: 0 }],
     },
-    boardNames,
-    isOpen
+    boardNames
   );
+
   function handleSubmit() {
     if (!checkColumnFields()) {
       return;
     }
 
-    dispatch(
-      onEditBoard({
-        board: formValues,
-        boardIndex: boardDetails.boardSelectedIndex,
-      })
-    );
+    dispatch(onAddNewBoard(formValues));
+    dispatch(addDetails({ type: '', boardSelectedIndex: boardNames.length }));
     closeModal();
   }
   function closeModal() {
@@ -65,7 +46,7 @@ export default function EditBoardModal() {
   }
 
   return (
-    <DialogWrapper title="Edit Board" isOpen={isOpen} onClose={closeModal}>
+    <DialogWrapper isOpen={isOpen} title="Add New Board" onClose={closeModal}>
       {/* Dialog Body */}
       <div className="mt-2 flex flex-col gap-4">
         {/* BOARD NAME */}
@@ -87,12 +68,11 @@ export default function EditBoardModal() {
             Columns
           </span>
           {formValues.columns.map((value, index) => {
-            const disableDelete = value.itemLength > 0;
             return (
               <div key={index} className="flex flex-row items-center gap-4">
                 <Input
-                  error={errorValues.columns[index]}
                   dataId={index}
+                  error={errorValues.columns[index]}
                   onChange={handleOnChangeArray}
                   value={value.new}
                 />{' '}
@@ -101,16 +81,10 @@ export default function EditBoardModal() {
                     onClick={() => {
                       handleDeleteColumn(index);
                     }}
-                    disabled={disableDelete}
+                    text=""
                     variant="none"
                   >
-                    <IconCross
-                      className={`${
-                        disableDelete
-                          ? 'fill-gray-400 dark:fill-gray-600'
-                          : 'fill-kanban-medium-grey'
-                      }`}
-                    />
+                    <IconCross className={`${'fill-kanban-medium-grey'}`} />
                   </Button>
                 </div>
               </div>
@@ -131,7 +105,7 @@ export default function EditBoardModal() {
           )}
           <Button
             onClick={handleSubmit}
-            text="Save Changes"
+            text="Create New Board"
             variant="primary"
           />
         </div>

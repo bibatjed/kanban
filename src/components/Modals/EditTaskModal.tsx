@@ -6,16 +6,14 @@ import { onEditTask, selectTask } from '../../reducer/board';
 import { closeModal } from '../../reducer/modal';
 import Button from '../Button/Button';
 import DialogWrapper from '../DialogWrapper';
-import { modal } from '../../constants';
 import Input from '../Input';
 import Select from '../Select';
 import TextArea from '../TextArea';
 
-const { EDIT_TASK } = modal;
 export default function EditTaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
+  const isOpen = modal.isOpen;
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
-  const isOpen = modal.isOpen && modal.modalType === EDIT_TASK;
   const state = useAppSelector((state) => state.boardReducers);
   const task = selectTask(
     state,
@@ -34,14 +32,15 @@ export default function EditTaskModal() {
     onChangeCommon,
     onChangeStatus,
     onChangeSubtasks,
-  } = useTask(task as Task, isOpen);
+  } = useTask(task as Task);
 
   function handleSubmit() {
     if (!checkColumnFields()) {
       return;
     }
+
     //@ts-ignore
-    const subtaskComplete: number = formValues.subtasks.reduce(
+    const subtaskComplete = formValues.subtasks.reduce(
       (acc: number, val: any) => {
         return val.done ? acc + 1 : acc;
       },
@@ -54,13 +53,14 @@ export default function EditTaskModal() {
         boardIndex: boardDetails.boardSelectedIndex,
       })
     );
+
     dispatch(closeModal());
   }
 
   return (
     <DialogWrapper
-      title="Edit Task"
       isOpen={isOpen}
+      title="Edit Task"
       onClose={() => dispatch(closeModal())}
     >
       {/* Dialog Body */}

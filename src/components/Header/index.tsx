@@ -8,7 +8,7 @@ import Button from '../Button/Button';
 import DropDown from '../Dropdown';
 import { modal, theme } from '../../constants';
 import { useCallback, useMemo } from 'react';
-import useTheme from '../TaskModal/hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { useMediaQuery } from 'react-responsive';
 import IconChevronDown from '../../assets/icon-chevron-down.svg';
 import { openSidebar } from '../../reducer/sidebar';

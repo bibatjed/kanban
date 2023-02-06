@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { theme } from "../../../constants";
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { onChangeTheme } from "../../../reducer/theme";
+import { useEffect } from 'react';
+import { theme } from '../constants';
+import { useAppDispatch, useAppSelector } from './redux';
+import { onChangeTheme } from '../reducer/theme';
 
 const { DARK, LIGHT } = theme;
 

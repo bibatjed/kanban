@@ -17,7 +17,7 @@ import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
 import Item from '../Item';
 import Column from '../Column';
-import { Task } from '../TaskModal/hooks/useTask';
+import { Task } from '../Modals/hooks/useTask';
 import StatusCircle from '../StatusCircle';
 import ColumnPlaceHolder from '../ColumnPlaceholder';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';

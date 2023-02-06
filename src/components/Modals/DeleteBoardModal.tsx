@@ -7,8 +7,7 @@ import { onDeleteBoard } from '../../reducer/board';
 import { addDetails } from '../../reducer/boardDetails';
 const { DELETE_BOARD } = modal;
 export default function DeleteBoardModal() {
-  const modal = useAppSelector((state) => state.modalReducers);
-  const isOpen = modal.isOpen && modal.modalType === DELETE_BOARD;
+  const isOpen = useAppSelector((state) => state.modalReducers.isOpen);
   const board = useAppSelector((state) => state.boardReducers);
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const dispatch = useAppDispatch();

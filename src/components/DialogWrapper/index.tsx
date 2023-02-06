@@ -1,5 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, ReactNode } from 'react';
+import { useAppDispatch } from '../../hooks/redux';
+import { unMountModal } from '../../reducer/modal';
 
 type DialogWrapperProps = {
   isOpen: boolean;
@@ -14,9 +16,19 @@ interface IDialogWrapper extends DialogWrapperProps {
 export default function DialogWrapper(props: IDialogWrapper) {
   const { titleColor = 'black' } = props;
 
+  const dispatch = useAppDispatch();
+  //use other state like `modal.isOpen` to trigger leave transition animation
+  //updating unmount `modal.mountModal` state will not wait for leave transition to be done and unmounts immediately when using conditional rendering
+
   return (
     <>
-      <Transition unmount={true} show={props.isOpen} as={Fragment}>
+      <Transition
+        appear
+        show={props.isOpen}
+        as={Fragment}
+        //update `modal.mountModal` after leave transition
+        afterLeave={() => dispatch(unMountModal())}
+      >
         <Dialog as="div" className="relative z-10" onClose={props.onClose}>
           <Transition.Child
             as={Fragment}

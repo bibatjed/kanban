@@ -21,8 +21,7 @@ export type BoardFormValues = {
 };
 export default function useBoardModal(
   board: BoardFormValues,
-  boardNames: string[],
-  isOpen: boolean = false
+  boardNames: string[]
 ) {
   const [formValues, setFormValues] = useState<BoardFormValues>({
     boardName: '',
@@ -34,11 +33,9 @@ export default function useBoardModal(
     columns: {},
   });
   useEffect(() => {
-    if (isOpen === true) {
-      setFormValues(board);
-      setErrorValues({ boardName: '', columns: {} });
-    }
-  }, [isOpen, board.boardName]);
+    setFormValues(board);
+    setErrorValues({ boardName: '', columns: {} });
+  }, [board.boardName]);
 
   function handleAddColumn() {
     setFormValues((prev) => {

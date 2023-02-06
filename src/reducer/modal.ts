@@ -10,6 +10,7 @@ type ModalDetail = {
 };
 type ModalState = {
   isOpen: boolean;
+  mountModal: boolean;
   modalType: string;
   modalDetail: ModalDetail;
 };
@@ -18,6 +19,7 @@ const { ADD_COLUMN } = modal;
 // Define the initial state using that type
 const initialState = InitialStateParser<ModalState>('modal', {
   isOpen: false,
+  mountModal: false,
   modalType: ADD_COLUMN,
   modalDetail: {
     id: '',
@@ -32,6 +34,7 @@ export const modalSlice = createSlice({
   reducers: {
     openModal: (state, action: PayloadAction<AnyAction>) => {
       state.isOpen = true;
+      state.mountModal = true;
       state.modalType = action.payload.type;
       state.modalDetail.id = action.payload.detail?.id || '';
       state.modalDetail.title = action.payload.detail?.title || '';
@@ -39,10 +42,14 @@ export const modalSlice = createSlice({
     closeModal: (state) => {
       state.isOpen = false;
     },
+    unMountModal: (state) => {
+      state.isOpen = false;
+      state.mountModal = false;
+    },
   },
 });
 
-export const { closeModal, openModal } = modalSlice.actions;
+export const { closeModal, openModal, unMountModal } = modalSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 // export const selectCount = (state: RootState) => state.counterReducers.value;

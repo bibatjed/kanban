@@ -3,18 +3,18 @@ import DialogWrapper from '../DialogWrapper';
 import { modal } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { closeModal, openModal } from '../../reducer/modal';
-import board, { onChangeStatus as changeStatus } from '../../reducer/board';
+import { onChangeStatus as changeStatus } from '../../reducer/board';
 import Select from '../Select';
 import CheckBox from '../CheckBox';
 import { onClickSubtasks, selectTask } from '../../reducer/board';
 import DropDown from '../Dropdown';
 import { useMemo } from 'react';
-const { VIEW_TASK, EDIT_TASK, DELETE_TASK } = modal;
+const { EDIT_TASK, DELETE_TASK } = modal;
 
 export default function ViewTaskModal() {
   const modal = useAppSelector((state) => state.modalReducers);
+  const isOpen = modal.isOpen;
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
-  const isOpen = modal.isOpen && modal.modalType === VIEW_TASK;
   const state = useAppSelector((state) => state.boardReducers);
   const columns = state[boardDetails.boardSelectedIndex]?.columns ?? [];
   const task = selectTask(

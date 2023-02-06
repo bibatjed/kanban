@@ -6,9 +6,9 @@ import {
 } from '@reduxjs/toolkit';
 import uuid from 'react-uuid';
 // Define a type for the slice state
-import { Task } from '../components/TaskModal/hooks/useTask';
+import { Task } from '../components/Modals/hooks/useTask';
 import produce from 'immer';
-import { BoardFormValues } from '../components/BoardModal/hooks/useBoardModal';
+import { BoardFormValues } from '../components/Modals/hooks/useBoardModal';
 import InitialStateParser from '../helper/initialStateParser';
 
 import { arrayMove } from '@dnd-kit/sortable';

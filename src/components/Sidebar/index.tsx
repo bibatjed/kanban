@@ -9,7 +9,7 @@ import { closeSidebar } from '../../reducer/sidebar';
 import { addDetails } from '../../reducer/boardDetails';
 import { openModal } from '../../reducer/modal';
 import { modal } from '../../constants';
-import useTheme from '../TaskModal/hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 
 const { CREATE_BOARD } = modal;
 export default function Sidebar() {

@@ -6,7 +6,7 @@ import { Fragment } from 'react';
 import IconAddTaskMobile from '../../assets/icons/IconAddTaskMobile';
 import IconBoard from '../../assets/icons/IconBoard';
 import { openModal } from '../../reducer/modal';
-import useTheme from '../TaskModal/hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { addDetails } from '../../reducer/boardDetails';
 import { modal } from '../../constants';
