@@ -1,12 +1,12 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useRef } from 'react';
 import {
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+} from '@dnd-kit/sortable';
 
-import SortableItem from "../SortableItem";
-import { Task } from "../TaskModal/hooks/useTask";
+import SortableItem from '../SortableItem';
+import { Task } from '../Modals/hooks/useTask';
 
 type ColumnProps = {
   id: string;
@@ -22,8 +22,8 @@ export default function Column(props: ColumnProps) {
   );
   const borderBroken =
     items.length === 0
-      ? "border-dashed border-kanban-lines-light dark:border-kanban-lines-dark border-2 rounded-md"
-      : "";
+      ? 'border-dashed border-kanban-lines-light dark:border-kanban-lines-dark border-2 rounded-md'
+      : '';
   const { setNodeRef } = useSortable({
     id,
     data: {
@@ -41,7 +41,7 @@ export default function Column(props: ColumnProps) {
       <div className={`h-full ${borderBroken}`}>
         <div
           ref={setNodeRef}
-          className={`flex flex-col gap-2 w-full transition-colors duration-150 ease-in dark:bg-kanban-very-dark-gray bg-kanban-light-grey-bg`}
+          className={`flex w-full flex-col gap-2 bg-kanban-light-grey-bg transition-colors duration-150 ease-in dark:bg-kanban-very-dark-gray`}
         >
           {items.map((item) => (
             <SortableItem
