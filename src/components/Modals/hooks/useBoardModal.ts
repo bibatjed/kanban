@@ -61,7 +61,6 @@ export default function useBoardModal(
   function handleOnChangeArray(e: ChangeEvent<HTMLInputElement>) {
     const id = e.currentTarget.getAttribute('data-id');
 
-    console.log(id);
     setFormValues((prev) => {
       const columns = [...prev.columns];
       columns[Number(id)].new = e.target.value;
