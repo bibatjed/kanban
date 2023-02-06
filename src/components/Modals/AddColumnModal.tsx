@@ -1,7 +1,7 @@
 import IconAddTaskMobile from '../../assets/icons/IconAddTaskMobile';
 import IconCross from '../../assets/icons/IconCross';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { ContainerState, onEditBoard } from '../../reducer/board';
+import { onEditBoard } from '../../reducer/board';
 import Button from '../Button/Button';
 import DialogWrapper from '../DialogWrapper';
 import Input from '../Input';

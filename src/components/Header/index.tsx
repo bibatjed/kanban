@@ -77,7 +77,7 @@ export default function Header() {
           </div>
         </div>
         <span className="font-plus-jakarta-sans text-2xl font-extrabold transition-all duration-150 ease-in dark:text-kanban-white ml:flex ml:flex-row ml:items-center ml:gap-2">
-          {boardName}
+          {boardName || 'No Board Found'}
           {isMobile && (
             <span className="pointer-events-none">
               <img
@@ -95,6 +95,7 @@ export default function Header() {
         <div className="mr-9 flex flex-row items-center gap-7">
           <div className="w-40 ml:w-14">
             <Button
+              disabled={!boardName}
               variant="primary"
               onClick={() => dispatch(openModal({ type: ADD_TASK }))}
               text={`${!isMobile ? 'Add New Task' : ''}`}

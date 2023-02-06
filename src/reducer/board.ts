@@ -12,14 +12,14 @@ import { BoardFormValues } from '../components/Modals/hooks/useBoardModal';
 import InitialStateParser from '../helper/initialStateParser';
 
 import { arrayMove } from '@dnd-kit/sortable';
-export type ContainerState = {
+export type Items = {
   container: string;
   task: Task[];
 };
 
 export type Board = {
   name: string;
-  columns: ContainerState[];
+  columns: Items[];
 };
 
 const initialState = InitialStateParser<Board[]>('board', [

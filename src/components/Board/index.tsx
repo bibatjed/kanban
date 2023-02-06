@@ -21,23 +21,19 @@ import { Task } from '../Modals/hooks/useTask';
 import StatusCircle from '../StatusCircle';
 import ColumnPlaceHolder from '../ColumnPlaceholder';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import {
-  ContainerState,
-  onHandleDragEnd,
-  onHandleDragOver,
-} from '../../reducer/board';
-import SideBarShow from '../SidebarShow';
+import { Items, onHandleDragEnd, onHandleDragOver } from '../../reducer/board';
+import Button from '../Button/Button';
+import { openModal } from '../../reducer/modal';
+import IconAddTaskMobile from '../../assets/icons/IconAddTaskMobile';
+import { modal, theme } from '../../constants';
 
-export type Items = {
-  container: string;
-  task: Task[];
-};
+const { CREATE_BOARD } = modal;
 
 export default function Board() {
   const [activeId, setActiveId] = useState<Task | null>();
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const containerResult = useAppSelector((state) => state.boardReducers);
-  const container: ContainerState[] =
+  const container: Items[] =
     containerResult[boardDetails.boardSelectedIndex]?.columns ?? [];
   const dispatch = useAppDispatch();
   const [clonedItems, setClonedItems] = useState<Items[] | null>(null);
@@ -129,6 +125,25 @@ export default function Board() {
     }
     setActiveId(null);
     setClonedItems(null);
+  }
+
+  if (container.length === 0) {
+    return (
+      <div className="m-auto flex -translate-y-2/4 flex-col items-center gap-8">
+        <p className="text-center font-plus-jakarta-sans text-base font-semibold text-kanban-medium-grey">
+          This board is empty. Create a new column to get started.
+        </p>
+        <div className="w-48">
+          <Button
+            variant="primary"
+            onClick={() => dispatch(openModal({ type: CREATE_BOARD }))}
+            text={`Create New Board`}
+          >
+            <IconAddTaskMobile className="fill-kanban-white" />
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
