@@ -7,7 +7,9 @@ import {
   DragOverlay,
   DragStartEvent,
   KeyboardSensor,
+  MouseSensor,
   PointerSensor,
+  TouchSensor,
   TraversalOrder,
   useSensor,
   useSensors,
@@ -46,13 +48,18 @@ export default function Board() {
   const dispatch = useAppDispatch();
   const [clonedItems, setClonedItems] = useState<Items[] | null>(null);
   const sensors = useSensors(
-    useSensor(PointerSensor, {
+    useSensor(MouseSensor, {
       activationConstraint: {
         distance: 1,
       },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        distance: 1,
+      },
     })
   );
 
