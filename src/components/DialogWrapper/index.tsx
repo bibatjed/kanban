@@ -56,7 +56,7 @@ export default function DialogWrapper(props: IDialogWrapper) {
                   {/* Dialog Header */}
                   <Dialog.Title
                     as="h3"
-                    className={`font-plus-jakarta-sans text-lg font-semibold ${
+                    className={`max-w-[23rem] break-words font-plus-jakarta-sans text-lg font-semibold ${
                       titleColor === 'black'
                         ? 'text-kanban-black dark:text-kanban-white'
                         : 'text-kanban-red'
