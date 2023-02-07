@@ -1,6 +1,6 @@
-import { Menu, Transition } from "@headlessui/react";
-import { Fragment } from "react";
-import ElipsisLogo from "../../assets/icon-vertical-ellipsis.svg";
+import { Menu, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
+import ElipsisLogo from '../../assets/icon-vertical-ellipsis.svg';
 
 type MenuItem = {
   text: string;
@@ -16,13 +16,19 @@ interface IMenuItem extends MenuItem {
 
 type DropdownProps = {
   menuItem: IMenuItem[];
+  disabled?: boolean;
 };
 
 export default function Dropdown(props: DropdownProps) {
   return (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu as="div" className="relative">
       <div>
-        <Menu.Button className="w-full p-2 hover:bg-kanban-medium-grey rounded-full hover:bg-opacity-30">
+        <Menu.Button
+          disabled={props.disabled}
+          className={`${
+            props.disabled ? 'opacity-50' : 'opacity-100'
+          } w-full rounded-full p-2 hover:bg-kanban-medium-grey hover:bg-opacity-30`}
+        >
           <img src={ElipsisLogo} />
         </Menu.Button>
       </div>
@@ -35,7 +41,7 @@ export default function Dropdown(props: DropdownProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-52 origin-top-right rounded-md dark:bg-kanban-very-dark-gray bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-2 w-52 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-kanban-very-dark-gray">
           <div className="px-2 py-1 ">
             {props.menuItem.map((item, index) => {
               return (
@@ -46,7 +52,7 @@ export default function Dropdown(props: DropdownProps) {
                       className={`${
                         active ? item.colorPallete[0] : item.colorPallete[1]
                       }
-                     group font-plus-jakarta-sans flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                     group flex w-full items-center rounded-md px-2 py-2 font-plus-jakarta-sans text-sm`}
                     >
                       {item.text}
                     </button>

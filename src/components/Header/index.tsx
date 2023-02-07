@@ -103,7 +103,7 @@ export default function Header() {
               <IconAddTaskMobile className="fill-kanban-white" />
             </Button>
           </div>
-          <DropDown menuItem={MenuList} />
+          <DropDown disabled={!boardName} menuItem={MenuList} />
         </div>
       </div>
     </div>
