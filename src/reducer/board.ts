@@ -176,87 +176,59 @@ export const boardSlice = createSlice({
       state,
       action: PayloadAction<{ task: Task; boardIndex: number }>
     ) => {
+      const task = action.payload.task;
+      const status = task.status;
       const boardIndex = action.payload.boardIndex;
       const statusIndex = state[boardIndex].columns.findIndex(
-        (item) => item.container === action.payload.task.status
+        (item) => item.container === status
       );
       const newState = produce(state, (draft) => {
-        draft[boardIndex].columns[statusIndex].task.push(action.payload.task);
+        draft[boardIndex].columns[statusIndex].task.push(task);
       });
 
       return newState;
     },
     onClickSubtasks: (state, action: PayloadAction<AnyAction>) => {
-      let counter = 0;
-      let found: number | null = null;
+      const subtaskIndex = action.payload.subtaskIdx;
+      const id = action.payload.id;
       const boardIndex = action.payload.boardIndex;
-      while (counter < state[boardIndex].columns.length) {
-        let find = state[boardIndex].columns[counter].task.findIndex(
-          (value) => {
-            return value.id === action.payload.id;
-          }
-        );
-
-        if (find > -1) {
-          found = find;
-          break;
-        }
-
-        counter++;
-      }
-
       const newState = produce(state, (draft) => {
-        const currentStatus =
-          draft[boardIndex].columns[counter].task[found as number].subtasks[
-            action.payload.subtaskIdx
-          ].done;
+        for (const item of draft[boardIndex].columns) {
+          let taskIndex = item.task.findIndex((value) => {
+            return value.id === id;
+          });
 
-        if (currentStatus) {
-          draft[boardIndex].columns[counter].task[
-            found as number
-          ].subtaskComplete -= 1;
-          draft[boardIndex].columns[counter].task[found as number].subtasks[
-            action.payload.subtaskIdx
-          ].done = false;
-          return;
+          if (taskIndex > -1) {
+            const currentStatus =
+              item.task[taskIndex].subtasks[subtaskIndex].done;
+
+            item.task[taskIndex].subtaskComplete += !currentStatus ? 1 : -1;
+            item.task[taskIndex].subtasks[subtaskIndex].done = !currentStatus;
+          }
         }
-
-        draft[boardIndex].columns[counter].task[
-          found as number
-        ].subtaskComplete += 1;
-        draft[boardIndex].columns[counter].task[found as number].subtasks[
-          action.payload.subtaskIdx
-        ].done = true;
       });
 
       return newState;
     },
     onChangeStatus: (state, action: PayloadAction<AnyAction>) => {
+      const boardIndex = action.payload.boardIndex;
+      const id = action.payload.id;
+      const status = action.payload.status;
       const newState = produce(state, (draft) => {
-        let oldStatusContainerIndex: number | null = null;
-        let taskIndex: number | null = null;
-        const boardIndex = action.payload.boardIndex;
-        for (let [key, item] of state[boardIndex].columns.entries()) {
-          const findTaskIndex = item.task.findIndex(
-            (value) => value.id === action.payload.id
-          );
+        for (let item of draft[boardIndex].columns) {
+          const findTaskIndex = item.task.findIndex((value) => value.id === id);
 
           if (findTaskIndex > -1) {
-            taskIndex = findTaskIndex;
-            oldStatusContainerIndex = key;
-            break;
+            if (item.task[findTaskIndex].status === status) return;
+            const task: Task = item.task.splice(findTaskIndex, 1)[0];
+
+            const newStatusContainerIndex = draft[boardIndex].columns.findIndex(
+              (value) => value.container === status
+            );
+            task.status = status;
+            draft[boardIndex].columns[newStatusContainerIndex].task.push(task);
           }
         }
-
-        const newStatusContainerIndex = draft[boardIndex].columns.findIndex(
-          (value) => value.container === action.payload.status
-        );
-        const task: Task = draft[boardIndex].columns[
-          oldStatusContainerIndex as number
-        ].task.splice(taskIndex as number, 1)[0];
-
-        task.status = action.payload.status;
-        draft[boardIndex].columns[newStatusContainerIndex].task.push(task);
       });
 
       return newState;
@@ -266,52 +238,46 @@ export const boardSlice = createSlice({
       action: PayloadAction<{ task: Task; boardIndex: number }>
     ) => {
       const boardIndex = action.payload.boardIndex;
+      const id = action.payload.task.id;
+      const taskPayload = action.payload.task;
       const newState = produce(state, (draft) => {
-        let oldStatusContainerIndex: number | null = null;
-        let taskIndex: number | null = null;
-        for (let [key, item] of state[boardIndex].columns.entries()) {
-          const findTaskIndex = item.task.findIndex(
-            (value) => value.id === action.payload.task.id
-          );
+        for (let item of draft[boardIndex].columns) {
+          const findTaskIndex = item.task.findIndex((value) => value.id === id);
 
           if (findTaskIndex > -1) {
-            const originalStatus =
-              draft[boardIndex].columns[key].task[findTaskIndex].status;
-            const newStatus = action.payload.task.status;
+            const originalStatus = item.task[findTaskIndex].status;
+            const newStatus = taskPayload.status;
+
             if (originalStatus === newStatus) {
-              draft[boardIndex].columns[key].task[findTaskIndex] = {
+              item.task[findTaskIndex] = {
                 ...action.payload.task,
               };
               return;
             }
-            taskIndex = findTaskIndex;
-            oldStatusContainerIndex = key;
-            break;
+
+            const newStatusContainerIndex = draft[boardIndex].columns.findIndex(
+              (value) => value.container === taskPayload.status
+            );
+
+            let task: Task = item.task.splice(findTaskIndex, 1)[0];
+
+            task = { ...taskPayload };
+
+            draft[boardIndex].columns[newStatusContainerIndex].task.push(task);
           }
         }
-
-        const newStatusContainerIndex = draft[boardIndex].columns.findIndex(
-          (value) => value.container === action.payload.task.status
-        );
-        let task: Task = draft[boardIndex].columns[
-          oldStatusContainerIndex as number
-        ].task.splice(taskIndex as number, 1)[0];
-
-        task = { ...action.payload.task };
-
-        draft[boardIndex].columns[newStatusContainerIndex].task.push(task);
       });
       return newState;
     },
     onDeleteTask: (state, action: PayloadAction<AnyAction>) => {
       const boardIndex = action.payload.boardIndex;
+      const id = action.payload.id;
       const newState = produce(state, (draft) => {
-        for (let [key, item] of draft[boardIndex].columns.entries()) {
-          const findTaskIndex = item.task.findIndex(
-            (value) => value.id === action.payload.id
-          );
+        for (let item of draft[boardIndex].columns) {
+          const findTaskIndex = item.task.findIndex((value) => value.id === id);
+
           if (findTaskIndex > -1) {
-            draft[boardIndex].columns[key].task.splice(findTaskIndex, 1);
+            item.task.splice(findTaskIndex, 1);
             break;
           }
         }
@@ -348,8 +314,10 @@ export const boardSlice = createSlice({
       action: PayloadAction<{ board: BoardFormValues; boardIndex: number }>
     ) => {
       const boardIndex = action.payload.boardIndex;
+      const board = action.payload.board;
+      const boardName = board.boardName;
       const newState = produce(state, (draft) => {
-        const columns = action.payload.board.columns.map((item) => {
+        const columns = board.columns.map((item) => {
           const task = item.old
             ? state[boardIndex].columns.find(
                 (columnItem) => columnItem.container === item.old
@@ -361,7 +329,7 @@ export const boardSlice = createSlice({
           };
         });
 
-        draft[boardIndex].name = action.payload.board.boardName;
+        draft[boardIndex].name = boardName;
         draft[boardIndex].columns = columns;
       });
       return newState;
@@ -370,22 +338,15 @@ export const boardSlice = createSlice({
 });
 
 function selectTaskByID(state: Board[], id: string, boardIndex: number) {
-  let counter = 0;
-  let found: Task | null = null;
-  while (counter < state[boardIndex]?.columns.length) {
-    let find = state[boardIndex].columns[counter].task.find((value) => {
+  for (const item of state[boardIndex].columns) {
+    let find = item.task.find((value) => {
       return value.id === id;
     });
 
     if (find) {
-      found = find;
-      break;
+      return find;
     }
-
-    counter++;
   }
-
-  return found;
 }
 
 export const selectTask = createSelector(
