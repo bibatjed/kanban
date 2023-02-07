@@ -159,7 +159,7 @@ export default function Board() {
     >
       {container.map((item, idx) => {
         return (
-          <div key={idx} className="h-[calc(100%_-_120px)] min-w-[250px]">
+          <div key={idx} className="h-[calc(100%_-_120px)] min-w-[280px]">
             <div className="mb-7 flex flex-row items-center gap-2">
               <StatusCircle id={idx} />
               <span className="font-plus-jakarta-sans text-[15px] uppercase tracking-wider text-kanban-medium-grey">
@@ -180,7 +180,7 @@ export default function Board() {
       })}
 
       {container.length < 6 && (
-        <div className="h-[calc(100%_-_120px)] min-w-[250px]">
+        <div className="h-[calc(100%_-_120px)] min-w-[280px]">
           <div className="mb-7 h-[24px]"></div>
           <ColumnPlaceHolder />
         </div>
