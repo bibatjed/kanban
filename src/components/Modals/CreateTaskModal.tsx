@@ -27,6 +27,7 @@ export default function CreateTaskModal() {
     onChangeCommon,
     onChangeStatus,
     onChangeSubtasks,
+    errorValues,
   } = useTask({
     title: '',
     description: '',
@@ -62,7 +63,7 @@ export default function CreateTaskModal() {
             Title
           </span>
           <Input
-            error={formValues.errorTitle}
+            error={errorValues.title}
             name="title"
             value={formValues.title}
             onChange={onChangeCommon}
@@ -89,11 +90,11 @@ export default function CreateTaskModal() {
             return (
               <div key={index} className="flex flex-row items-center gap-4">
                 <Input
+                  dataId={index}
                   placeholder="e.g. Make Coffee"
-                  name={index.toString()}
                   onChange={onChangeSubtasks}
                   value={value.name}
-                  error={value.error}
+                  error={errorValues.subtasks[index]}
                 />{' '}
                 <div>
                   <Button

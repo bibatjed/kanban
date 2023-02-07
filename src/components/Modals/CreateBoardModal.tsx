@@ -81,7 +81,6 @@ export default function CreateBoardModal() {
                     onClick={() => {
                       handleDeleteColumn(index);
                     }}
-                    text=""
                     variant="none"
                   >
                     <IconCross className={`${'fill-kanban-medium-grey'}`} />

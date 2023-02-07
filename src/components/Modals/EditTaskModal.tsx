@@ -32,6 +32,7 @@ export default function EditTaskModal() {
     onChangeCommon,
     onChangeStatus,
     onChangeSubtasks,
+    errorValues,
   } = useTask(task as Task);
 
   function handleSubmit() {
@@ -71,7 +72,7 @@ export default function EditTaskModal() {
             Title
           </span>
           <Input
-            error={formValues?.errorTitle}
+            error={errorValues.title}
             name="title"
             value={formValues.title}
             onChange={onChangeCommon}
@@ -98,11 +99,11 @@ export default function EditTaskModal() {
             return (
               <div key={index} className="flex flex-row items-center gap-4">
                 <Input
+                  dataId={index}
                   placeholder="e.g. Make Coffee"
-                  name={index.toString()}
                   onChange={onChangeSubtasks}
                   value={value.name}
-                  error={value.error}
+                  error={errorValues.subtasks[index]}
                 />{' '}
                 <div>
                   <Button

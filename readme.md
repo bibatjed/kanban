@@ -37,6 +37,7 @@ Users should be able to:
 ![Mobile Dark](./screenshots/screenshot-mobile-dark.png)
 
 ### Links
+
 - Live Site URL: [Vercel](https://kanban-bibatjed.vercel.app/)
 
 ## My process
@@ -48,9 +49,6 @@ Users should be able to:
 - Typescript
 - Dnd-kit
 - Redux
-
-
-
 
 ## Author
 

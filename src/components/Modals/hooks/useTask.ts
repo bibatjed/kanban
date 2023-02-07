@@ -1,12 +1,15 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+
+import { formErrors } from '../../../constants';
+
+const { REQUIRED, USED } = formErrors;
 
 export type Subtasks = {
   name: string;
   done: boolean;
-  error?: string;
 };
 
-type errorObj = {
+type TaskFormError = {
   title: string;
   subtasks: {
     [key: number]: string;
@@ -16,41 +19,37 @@ type errorObj = {
 export type Task = {
   id?: string;
   title: string;
-  errorTitle?: string;
   description: string;
   subtasks: Subtasks[] | [];
   subtaskComplete: number;
   status: string;
 };
+
 const initialState: Task = {
-  title: "",
-  description: "",
-  subtasks: [{ name: "", done: false }],
+  title: '',
+  description: '',
+  subtasks: [{ name: '', done: false }],
   subtaskComplete: 0,
-  status: "",
+  status: '',
 };
 export default function useTask(task: Task, isOpen: boolean = false) {
-  const [formValues, setFormValues] = useState<Task>(task || initialState);
+  const [formValues, setFormValues] = useState<Task>(initialState);
+  const [errorValues, setErrorValues] = useState<TaskFormError>({
+    title: '',
+    subtasks: {},
+  });
 
   useEffect(() => {
-    if (isOpen) {
-      setFormValues((prev) => {
-        return {
-          ...prev,
-          ...task,
-        };
-      });
-    }
-  }, [task?.id, isOpen]);
-
-  const reset = useCallback(() => {
-    setFormValues(task);
-  }, [task]);
+    setFormValues(() => ({
+      ...task,
+    }));
+    setErrorValues({ title: '', subtasks: {} });
+  }, [task?.id]);
 
   function handleAddSubtasks() {
     setFormValues((prev) => ({
       ...prev,
-      subtasks: [...prev.subtasks, { name: "", done: false }],
+      subtasks: [...prev.subtasks, { name: '', done: false }],
     }));
   }
   function handleDeleteSubtasks(id: number) {
@@ -67,19 +66,18 @@ export default function useTask(task: Task, isOpen: boolean = false) {
   function onChangeCommon(
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
-    const errorTitle = e.target.name === "title" ? "" : formValues.errorTitle;
     setFormValues((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
-      errorTitle,
     }));
   }
 
   function onChangeSubtasks(e: ChangeEvent<HTMLInputElement>) {
+    const id = e.currentTarget.getAttribute('data-id');
     setFormValues((prev) => {
       try {
         const subtasks = structuredClone(prev.subtasks);
-        subtasks[Number(e.target.name)].name = e.target.value;
+        subtasks[Number(id)].name = e.target.value;
 
         return {
           ...prev,
@@ -101,37 +99,29 @@ export default function useTask(task: Task, isOpen: boolean = false) {
   }
 
   function checkColumnFields() {
-    const errorObj: errorObj = {
-      title: "",
+    const formError: TaskFormError = {
+      title: '',
       subtasks: {},
     };
 
-    if (formValues.title == "") {
-      errorObj.title = "required";
+    if (formValues.title == '') {
+      formError.title = REQUIRED;
     }
     formValues.subtasks.forEach((value, index) => {
-      if (value.name === "" || value.name == null) {
-        errorObj.subtasks[index] = "required";
+      if (value.name === '' || value.name == null) {
+        formError.subtasks[index] = REQUIRED;
         return;
       }
     });
 
-    if (errorObj.title === "" && Object.keys(errorObj.subtasks).length === 0) {
+    if (
+      formError.title === '' &&
+      Object.keys(formError.subtasks).length === 0
+    ) {
       return true;
     }
 
-    setFormValues((prev) => {
-      return {
-        ...prev,
-        errorTitle: errorObj.title as string,
-        subtasks: prev.subtasks.map((value, index) => {
-          return {
-            ...value,
-            error: errorObj.subtasks[index] || "",
-          };
-        }),
-      };
-    });
+    setErrorValues(formError);
   }
 
   return {
@@ -142,6 +132,6 @@ export default function useTask(task: Task, isOpen: boolean = false) {
     onChangeCommon,
     onChangeStatus,
     checkColumnFields,
-    reset,
+    errorValues,
   };
 }
