@@ -5,7 +5,6 @@ import EditTaskModal from './EditTaskModal';
 import CreateTaskModal from './CreateTaskModal';
 import DeleteTaskModal from './DeleteTaskModal';
 import CreateBoardModal from './CreateBoardModal';
-import AddColumModal from './AddColumnModal';
 import EditBoardModal from './EditBoardModal';
 import DeleteBoardModal from './DeleteBoardModal';
 
@@ -38,8 +37,10 @@ export default function Modal() {
       {modal.mountModal && modal.modalType === CREATE_BOARD && (
         <CreateBoardModal />
       )}
-      {modal.mountModal && modal.modalType === ADD_COLUMN && <AddColumModal />}
-      {modal.mountModal && modal.modalType === EDIT_BOARD && <EditBoardModal />}
+      {modal.mountModal &&
+        [EDIT_BOARD, ADD_COLUMN].includes(modal.modalType) && (
+          <EditBoardModal />
+        )}
       {modal.mountModal && modal.modalType === DELETE_BOARD && (
         <DeleteBoardModal />
       )}

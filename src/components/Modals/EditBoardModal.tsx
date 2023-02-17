@@ -8,14 +8,13 @@ import Input from '../Input';
 import { modal } from '../../constants';
 import { closeModal as reducerCloseModal } from '../../reducer/modal';
 import useBoardModal from './hooks/useBoardModal';
-import { useEffect, useRef } from 'react';
-import { shallowEqual } from 'react-redux';
 
-const { EDIT_BOARD } = modal;
+const { EDIT_BOARD, ADD_COLUMN } = modal;
 
 export default function EditBoardModal() {
   const modal = useAppSelector((state) => state.modalReducers);
-  const isOpen = modal.isOpen && modal.modalType === EDIT_BOARD;
+  const isOpen =
+    modal.isOpen && [EDIT_BOARD, ADD_COLUMN].includes(modal.modalType);
   const boardDetails = useAppSelector((state) => state.boardDetailsReducers);
   const state = useAppSelector((state) => state.boardReducers);
   const container = state[boardDetails.boardSelectedIndex]?.columns ?? [];
@@ -74,6 +73,7 @@ export default function EditBoardModal() {
           </span>
           <Input
             error={errorValues.boardName}
+            isReadOnly={modal.modalType === ADD_COLUMN}
             name="boardName"
             onChange={handleOnChangeCommon}
             value={formValues.boardName}
