@@ -1,5 +1,4 @@
 import {
-  AnyAction,
   createSelector,
   createSlice,
   PayloadAction,
@@ -125,8 +124,8 @@ export const boardSlice = createSlice({
           overIndex === overItems.length - 1
             ? overItems.length
             : overIndex < 0
-            ? 0
-            : overIndex;
+              ? 0
+              : overIndex;
 
         //update status of selected item
         item[0].status = newContainer;
@@ -188,7 +187,7 @@ export const boardSlice = createSlice({
 
       return newState;
     },
-    onClickSubtasks: (state, action: PayloadAction<AnyAction>) => {
+    onClickSubtasks: (state, action: PayloadAction<{ subtaskIdx: number, id: string, boardIndex: number }>) => {
       const subtaskIndex = action.payload.subtaskIdx;
       const id = action.payload.id;
       const boardIndex = action.payload.boardIndex;
@@ -210,7 +209,7 @@ export const boardSlice = createSlice({
 
       return newState;
     },
-    onChangeStatus: (state, action: PayloadAction<AnyAction>) => {
+    onChangeStatus: (state, action: PayloadAction<{ boardIndex: number, id: string, status: string }>) => {
       const boardIndex = action.payload.boardIndex;
       const id = action.payload.id;
       const status = action.payload.status;
@@ -269,7 +268,7 @@ export const boardSlice = createSlice({
       });
       return newState;
     },
-    onDeleteTask: (state, action: PayloadAction<AnyAction>) => {
+    onDeleteTask: (state, action: PayloadAction<{ boardIndex: number, id: string }>) => {
       const boardIndex = action.payload.boardIndex;
       const id = action.payload.id;
       const newState = produce(state, (draft) => {
@@ -285,7 +284,7 @@ export const boardSlice = createSlice({
       return newState;
     },
 
-    onDeleteBoard: (state, action: PayloadAction<AnyAction>) => {
+    onDeleteBoard: (state, action: PayloadAction<{ boardIndex: number }>) => {
       const newState = produce(state, (draft) => {
         const boardIndex = action.payload.boardIndex;
         draft.splice(boardIndex, boardIndex + 1);
@@ -320,8 +319,8 @@ export const boardSlice = createSlice({
         const columns = board.columns.map((item) => {
           const task = item.old
             ? state[boardIndex].columns.find(
-                (columnItem) => columnItem.container === item.old
-              )!.task
+              (columnItem) => columnItem.container === item.old
+            )!.task
             : [];
           return {
             container: item.new,
