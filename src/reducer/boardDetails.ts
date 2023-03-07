@@ -1,4 +1,4 @@
-import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import InitialStateParser from '../helper/initialStateParser';
 
 export type boardDetailsState = {
@@ -13,7 +13,7 @@ export const boardDetailsSlice = createSlice({
   name: 'boardDetails',
   initialState,
   reducers: {
-    addDetails: (state, action: PayloadAction<AnyAction>) => {
+    addDetails: (state, action: PayloadAction<{ boardSelectedIndex: number }>) => {
       state.boardSelectedIndex = action.payload.boardSelectedIndex;
     },
   },

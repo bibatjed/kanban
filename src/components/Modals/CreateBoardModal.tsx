@@ -38,7 +38,7 @@ export default function CreateBoardModal() {
     }
 
     dispatch(onAddNewBoard(formValues));
-    dispatch(addDetails({ type: '', boardSelectedIndex: boardNames.length }));
+    dispatch(addDetails({ boardSelectedIndex: boardNames.length }));
     closeModal();
   }
   function closeModal() {

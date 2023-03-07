@@ -24,15 +24,14 @@ export default function Sidebar() {
 
   function handleOnClick(index: number) {
     return function () {
-      dispatch(addDetails({ type: '', boardSelectedIndex: index }));
+      dispatch(addDetails({ boardSelectedIndex: index }));
     };
   }
 
   return (
     <div
-      className={`${
-        isOpen ? '' : '-translate-x-full'
-      } fixed z-10 flex h-[calc(100%-5.7rem)] w-full max-w-[18.06rem] flex-col justify-between border-r-[1px] border-kanban-lines-light bg-kanban-white pt-8 pb-3 transition-all duration-200 dark:border-r-kanban-lines-dark dark:bg-kanban-dark-grey`}
+      className={`${isOpen ? '' : '-translate-x-full'
+        } fixed z-10 flex h-[calc(100%-5.7rem)] w-full max-w-[18.06rem] flex-col justify-between border-r-[1px] border-kanban-lines-light bg-kanban-white pt-8 pb-3 transition-all duration-200 dark:border-r-kanban-lines-dark dark:bg-kanban-dark-grey`}
     >
       <div className="flex flex-col gap-2 pr-10">
         <span className="pl-8 pb-2 font-plus-jakarta-sans text-[13px] font-medium uppercase tracking-widest text-kanban-medium-grey">
@@ -44,23 +43,20 @@ export default function Sidebar() {
             <button
               key={index}
               onClick={handleOnClick(index)}
-              className={`${
-                active
-                  ? 'bg-kanban-main-purple'
-                  : 'hover:bg-kanban-main-purple-hover'
-              } group flex flex-row items-center gap-5 rounded-r-full p-3 pl-8 transition-all duration-100`}
+              className={`${active
+                ? 'bg-kanban-main-purple'
+                : 'hover:bg-kanban-main-purple-hover'
+                } group flex flex-row items-center gap-5 rounded-r-full p-3 pl-8 transition-all duration-100`}
             >
               <IconBoard
-                className={`${
-                  active
-                    ? 'fill-kanban-white'
-                    : 'fill-kanban-medium-grey group-hover:fill-kanban-white'
-                } transition-all duration-100`}
+                className={`${active
+                  ? 'fill-kanban-white'
+                  : 'fill-kanban-medium-grey group-hover:fill-kanban-white'
+                  } transition-all duration-100`}
               />
               <span
-                className={`${
-                  active ? 'text-kanban-white' : 'text-kanban-medium-grey'
-                } font-plus-jakarta-sans text-sm font-semibold transition-all duration-100 group-hover:text-kanban-white`}
+                className={`${active ? 'text-kanban-white' : 'text-kanban-medium-grey'
+                  } font-plus-jakarta-sans text-sm font-semibold transition-all duration-100 group-hover:text-kanban-white`}
               >
                 {board}
               </span>

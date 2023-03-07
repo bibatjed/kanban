@@ -14,9 +14,9 @@ export default function DeleteBoardModal() {
 
   function handleDelete() {
     dispatch(
-      onDeleteBoard({ type: '', boardIndex: boardDetails.boardSelectedIndex })
+      onDeleteBoard({ boardIndex: boardDetails.boardSelectedIndex })
     );
-    dispatch(addDetails({ type: '', boardSelectedIndex: 0 }));
+    dispatch(addDetails({ boardSelectedIndex: 0 }));
     dispatch(closeModal());
   }
 

@@ -25,7 +25,7 @@ export default function MenuMobile() {
 
   function handleOnClick(index: number) {
     return function () {
-      dispatch(addDetails({ type: '', boardSelectedIndex: index }));
+      dispatch(addDetails({ boardSelectedIndex: index }));
       dispatch(closeSidebar());
     };
   }
@@ -71,25 +71,22 @@ export default function MenuMobile() {
                         <button
                           key={index}
                           onClick={handleOnClick(index)}
-                          className={`${
-                            active
+                          className={`${active
                               ? 'bg-kanban-main-purple'
                               : 'hover:bg-kanban-main-purple-hover'
-                          } group flex flex-row items-center gap-5 rounded-r-full p-3 pl-8 transition-all duration-100`}
+                            } group flex flex-row items-center gap-5 rounded-r-full p-3 pl-8 transition-all duration-100`}
                         >
                           <IconBoard
-                            className={`${
-                              active
+                            className={`${active
                                 ? 'fill-kanban-white'
                                 : 'fill-kanban-medium-grey group-hover:fill-kanban-white'
-                            } transition-all duration-100`}
+                              } transition-all duration-100`}
                           />
                           <span
-                            className={`${
-                              active
+                            className={`${active
                                 ? 'text-kanban-white'
                                 : 'text-kanban-medium-grey'
-                            } font-plus-jakarta-sans text-sm font-semibold transition-all duration-100 group-hover:text-kanban-white`}
+                              } font-plus-jakarta-sans text-sm font-semibold transition-all duration-100 group-hover:text-kanban-white`}
                           >
                             {board}
                           </span>

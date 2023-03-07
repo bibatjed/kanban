@@ -13,7 +13,6 @@ export default function DeleteTaskModal() {
   function handleDelete() {
     dispatch(
       onDeleteTask({
-        type: '',
         id: modal.modalDetail?.id,
         boardIndex: boardDetails.boardSelectedIndex,
       })

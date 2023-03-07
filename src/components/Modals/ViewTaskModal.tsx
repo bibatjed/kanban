@@ -30,7 +30,7 @@ export default function ViewTaskModal() {
       {
         text: 'Edit Task',
         onClick: () =>
-          dispatch(openModal({ type: EDIT_TASK, detail: { id: task?.id } })),
+          dispatch(openModal({ type: EDIT_TASK, detail: { id: task?.id || '' } })),
         colorPallete: ['text-gray-400', 'text-kanban-medium-grey'],
       },
       {
@@ -39,7 +39,7 @@ export default function ViewTaskModal() {
           dispatch(
             openModal({
               type: DELETE_TASK,
-              detail: { id: task?.id, title: task?.title },
+              detail: { id: task?.id || '', title: task?.title },
             })
           ),
         colorPallete: ['text-kanban-red-hover', 'text-kanban-red'],
@@ -51,7 +51,6 @@ export default function ViewTaskModal() {
   function onChangeStatus(value: string) {
     dispatch(
       changeStatus({
-        type: '',
         id: modal.modalDetail.id,
         status: value,
         boardIndex: boardDetails.boardSelectedIndex,
@@ -91,7 +90,6 @@ export default function ViewTaskModal() {
                     dispatch(
                       onClickSubtasks({
                         id: modal.modalDetail!.id as string,
-                        type: '',
                         subtaskIdx: idx,
                         boardIndex: boardDetails.boardSelectedIndex,
                       })

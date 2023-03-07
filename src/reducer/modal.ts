@@ -1,7 +1,6 @@
-import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { modal } from '../constants';
 import InitialStateParser from '../helper/initialStateParser';
-import { RootState } from '../store';
 
 // Define a type for the slice state
 type ModalDetail = {
@@ -32,7 +31,7 @@ export const modalSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    openModal: (state, action: PayloadAction<AnyAction>) => {
+    openModal: (state, action: PayloadAction<{ detail?: ModalDetail, type: string }>) => {
       state.isOpen = true;
       state.mountModal = true;
       state.modalType = action.payload.type;
