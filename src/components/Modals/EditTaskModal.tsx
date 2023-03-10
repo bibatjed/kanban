@@ -40,13 +40,10 @@ export default function EditTaskModal() {
       return;
     }
 
-    //@ts-ignore
-    const subtaskComplete = formValues.subtasks.reduce(
-      (acc: number, val: any) => {
-        return val.done ? acc + 1 : acc;
-      },
-      0
-    );
+    const subtasks = [...formValues.subtasks];
+    const subtaskComplete = subtasks.reduce((acc: number, val: any) => {
+      return val.done ? acc + 1 : acc;
+    }, 0);
 
     dispatch(
       onEditTask({
